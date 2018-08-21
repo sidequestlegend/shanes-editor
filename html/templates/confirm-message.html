@@ -1,0 +1,37 @@
+<a-text font="roboto" baseLine="center" value="{{title}}"
+        color="#212121" anchor="center" wrap-count="32" width="2.6" height="0.15"></a-text>
+
+<a-text font="roboto" baseLine="center" value="{{message}}"
+        anchor="center" color="#515151" wrap-count="50" width="2.6" height="0.2"></a-text>
+<a-entity height="0.5" width="2.9"></a-entity>
+<a-entity height="0.2" width="0.1"></a-entity>
+<a-entity width="{{ternary middleButtonText 0.65 1.25}}">
+    <!--Flat Button-->
+    <a-ui-button class="intersectable close-modal right-button" text-value="{{leftButtonText}}"
+                 font-color="{{ternary leftButtonFontColor leftButtonFontColor '#009688'}}"
+                 color="{{ternary leftButtonColor leftButtonColor '#fff'}}"
+                 ripple-color="{{ternary leftButtonRippleColor leftButtonRippleColor '#009688'}}"
+                 width="{{ternary middleButtonText 0.65 1.2}}" height="0.2" ripple-size="{{ternary middleButtonText 0.65 1.2}} 0.2"
+                 wrap-count="{{ternary middleButtonText 14 24}}"></a-ui-button>
+</a-entity>
+{{#if middleButtonText}}
+<a-entity height="0.2" width="0.1"></a-entity>
+<a-entity width="0.8">
+    <!--Button-->
+    <a-ui-button class="intersectable close-modal middle-button" text-value="{{middleButtonText}}"
+                 font-color="{{ternary middleButtonFontColor middleButtonFontColor '#fff'}}"
+                 color="{{ternary middleButtonColor middleButtonColor '#009688'}}"
+                 ripple-color="{{ternary middleButtonRippleColor middleButtonRippleColor '#009688'}}"
+                 width="0.8" height="0.2" ripple-size="0.8 0.2" wrap-count="{{ternary middleButtonText 14 24}}"></a-ui-button>
+</a-entity>
+{{/if}}
+<a-entity height="0.2" width="0.1"></a-entity>
+<a-entity width="{{ternary middleButtonText 0.65 1.25}}">
+    <!--Button-->
+    <a-ui-button class="intersectable close-modal right-button" text-value="{{rightButtonText}}"
+                 font-color="{{ternary rightButtonFontColor rightButtonFontColor '#fff'}}"
+                 color="{{ternary rightButtonColor rightButtonColor '#009688'}}"
+                 ripple-color="{{ternary rightButtonRippleColor rightButtonRippleColor '#009688'}}"
+                 width="{{ternary middleButtonText 0.65 1.2}}" height="0.2" ripple-size="{{ternary middleButtonText 0.65 1.2}} 0.2"
+                 wrap-count="{{ternary middleButtonText 14 24}}"></a-ui-button>
+</a-entity>

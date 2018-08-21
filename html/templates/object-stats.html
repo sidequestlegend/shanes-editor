@@ -1,0 +1,47 @@
+<a-text font="roboto" baseLine="top" anchor="center" value="Stats"
+        color="#212121" wrap-count="45" width="2.6" height="0.2"></a-text>
+<a-plane width="2.6" height="0.01" color="#8f8f8f" shader="flat"></a-plane>
+
+
+<a-entity width="1.2">
+    <a-text font="roboto" baseLine="top" anchor="center" value="Desktop"
+            color="#212121" wrap-count="28" width="1.2" height="0.05"></a-text>
+
+
+    <a-entity width="1.2">
+        <a-plane width="0.6" height="0.008" color="#8f8f8f" shader="flat"></a-plane>
+    </a-entity>
+
+
+    <a-text font="roboto" baseLine="top" anchor="center" value="Points:"
+            color="#212121" wrap-count="8" width="0.25" height="0.1"></a-text>
+    <a-text font="roboto" baseLine="top" anchor="left" value="{{number-format desktop.points ','}}"
+            color="#212121" wrap-count="26" width="0.8" height="0.1"></a-text>
+
+    <a-text font="roboto" baseLine="top" anchor="center" value="Pixels:"
+            color="#212121" wrap-count="8" width="0.25" height="0.1"></a-text>
+    <a-text font="roboto" baseLine="top" anchor="left" value="{{number-format desktop.pixels ','}}"
+            color="#212121" wrap-count="26" width="0.8" height="0.1"></a-text>
+
+</a-entity>
+<a-entity width="1.2">
+
+    <a-text font="roboto" baseLine="top" anchor="center" value="Mobile"
+            color="#212121" wrap-count="28" width="1.2" height="0.05"></a-text>
+
+    <a-entity width="1.2">
+        <a-plane width="0.6" height="0.008" color="#8f8f8f" shader="flat"></a-plane>
+    </a-entity>
+
+    <a-text font="roboto" baseLine="top" anchor="center" value="Points:"
+            color="#212121" wrap-count="8" width="0.25" height="0.1"></a-text>
+    <a-text font="roboto" baseLine="top" anchor="left" value="{{number-format mobile.points ','}}"
+            color="#212121" wrap-count="26" width="0.8" height="0.1"></a-text>
+
+    <a-text font="roboto" baseLine="top" anchor="center" value="Pixels:"
+            color="#212121" wrap-count="8" width="0.25" height="0.1"></a-text>
+    <a-text font="roboto" baseLine="top" anchor="left" value="{{number-format mobile.pixels ','}}"
+            color="#212121" wrap-count="26" width="0.8" height="0.1"></a-text>
+
+
+</a-entity>

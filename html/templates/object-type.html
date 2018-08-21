@@ -1,0 +1,39 @@
+<a-text font="roboto" baseLine="top" anchor="center" value="{{upper-first type}} Type"
+        color="#212121" wrap-count="45" width="2.9" height="0.2"></a-text>
+<a-plane width="2.9" height="0.01" color="#8f8f8f" shader="flat"></a-plane>
+
+<a-entity width="2.9">
+    {{#each options}}
+    <a-ui-radio value="{{name}}" class="radio-{{remove-spaces name}}" {{#compare name ../selected operator="=="}}selected="true"{{/compare}}></a-ui-radio>
+    <a-text font="roboto" baseLine="center" anchor="center" value="{{name}}"
+            color="#212121" wrap-count="12" width="0.45" height="0.1"></a-text>
+    {{/each}}
+
+</a-entity>
+<a-plane width="2.9" height="0.01" color="#8f8f8f" shader="flat"></a-plane>
+
+
+<a-text font="roboto" baseLine="top" anchor="center" value="Changing the {{type}} will also reset other {{type}} settings. "
+        color="#212121" wrap-count="75" width="2.9" height="0.1"></a-text>
+
+<a-entity height="0" width="2.9"></a-entity>
+<a-entity height="0.2" width="0.075"></a-entity>
+<a-entity width="1.25">
+    <!--Flat Button-->
+    <a-ui-button class="intersectable close-modal left-button" text-value="CANCEL"
+                 font-color="{{ternary leftButtonFontColor leftButtonFontColor '#009688'}}"
+                 color="{{ternary leftButtonColor leftButtonColor '#fff'}}"
+                 ripple-color="{{ternary leftButtonRippleColor leftButtonRippleColor '#009688'}}"
+                 width="{{ternary middleButtonText 0.65 1.2}}" height="0.2" ripple-size="1.2 0.2"
+                 wrap-count="{{ternary middleButtonText 14 24}}"></a-ui-button>
+</a-entity>
+<a-entity height="0.2" width="0.1"></a-entity>
+<a-entity width="1.25">
+    <!--Button-->
+    <a-ui-button class="intersectable close-modal right-button" text-value="SAVE"
+                 font-color="{{ternary rightButtonFontColor rightButtonFontColor '#fff'}}"
+                 color="{{ternary rightButtonColor rightButtonColor '#009688'}}"
+                 ripple-color="{{ternary rightButtonRippleColor rightButtonRippleColor '#009688'}}"
+                 width="{{ternary middleButtonText 0.65 1.2}}" height="0.2" ripple-size="1.2 0.2"
+                 wrap-count="{{ternary middleButtonText 14 24}}"></a-ui-button>
+</a-entity>
