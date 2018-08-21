@@ -1,0 +1,26 @@
+{
+  "name": "expanse-editor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "webpack-dev-server",
+    "start-server": "concurrently \"nodemon server/index.js --ignore src/\" \"webpack-dev-server\"",
+    "build": "webpack --mode production"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^3.6.0",
+    "copy-webpack-plugin": "^4.5.2",
+    "nodemon": "^1.18.3",
+    "webpack": "^4.16.1",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.4",
+    "worker-loader": "^2.0.0"
+  },
+  "dependencies": {
+    "handlebars": "^4.0.11"
+  }
+}

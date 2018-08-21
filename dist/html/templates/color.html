@@ -1,0 +1,12 @@
+<a-entity width="1.35">
+
+    <a-text font="roboto" baseLine="top" anchor="center" value="{{ternary colorName colorName 'Color'}}:"
+            color="#212121" wrap-count="16" width="0.5" height="0.1"></a-text>
+    <a-text ui-yoga="margin:0" shader="flat" width="0.32" class="{{ternary colorButtonTextClass colorButtonTextClass 'colorInputFieldText'}}" height="0.2" value="{{color}}" color="#212121" wrap-count="7" align="center">
+    </a-text>
+    <a-entity width="0.01"></a-entity>
+    <a-plane ui-btn ui-yoga="margin:0" shader="flat" class="{{ternary colorButtonClass colorButtonClass 'colorInputField'}} intersectable" ui-rounded="borderRadius:0.1;curveSegments:5" width="0.32" height="0.2" color="{{color}}">
+    </a-plane>
+
+</a-entity>
+<a-plane width="1.35" height="0.004" color="#8f8f8f" shader="flat"></a-plane>

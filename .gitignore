@@ -1,0 +1,7 @@
+node_modules
+dist/models
+dist/images/textures
+dist/images/skybox
+dist/images/3d-scan
+dist/images/kenney
+.idea

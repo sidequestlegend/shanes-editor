@@ -1,0 +1,10 @@
+
+<a-entity width="1.35">
+    {{#each settings}}
+    <a-text font="roboto" baseLine="top" anchor="center" value="{{name}}:"
+            color="#212121" wrap-count="10" width="0.32" height="0.07" ui-yoga="margin:0"></a-text>
+    <a-ui-switch class="switch-{{remove-spaces name}}" value="{{selected}}"></a-ui-switch>
+    {{/each}}
+</a-entity>
+
+<a-plane width="1.35" height="0.004" color="#8f8f8f" shader="flat"></a-plane>

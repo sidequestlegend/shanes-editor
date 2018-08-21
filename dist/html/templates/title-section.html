@@ -1,0 +1,26 @@
+<a-text font="roboto" baseLine="top" anchor="center" value="{{name}}"
+        color="#212121" wrap-count="25" width="2.2" height="0.17"></a-text>
+
+<a-entity width="0.2" height="0.17">
+    <a-entity width="0.2" height="0.05"></a-entity>
+<a-ui-fab-button-small class="intersectable" color="#fff" icon-color="#009688"
+                       ui-toast="toastEl:#toastMessage;message:Coming Soon!"
+                       ripple-color="#009688" src="images/icons/edit.png" ui-yoga="margin:0;"></a-ui-fab-button-small>
+
+</a-entity>
+<a-text font="roboto" baseLine="top" anchor="center" value="UUID: {{uuid}}"
+        color="#212121" wrap-count="45" width="2.2" height="0.17"></a-text>
+
+<a-entity width="0.2" height="0.17">
+    <a-entity width="0.2" height="0.01"></a-entity>
+    <a-ui-fab-button-small class="intersectable" color="#fff" icon-color="#009688"
+                           ui-toast="toastEl:#toastMessage;message:UUID copied to clipboard!"
+                           ripple-color="#009688" src="images/icons/baseline_file_copy_white_18dp.png" ui-yoga="margin:0;"></a-ui-fab-button-small>
+
+</a-entity>
+<!--<a-entity width="0.2" height="0.5">-->
+    <!--<a-entity width="0.2" height="0.08" ui-yoga="margin:0;"></a-entity>-->
+    <!--<a-plane shader="flat" width="0.1" height="0.1" data-scene="{{scene_id}}"-->
+             <!--class="loadScene intersectable" src="#iconCopy" color="#009688" transparent="true" alpha-test="0.5"-->
+             <!--ui-ripple="size:0.1 0.1;zIndex:-0.001;color:#999;duration:500;fadeDuration:250;"></a-plane>-->
+<!--</a-entity>-->

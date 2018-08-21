@@ -1,0 +1,9 @@
+<a-text font="roboto" baseLine="top" anchor="center" value="{{title}}"
+        position="-1.05 0.88 0" color="#212121" wrap-count="45" width="2.6" height="0.15"></a-text>
+
+<a-plane width="2.6" height="0.01" color="#8f8f8f" shader="flat" ui-yoga="margin:0"></a-plane>
+
+<a-text font="roboto" baseLine="top" anchor="center" value="{{description}}"
+        position="-1.05 0.88 0" color="#212121" wrap-count="58" width="2.6" height="{{descriptionHeight}}"></a-text>
+<a-entity width="1.2"></a-entity>
+<a-ui-button class="intersectable singleButton" text-value="{{buttonText}}" width="1.2" height="0.2" ripple-size="1.2 0.2" wrap-count="24" ui-modal="modal:#modalRenderer;main:#mainRenderer" font-color="{{ternary buttonFontColor buttonFontColor '#009688'}}" color="{{ternary buttonColor buttonColor 'white'}}" ripple-color="#009688"></a-ui-button>

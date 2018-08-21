@@ -1,0 +1,12 @@
+<a-entity width="1.35" class="{{remove-spaces name}}">
+
+    <a-text font="roboto" baseLine="top" anchor="center" value="{{name}}:"
+            color="#212121" wrap-count="16" width="0.5" height="0.1"></a-text>
+
+    <a-plane ui-yoga="margin:0" class="xText" width="0.33" ui-border="borderRadius:0.1;borderWidth:0.008" height="0.2" color="#212121" text="value:{{to-fixed number 3}};color:#212121;wrapCount:9;align:center">
+        <a-ui-fab-button-small scale="0.75 0.75 0.75" class="xInputUp intersectable no-yoga-layout" color="#009688" position="0.22 0.055 0.001" icon-color="#fff" ripple-color="#009688" src="images/icons/baseline_keyboard_arrow_up_white_18dp.png"></a-ui-fab-button-small>
+        <a-ui-fab-button-small scale="0.75 0.75 0.75" class="xInputDown intersectable no-yoga-layout" color="#009688" position="0.22 -0.055 0.001" icon-color="#fff" ripple-color="#009688" src="images/icons/down_arrow.png"></a-ui-fab-button-small>
+    </a-plane>
+
+</a-entity>
+<a-plane width="1.35" height="0.004" color="#8f8f8f" shader="flat"></a-plane>

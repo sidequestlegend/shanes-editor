@@ -1,0 +1,14 @@
+{{#if top_image_url}}
+    <a-entity width="0.5"></a-entity>
+    <a-plane src="{{top_image_url}}" width="1.8" height="1" shader="flat"></a-plane>
+{{/if}}
+{{#each items}}
+    <a-entity>
+        <a-plane ui-btn class="intersectable type-select {{extra_class}}" color="#efefef" data-key="{{name}}" width="0.67" height="0.65" shader="flat" ui-yoga="margin:0;">
+            {{#if image_url}}
+            <a-plane src="{{image_url}}" class="no-yoga-layout" width="0.45" height="0.45" shader="flat" position="0 0.1 0.001" ></a-plane>
+            {{/if}}
+            <a-text color="#009688" align="center" class="no-yoga-layout" position="0 -0.23 0.001" width="0.5" wrap-count="15" value="{{friendly_name}}"></a-text>
+        </a-plane>
+    </a-entity>
+{{/each}}

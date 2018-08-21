@@ -1,0 +1,27 @@
+<a-text font="roboto" baseLine="top" anchor="center" value="{{title}}"
+        position="-1.05 0.88 0" color="#212121" wrap-count="12" width="0.7" height="0.2"></a-text>
+<a-plane width="1" height="0.01" color="#8f8f8f" shader="flat"></a-plane>
+<a-entity class="childObjects">
+    <a-entity width="1" height="0.2">
+        <a-ui-button class="intersectable loadItem no-yoga-layout" position="0.5 -0.1 0" ui-modal="modal:#modalRenderer;main:#mainRenderer" text-value="{{buttonText}}" width="0.7" height="0.2" ripple-size="0.7 0.2" wrap-count="15" font-color="#009688" color="white" ripple-color="#009688"></a-ui-button>
+    </a-entity>
+    <a-plane width="1" height="0.01" color="#8f8f8f" shader="flat"></a-plane>
+    {{#each children}}
+    <a-entity width="1.2">
+        <a-plane src="{{image_url}}" width="0.3" height="0.3" segments="6" shader="flat"></a-plane>
+
+        <a-entity width="0.4">
+            <a-text font="roboto" baseLine="center" anchor="center" value="{{name}}"
+                    position="-1.05 0.88 0" color="#212121" wrap-count="15" width="0.5" height="0.15"></a-text>
+
+            <a-text font="roboto" baseLine="center" anchor="center" value="{{type}} Object"
+                    position="-1.05 0.88 0" color="#8f8f8f" wrap-count="16" width="0.5" height="0.05"></a-text>
+        </a-entity>
+        <a-ui-fab-button-small class="intersectable openItem" color="#009688" data-uuid="{{uuid}}" icon-color="#fff" ripple-color="#009688" src="images/icons/send.png" ui-yoga="margin:0;"></a-ui-fab-button-small>
+
+        <a-plane width="1" height="0.01" color="#8f8f8f" shader="flat" ui-yoga="margin:0"></a-plane>
+    </a-entity>
+
+    <!--<a-entity width="0.5"></a-entity>-->
+    {{/each}}
+</a-entity>
