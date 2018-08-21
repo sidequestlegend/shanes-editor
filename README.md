@@ -7,3 +7,5 @@ It supports many 3d shapes, a rich set of optimised prefab models built in and s
 The editor interface uses `aframe-material-collection` for all UI components and interaction.
 
 Video Demo - https://www.youtube.com/watch?v=7i2peYBWtdI;
+
+I will update this documentation much more in the coming days!
