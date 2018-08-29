@@ -1,15 +1,16 @@
 node_modules
-dist/models
-dist/images/textures
+dist/models/*
+dist/images/textures/*
 dist/images/3DTextures-1024
 dist/images/3DTextures-512
 dist/images/3DTextures
-dist/images/skybox
+dist/images/skybox/*
 dist/images/3d-scan
 .idea
 
 
 # Demo purposes
+!*/
 !*/dist/images/textures/groundcover/Grass-2351.jpg
 !*/dist/models/prefabs/kenney_furniturepack/Models/bedBunk.mtl
 !*/dist/models/prefabs/kenney_furniturepack/Models/bedBunk.obj
