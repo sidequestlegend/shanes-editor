@@ -6,8 +6,8 @@
     <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
     <script src="https://shanesedit.org/socket.io/socket.io.js"></script>
     <script src="https://cdn.rawgit.com/shaneharris/aframe-colorwheel-component/d0419acec7bb67b47a686b7ca35e8d1d3c1a30d2/dist/aframe-colorwheel-component.js"></script>
-    <!--<script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v4.1.2/dist/aframe-extras.min.js"></script>-->
-    <!--<script src="https://unpkg.com/super-hands@3.0.0/dist/super-hands.min.js"></script>-->
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v4.1.2/dist/aframe-extras.min.js"></script>
+    <script src="https://unpkg.com/super-hands@3.0.0/dist/super-hands.min.js"></script>
     <script src="app-bundle.js"></script>
 </head>
 <body>
@@ -53,14 +53,14 @@
     <a-entity id="rig"
               movement-controls="camera:#camera;fly:true">
         <a-entity id="camera" camera="near:0.1;far:500" right-look-controls wasd-controls="fly:true">
-            <a-entity id="cursor"  cursor="rayOrigin: mouse"
+            <a-entity id="cursor"  ></a-entity>
+
+            <!-- cursor="rayOrigin: mouse"
                       raycaster="far: 30; objects: .intersect;" ui-mouse-shim="fps:60"
                       super-hands="colliderEvent: raycaster-intersection;
             colliderEventProperty: els;
             colliderEndEvent:raycaster-intersection-cleared;
-            colliderEndEventProperty: clearedEls;" ></a-entity>
-
-                <!---->
+            colliderEndEventProperty: clearedEls;"-->
 
             <a-entity id="cameraDummyPosition"></a-entity>
         </a-entity>
@@ -87,7 +87,7 @@
         <!--<a-entity sphere-collider="objects: a-box" super-hands hand-controls="left"></a-entity>-->
 
         <!--<a-entity id="rhand" mixin="controller-right"></a-entity>-->
-        <!--<a-entity id="lhand" mixin="controller-left"></a-entity>-->
+        <a-entity id="lhand" mixin="controller-left"></a-entity>
     </a-entity>
 
     <a-ui-renderer id="modalRenderer" ui-panel="#modalPanel">
