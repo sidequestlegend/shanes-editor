@@ -15,7 +15,7 @@ module.exports = {
         rules: [
             {
                 test: /\.worker\.js$/,
-                use: { loader: 'worker-loader',options: { publicPath: '/scripts/workers/' } }
+                use: { loader: 'worker-loader',options: { inline: true, fallback: false, publicPath: '/shanes-editor/' } }
             }
         ]
     },
@@ -24,7 +24,7 @@ module.exports = {
         contentBase: __dirname+"/dist",
         open:true,
         disableHostCheck: true,
-        public: 'http://192.168.0.8:8080',
-        host:'192.168.0.8'
+        // public: 'http://192.168.0.8:8080',
+        // host:'192.168.0.8'
     }
 };
