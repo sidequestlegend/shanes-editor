@@ -6,9 +6,10 @@
     <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
     <script src="https://shanesedit.org/socket.io/socket.io.js"></script>
     <script src="https://cdn.rawgit.com/shaneharris/aframe-colorwheel-component/d0419acec7bb67b47a686b7ca35e8d1d3c1a30d2/dist/aframe-colorwheel-component.js"></script>
-    <script src="https://cdn.rawgit.com/shaneharris/CanvasInput/master/CanvasInput.js"></script>
-    <script src="https://unpkg.com/aframe-material-collection/dist/aframe-yoga-layout.min.js"></script>
-    <script src="https://unpkg.com/aframe-material-collection/dist/aframe-material-collection.min.js"></script>
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v4.1.2/dist/aframe-extras.min.js"></script>
+    <script src="https://unpkg.com/super-hands@3.0.0/dist/super-hands.min.js"></script>
+    <!--<script src="https://unpkg.com/aframe-material-collection/dist/aframe-yoga-layout.min.js"></script>-->
+    <!--<script src="https://cdn.rawgit.com/shaneharris/aframe-material-collection/master/dist/aframe-material-collection.js"></script>-->
     <script src="app-bundle.js"></script>
 </head>
 <body>
@@ -33,9 +34,39 @@
         <img id="resetIcon" src="images/icons/baseline_vertical_align_bottom_white_18dp.png"/>
         <img id="precisionIcon" src="images/icons/baseline_gps_fixed_white_18dp.png"/>
 
+        <a-mixin id="pointer" raycaster="showLine: true; objects: .intersect" ui-mouse-shim="fps:90"
+                 super-hands="colliderEvent: raycaster-intersection;
+                               colliderEventProperty: els;
+                               colliderEndEvent:raycaster-intersection-cleared;
+                               colliderEndEventProperty: clearedEls;">
+        </a-mixin>
+        <a-mixin id="controller-right" mixin="pointer"
+                 vive-controls="hand: right" oculus-touch-controls="hand: right"
+                 windows-motion-controls="hand: right"
+                 gearvr-controls daydream-controls oculus-go-controls>
+        </a-mixin>
+        <a-mixin id="controller-left" mixin="pointer"
+                 vive-controls="hand: left" oculus-touch-controls="hand: left"
+                 windows-motion-controls="hand: left">
+        </a-mixin>
+
+
     </a-assets>
-    <a-entity id="camera" camera="near:0.1;far:500" right-look-controls wasd-controls="fly:true">
-        <a-entity id="cursor" cursor="rayOrigin: mouse" ui-mouse-shim="fps:60" raycaster="far: 30; objects: .intersect;"></a-entity>
+    <a-entity id="rig"
+              movement-controls="camera:#camera;fly:true">
+        <a-entity id="camera" camera="near:0.1;far:500" right-look-controls wasd-controls="fly:true">
+            <a-entity id="cursor"  cursor="rayOrigin: mouse"
+                      raycaster="far: 30; objects: .intersect;" ui-mouse-shim="fps:60"
+                      super-hands="colliderEvent: raycaster-intersection;
+            colliderEventProperty: els;
+            colliderEndEvent:raycaster-intersection-cleared;
+            colliderEndEventProperty: clearedEls;" ></a-entity>
+
+                <!---->
+
+            <a-entity id="cameraDummyPosition"></a-entity>
+        </a-entity>
+
         <a-entity position="-1.85 -0.8 -1.2">
             <a-ring segments-theta="6" theta-start="100" rotation="0 0 -10" shader="flat" position="0 0 0"
                     ui-btn radius-inner="0.085" class="intersect" radius-outer="0.1">
@@ -54,7 +85,11 @@
                 <a-plane class="intersect" id="scaleButton" shader="flat" src="images/gizmos/scale.png" width="0.1" height="0.1" alpha-test="0.5" transparent="true"></a-plane>
             </a-ring>
         </a-entity>
-        <a-entity id="cameraDummyPosition"></a-entity>
+        <!--<a-entity sphere-collider="objects: a-box" super-hands hand-controls="right" ></a-entity>-->
+        <!--<a-entity sphere-collider="objects: a-box" super-hands hand-controls="left"></a-entity>-->
+
+        <!--<a-entity id="rhand" mixin="controller-right"></a-entity>-->
+        <!--<a-entity id="lhand" mixin="controller-left"></a-entity>-->
     </a-entity>
 
     <a-ui-renderer id="modalRenderer" ui-panel="#modalPanel">
@@ -119,25 +154,25 @@
                 </a-plane>
 
                 <!--<a-plane width="0.225" height="0.225" position="1.21 0.885 0.001"-->
-                         <!--class="intersectable" shader="flat"-->
-                         <!--id="myScenes"-->
-                         <!--ui-ripple="size:0.225 0.225;clampToSquare:true;zIndex:0.001;" transparent="true" opacity="0.1">-->
-                    <!--<a-plane src="#iconSend" width="0.1" height="0.1" shader="flat" transparent="true"></a-plane>-->
+                <!--class="intersectable" shader="flat"-->
+                <!--id="myScenes"-->
+                <!--ui-ripple="size:0.225 0.225;clampToSquare:true;zIndex:0.001;" transparent="true" opacity="0.1">-->
+                <!--<a-plane src="#iconSend" width="0.1" height="0.1" shader="flat" transparent="true"></a-plane>-->
                 <!--</a-plane>-->
 
                 <!--<a-plane width="0.225" height="0.225" position="1.435 0.885 0.001"-->
-                         <!--class="intersectable" shader="flat"-->
-                         <!--id="openScene"-->
-                         <!--ui-ripple="size:0.225 0.225;clampToSquare:true;zIndex:0.001;" transparent="true" opacity="0.1">-->
-                    <!--<a-plane src="#swapVirtIcon" width="0.1" height="0.1" shader="flat" transparent="true"></a-plane>-->
+                <!--class="intersectable" shader="flat"-->
+                <!--id="openScene"-->
+                <!--ui-ripple="size:0.225 0.225;clampToSquare:true;zIndex:0.001;" transparent="true" opacity="0.1">-->
+                <!--<a-plane src="#swapVirtIcon" width="0.1" height="0.1" shader="flat" transparent="true"></a-plane>-->
                 <!--</a-plane>-->
 
                 <!--<a-plane width="0.225" height="0.225" position="1.66 0.885 0.001"-->
-                         <!--class="intersectable" shader="flat"-->
-                         <!--id="openObject"-->
-                         <!--ui-toast="toastEl:#toastMessage;message:here!"-->
-                         <!--ui-ripple="size:0.225 0.225;clampToSquare:true;zIndex:0.001;" transparent="true" opacity="0.1">-->
-                    <!--<a-plane src="#helpIcon" width="0.1" height="0.1" shader="flat" transparent="true"></a-plane>-->
+                <!--class="intersectable" shader="flat"-->
+                <!--id="openObject"-->
+                <!--ui-toast="toastEl:#toastMessage;message:here!"-->
+                <!--ui-ripple="size:0.225 0.225;clampToSquare:true;zIndex:0.001;" transparent="true" opacity="0.1">-->
+                <!--<a-plane src="#helpIcon" width="0.1" height="0.1" shader="flat" transparent="true"></a-plane>-->
                 <!--</a-plane>-->
 
                 <a-plane width="0.225" height="0.225" position="1.885 0.885 0.001"

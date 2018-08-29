@@ -2,17 +2,17 @@
 
     <a-text font="roboto" baseLine="top" anchor="center" value="Texture Image:"
             color="#212121" wrap-count="15" width="0.5" height="0.1"></a-text>
-    <a-ui-text-input width="0.65" height="0.15" value="something.png"></a-ui-text-input>
+    <a-ui-input-text class="textureImage" camera-el="#camera" look-controls-component="right-look-controls" width="0.65" height="0.2" value="{{map}}"></a-ui-input-text>
 
     <a-entity width="0.21"></a-entity>
 
-    <a-ui-button class="intersectable" text-value="MAP SETTINGS"
+    <a-ui-button class="intersectable map-settings" text-value="MAP SETTINGS"
                  width="0.5" height="0.12" ripple-size="0.5 0.12" wrap-count="14"></a-ui-button>
 
-    <a-ui-button class="intersectable" text-value="LOAD"
+    <a-ui-button class="intersectable load" text-value="LOAD"
                  width="0.22" height="0.12" ripple-size="0.22 0.12" wrap-count="6"></a-ui-button>
 
-    <a-ui-button class="intersectable" text-value="SAVE"
+    <a-ui-button class="intersectable save" text-value="SAVE"
                  width="0.22" height="0.12" ripple-size="0.22 0.12" wrap-count="6"></a-ui-button>
 
 </a-entity>

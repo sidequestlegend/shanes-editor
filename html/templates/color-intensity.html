@@ -5,6 +5,7 @@
         <a-text ui-yoga="margin:0" shader="flat"  class="colorIntensityInputText" width="0.32" height="0.1" value="{{color}}" color="#212121" wrap-count="7" align="center">
         </a-text>
         <a-plane ui-btn ui-yoga="margin:0" shader="flat" class="colorIntensityInput intersectable" ui-rounded="borderRadius:0.05;curveSegments:5" width="0.32" height="0.1" color="{{color}}">
+            <a-plane ui-border="borderRadius:0.05;borderWidth:0.008" class="no-yoga-layout" width="0.32" height="0.1" color="#212121" position="0 0 0.001"></a-plane>
         </a-plane>
     </a-entity>
     <a-plane ui-yoga="margin:0" width="0.32" class="xText" ui-border="borderRadius:0.1;borderWidth:0.008" height="0.2" color="#212121" text="value:{{to-fixed intensity 3}};color:#212121;wrapCount:9;align:center">
