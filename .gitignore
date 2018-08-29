@@ -10,18 +10,18 @@ dist/images/3d-scan
 
 
 # Demo purposes
-!dist/images/textures/groundcover/Grass-2351.jpg
-!dist/models/prefabs/kenney_furniturepack/Models/bedBunk.mtl
-!dist/models/prefabs/kenney_furniturepack/Models/bedBunk.obj
-!dist/models/prefabs/kenney_furniturepack/Models/cabinetBedDrawer.obj
-!dist/models/prefabs/kenney_furniturepack/Models/cabinetBedDrawer.mtl
-!dist/models/prefabs/kenney_furniturepack/Models/bookcaseOpen.obj
-!dist/models/prefabs/kenney_furniturepack/Models/bookcaseOpen.mtl
-!dist/models/prefabs/kenney_furniturepack/Models/chairDesk.obj
-!dist/models/prefabs/kenney_furniturepack/Models/chairDesk.mtl
-!dist/models/prefabs/kenney_furniturepack/Models/speaker.obj
-!dist/models/prefabs/kenney_furniturepack/Models/speaker.mtl
-!dist/models/prefabs/kenney_furniturepack/Models/kitchenStoveElectric.obj
-!dist/models/prefabs/kenney_furniturepack/Models/kitchenStoveElectric.mtl
-!dist/images/skybox/flower_road_8M.jpg
-!dist/images/skybox/flower_road_2M.jpg
+!*/dist/images/textures/groundcover/Grass-2351.jpg
+!*/dist/models/prefabs/kenney_furniturepack/Models/bedBunk.mtl
+!*/dist/models/prefabs/kenney_furniturepack/Models/bedBunk.obj
+!*/dist/models/prefabs/kenney_furniturepack/Models/cabinetBedDrawer.obj
+!*/dist/models/prefabs/kenney_furniturepack/Models/cabinetBedDrawer.mtl
+!*/dist/models/prefabs/kenney_furniturepack/Models/bookcaseOpen.obj
+!*/dist/models/prefabs/kenney_furniturepack/Models/bookcaseOpen.mtl
+!*/dist/models/prefabs/kenney_furniturepack/Models/chairDesk.obj
+!*/dist/models/prefabs/kenney_furniturepack/Models/chairDesk.mtl
+!*/dist/models/prefabs/kenney_furniturepack/Models/speaker.obj
+!*/dist/models/prefabs/kenney_furniturepack/Models/speaker.mtl
+!*/dist/models/prefabs/kenney_furniturepack/Models/kitchenStoveElectric.obj
+!*/dist/models/prefabs/kenney_furniturepack/Models/kitchenStoveElectric.mtl
+!*/dist/images/skybox/flower_road_8M.jpg
+!*/dist/images/skybox/flower_road_2M.jpg
