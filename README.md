@@ -9,6 +9,10 @@ The editor interface uses [aframe-material-collection](https://npmjs.com/package
 
 [Longer Video Demo](https://www.youtube.com/watch?v=I57za9UXiTI)
 
+[Live Demo](https://shaneharris.github.io/shanes-editor/)
+
+[Live Demo - Super Hands](https://shaneharris.github.io/shanes-editor/super-hands.html)
+
 
 ## Getting Started
 
