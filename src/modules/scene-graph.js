@@ -7,37 +7,33 @@ export class SceneGraph{
 
     constructor(context){
         this.context = context;
-
         this.migrations = new Migrations(this);
-
         this.behaviourHelper = new BehaviourHelper(this);
-
         this.objectFactory = new ObjectFactory(this);
-
         this.serialiser = new Serialiser(this);
-
         this.behaviourFactory = new BehaviourFactory(this);
-
+        // Seed the current scene object - this is replaced when you load a scene in.
         this.currentScene = {settings:this.objectFactory.defaultUserData(),children:[]};
-
         this.resetContainer();
-
         this.containerComponentName = 'scene-graph-container';
-
         this.setupAframeContainer();
-
-        console.log('Scene Editor Version 0.1.0')
+        console.log('Shane\'s Editor Version 0.2.0')
     }
 
     async load(scene){
+        // Get the current scene json definition
         return fetch(window.location.protocol+'//'+window.location.host+'/scene/'+scene.short_code+'.json')
             .then(response=>response.json())
             .then(_scene=>{
+                // Clear anything out of the scene first.
                 this.clearScene();
                 this.hasScene = true;
                 this.sceneLoaded = false;
+                // Set the current scene object
                 this.currentScene = _scene || this.currentScene;
+                // Migrate the current scene object fromthe old altspace format
                 this.migrations.migrate();
+                // Store the scene details in the scene definition
                 this.currentScene.metadata = scene;
                 console.log('Scene Downloaded.');
                 return Promise.resolve();
@@ -45,10 +41,12 @@ export class SceneGraph{
     }
 
     canOpen(){
+        // Is there a scene loaded but not open?
         return this.hasScene&&!this.sceneLoaded;
     }
 
     dispatchLoadEvents(promises){
+        // Send back load events to facilitate displaying loading percentages.
         let completeCount = 0;
         let total = promises.length;
         for(let i = 0; i < total; i++){
@@ -62,9 +60,12 @@ export class SceneGraph{
 
     open(){
         console.log('Loading Scene...');
-        this.context.sceneEl.emit('scene-load-start');
+        // return if no scene is loaded.
         if(!this.currentScene||this.sceneLoaded)return;
+        // Open the current scene that was previously loaded with this.load()
+        this.context.sceneEl.emit('scene-load-start');
         this.sceneLoaded = true;
+        // Deserialize scene
         let promises = this.serialiser.deSerialiseScene(this.currentScene);
         this.dispatchLoadEvents(promises);
         return Promise.all(promises);
@@ -72,14 +73,15 @@ export class SceneGraph{
 
     setupAframeContainer(){
         let _this = this;
+        // Register aframe component to attach the scene to teh aframe container
+        // I didnt use aframe for the scene graph as i wanted more granular control over the
+        // hierarchy and wanted to be able to use fancy geometries and more material settings.
         AFRAME.registerComponent(this.containerComponentName, {
             init(){
-                this.setObject3d(_this.container);
-            },
-            setObject3d(object){
-                this.el.setObject3D('mesh',object);
+                this.el.setObject3D('mesh',_this.container);
             }
         });
+        // Create and attach the aframe entity container to the scene
         this.entityContainer = document.createElement('a-entity');
         this.entityContainer.setAttribute('scene-graph-container',"");
         this.entityContainer.setAttribute('position',"0 -1.6 0");
@@ -87,6 +89,8 @@ export class SceneGraph{
     }
 
     totals(object,totals,desktopOverride,mobileOverride){
+        // Recursively calculate object stats for the current object and its children.
+        // These stats are set when the objects are initially deserialized
         let hide_on_mobile = object.settings.hide_on_mobile;
         let hide_on_desktop = object.settings.hide_on_desktop;
         if(object.settings.stats){
@@ -109,6 +113,7 @@ export class SceneGraph{
     }
 
     resetContainer(){
+        // Reset the scene container.
         this.container = new THREE.Object3D();
         this.currentScene.settings = this.objectFactory.defaultUserData();
         this.currentScene.children.length=0;
@@ -116,6 +121,9 @@ export class SceneGraph{
     }
 
     findByUUID(uuids,is_json,parent){
+        // Traverse the scene graph to find an object with a certain UUID
+        // This is probably not needed as each scene graph object has a reference to the
+        // associated object3D and vice versa ( via userData )
         let results = {},
             _this = this;
         if(typeof uuids === "string"){
@@ -132,7 +140,9 @@ export class SceneGraph{
     }
 
     remove(parent,index){
+        // Remove an object from the scene graph freeing the resources is consumes.
         let child = parent.children[index];
+        // TODO: needs to be updated to use the referenced object3d at child.object3D
         if(child&&child.settings.uuid){
             let object = this.findByUUID(child.settings.uuid);
             if(object){
@@ -144,6 +154,9 @@ export class SceneGraph{
     }
 
     async add(parent,settings){
+        // Add an object to the scene.
+        // If there is a camera dummy ( positioned 4m in front of the camera ) object
+        // then use that to set the object position.
         if(this.context.cameraDummy){
             this.context.cameraDummy.object3D.position.set(0,0,-3);
             this.context.cameraDummy.object3D.updateMatrixWorld();
@@ -151,26 +164,35 @@ export class SceneGraph{
             let position = this.context.cameraDummy.object3D.localToWorld(new THREE.Vector3(0,0,0))
             settings.tra_settings = {position:parent.object3D.worldToLocal(position)};
         }
+        // Generate the object settings from the input parameters.
         let userData = this.objectFactory.generateUserData(settings);
-        if(parent.settings.uuid){
-            let child = {settings:userData,children:[]};
-            return this.objectFactory.make(child)
-                .then(object=>{
-                    child.object3D = object;
-                    child.parent = parent;
-                    parent.object3D.add(object);
-                    parent.children.push(child);
-                    return child;
-                })
-        }
+        // Seed child object
+        let child = {settings:userData,children:[]};
+        // Create the object3D
+        return this.objectFactory.make(child)
+            .then(object=>{
+                // Attach the child to the object3D as a reference.
+                object.userData.sceneObject = child;
+                // Attach the object3D to the child as a reference.
+                child.object3D = object;
+                // Set the childs parent property for traversing up the tree.
+                child.parent = parent;
+                // Add the object3D to the scene.
+                parent.object3D.add(object);
+                // Add the child to the parent int he scene graph
+                parent.children.push(child);
+                // Return the newly created child.
+                return child;
+            })
     }
 
-    getPointInBetweenByPerc(pointA, pointB, percentage) {
-        let dir = pointB.clone().sub(pointA).normalize().multiplyScalar(pointA.distanceTo(pointB)*(percentage||0.5));
-        return pointA.clone().add(dir);
-    }
+    // getPointInBetweenByPerc(pointA, pointB, percentage) {
+    //     let dir = pointB.clone().sub(pointA).normalize().multiplyScalar(pointA.distanceTo(pointB)*(percentage||0.5));
+    //     return pointA.clone().add(dir);
+    // }
 
     clearObject(object){
+        // TODO: need to investigate what of this is necessary - or if there are other things to do also
         object.traverse(child=>{
             if(child.material&&child.material.map&&child.material.map.dispose){
                 child.material.map.dispose();
@@ -197,6 +219,6 @@ export class SceneGraph{
         this.clearObject(this.container);
         // Reset the content container.
         this.resetContainer();
-        this.entityContainer.components[this.containerComponentName].setObject3d(this.container);
+        this.entityContainer.setObject3D('mesh',this.container);
     }
 }

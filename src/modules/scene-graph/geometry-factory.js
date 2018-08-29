@@ -2,9 +2,11 @@ import {ParametricGeometries} from "./parametric-geometries";
 export class GeometryFactory{
     constructor(sceneGraph){
         this.sceneGraph = sceneGraph;
+        // Initialise custom parametric geometries - many of which came from http://paulbourke.net/geometry/
         this.parametricGeometries = new ParametricGeometries();
     }
     makeGeometry(geo_settings){
+        // Make a primitive geometry with the given settings.
         let settingsObj = this.geometrySettingsWithDefaults(geo_settings);
         let parameters = [null];
         for(let key in settingsObj){
@@ -16,6 +18,7 @@ export class GeometryFactory{
         return new outputFunc();
     }
     makeParametric(geo_settings){
+        // Make a parametric geometry with the given settings.
         let _this = this;
         let settings = this.parametricSettingsWithDefaults(geo_settings);
         let globals = {
@@ -66,6 +69,7 @@ export class GeometryFactory{
         };
         let geo_func = custom_functions[geo_settings.sub_type];
         let parameters = [null,geo_func];
+        // Filter the settings not to be applied to the geometry function.
         let notAllowed = ['name','description','method','image','user_config','user_options','parametric_id'];
         for(let key in settings){
             if(settings.hasOwnProperty(key)&&
@@ -77,6 +81,9 @@ export class GeometryFactory{
         return new outputFunc();
     }
     parametricSettingsWithDefaults(settings){
+        // Get the deafualt settings for the parametric geometries.
+        // Mostly the same with only slices and stacks
+        // Some extra properties with custom geometries.
         switch(settings.sub_type) {
             case "AppleGeometry":
             case "AppleInvertedGeometry":
@@ -120,6 +127,7 @@ export class GeometryFactory{
         }
     }
     geometrySettingsWithDefaults(settings){
+        // Get the settings object with defaults for the nput type of geometry required.
         switch(settings.type){
             case "BoxGeometry":
             case "BoxBufferGeometry":

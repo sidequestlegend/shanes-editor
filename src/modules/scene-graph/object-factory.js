@@ -8,6 +8,7 @@ export class ObjectFactory{
         this.geometryFactory = new GeometryFactory(sceneGraph);
     }
     changeGeometry(type){
+        // Change the type of the geometry
         let isPrimitive = this.sceneGraph.context.currentObject.settings.type==="Primitive";
         let newGeometry = this.geometryFactory[isPrimitive?"geometrySettingsWithDefaults":"parametricSettingsWithDefaults"]
         (isPrimitive?{type:type}:{sub_type:type});
@@ -21,6 +22,7 @@ export class ObjectFactory{
         this.resetGeometry();
     }
     resetGeometry(){
+        // Reset the current objects geometry to the new one selected.
         let settings = this.sceneGraph.context.currentObject.settings;
         this.sceneGraph.context.currentObject.object3D.geometry =
             settings.type==="Primitive"?
@@ -30,18 +32,17 @@ export class ObjectFactory{
         this.addStats(this.sceneGraph.context.currentObject.object3D,this.sceneGraph.context.currentObject);
     }
     changeMaterial(type){
-        console.log(type);
+        // Change the material type transferring any settings across that are compatible.
         let settings = this.sceneGraph.context.currentObject.settings;
         settings.material.type = type;
         this.sceneGraph.context.currentObject.settings.material = this.materialFactory.materialSettingsWithDefaults(settings.material)
-        console.log(this.sceneGraph.context.currentObject.settings.material);
         this.materialFactory.makeMaterial(this.sceneGraph.context.currentObject.settings.material)
             .then(material=>{
                 this.sceneGraph.context.currentObject.object3D.material = material
             });
     }
     generateUserData(settings){
-        console.log(settings);
+        // Generate default settings for a new object created - wraps the defaultUserData method basically.
         let userData = this.defaultUserData(
                 settings.type,
                 settings.sub_type||"",
@@ -55,11 +56,13 @@ export class ObjectFactory{
             userData.mtl_url = settings.mtl_url;
             userData.mtl_path = settings.mtl_path;
         }
+        // Set the added flag to propagate this change to the sync system
         userData.state.added = true;
         return userData;
     }
 
     defaultUserData(type,sub_type,geo_settings,mat_settings,tra_settings,name,uuid){
+        // Create the default object definition.
         geo_settings = geo_settings||{};
         geo_settings.type = sub_type;
         geo_settings.sub_type = geo_settings.sub_type||"";
@@ -87,6 +90,7 @@ export class ObjectFactory{
             behaviours:[],
             hide_on_mobile:false,
             hide_on_desktop:false,
+            preserve_scale:false,
             geometry:geo_settings||{},
             material:this.materialFactory.materialSettingsWithDefaults(mat_settings||{}),
             state:{
@@ -98,6 +102,7 @@ export class ObjectFactory{
         }
     }
     getTotals(object){
+        // Get the total vertices and pixels in a newly added object.
         let totals = {points:0,pixels:0};
         let imageCache = [];
         object.traverse(child=>{
@@ -117,10 +122,12 @@ export class ObjectFactory{
     }
 
     addStats(object,child){
+        // Add total stats to an object if not already set.
         if(!child.settings.stats)
             child.settings.stats = this.getTotals(object);
     }
     transform(object,child){
+        // Transform a newly created object to the settings in the scene graph.
         object.userData.sceneObject = child;
         if(object){
             object.rotation.set(
@@ -139,7 +146,10 @@ export class ObjectFactory{
         }
     }
     resolveObject(object,scene,child,resolve){
+        // Resolve a newly created object - used to calculate the loading percentage and
+        // some common processing tasks.
         this.transform(object,child);
+        // TODO: hook into preserve_scale property to decide if this object should be centered and scaled to fit inside 1,1,1
         this.scaleAndCenterObject(scene);
         object.add( scene );
         this.addStats(object,child);
@@ -151,8 +161,8 @@ export class ObjectFactory{
             let object, geometry, promise, loader;
             switch(settings.type){
                 case "Primitive":
+                    // Create a primitive geometry
                     geometry = this.geometryFactory.makeGeometry(settings.geometry);
-                    //geometry = this.geometryModify(settings,geometry);
                     this.materialFactory.makeMaterial(settings.material)
                         .then(material=>{
                             object = new THREE.Mesh(geometry,material);
@@ -162,9 +172,9 @@ export class ObjectFactory{
                         });
                     break;
                 case "Parametric":
+                    // Create a parametric geometry
                     geometry = this.geometryFactory.makeParametric(settings.geometry);
                     this.scaleAndCenterGeometry(geometry);
-                    //geometry = this.geometryModify(settings,geometry);
                     this.materialFactory.makeMaterial(settings.material)
                         .then(material=>{
                             object = new THREE.Mesh(geometry,material);
@@ -174,6 +184,7 @@ export class ObjectFactory{
                         });
                     break;
                 case "Object3D":
+                    // Create a group
                     object = new THREE.Object3D();
                     object.name = 'Group';
                     this.transform(object,child);
@@ -182,18 +193,21 @@ export class ObjectFactory{
                     break;
                 case "Poly":
                 case "Custom":
+                    // Load a 3d model from any source.
                     object = new THREE.Object3D();
                     object.name = settings.type;
                     switch(settings.geometry.type){
                         case "GLTF2":
                             promise = Promise.resolve(settings.url);
-                            if(settings.type==="Poly"){
-                                promise = new Promise(function(r){
-                                    new THREE.FileLoader().load('poly-proxy/'+encodeURIComponent(settings.url),function(url) {
-                                        r(url);
-                                    });
-                                })
-                            }
+                            // google poly changed the models cdn breaking all old linsk. this is probably not needed any more
+                            // but leaving here as a reference when i get to loading google poly models again.
+                            // if(settings.type==="Poly"){
+                            //     promise = new Promise(function(r){
+                            //         new THREE.FileLoader().load('poly-proxy/'+encodeURIComponent(settings.url),function(url) {
+                            //             r(url);
+                            //         });
+                            //     })
+                            // }
                             promise.then((url)=>{
                                 let loader = new THREE.GLTFLoader();
                                 loader.setCrossOrigin( true );
@@ -259,16 +273,20 @@ export class ObjectFactory{
     }
     scaleAndCenterGeometry(geometry){
         geometry.computeBoundingBox();
-        let sizeH = geometry.boundingBox.getSize(); // get the size of the bounding box of the house
-        let sizeO = this.getScaledVector(sizeH); // get the size of the bounding box of the obj
+        // get the size of the bounding box of the house
+        let sizeH = geometry.boundingBox.getSize();
+        // get the size of the bounding box of the obj
+        let sizeO = this.getScaledVector(sizeH);
         let ratio = sizeH.divide( sizeO );
         geometry.scale ( 1/ratio.x, 1/ratio.y, 1/ratio.z );
         geometry.center();
     }
     scaleAndCenterObject(object){
         let box = new THREE.Box3().setFromObject( object );
-        let sizeH = box.getSize(); // get the size of the bounding box of the house
-        let sizeO = this.getScaledVector(sizeH); // get the size of the bounding box of the obj
+        // get the size of the bounding box of the house
+        let sizeH = box.getSize();
+        // get the size of the bounding box of the obj
+        let sizeO = this.getScaledVector(sizeH);
         let ratio = sizeH.divide( sizeO );
         object.scale.set( 1/ratio.x, 1/ratio.y, 1/ratio.z );
         let offset = box.getCenter().clone().negate();

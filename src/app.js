@@ -76,13 +76,9 @@ class Main{
         this.setupTopMenu();
         this.setupPopupNavigation();
         this.setupTransformOptions();
-        //new PlaceModels(this);
 
         this.showAlphaMap = new THREE.TextureLoader().load('images/nav-alpha.jpg');
         this.hideAlphaMap = new THREE.TextureLoader().load('images/nav-alpha-hide.jpg');
-        // document.getElementById('uiPanel').addEventListener('loaded',()=>{
-        //     console.log('loaded');
-        // });
         this.showMaterial = document.getElementById('uiPanel').getObject3D('mesh').material;
         this.showMaterial.transparent = true;
         this.showMaterial.alphaMap = this.hideAlphaMap;

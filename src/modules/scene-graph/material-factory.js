@@ -5,6 +5,7 @@ export class MaterialFactory{
     makeMaterial(mat_settings){
         let new_settings = {};
         return new Promise(resolve=>{
+            // Filter out all properties not to be applied or to be processed before being applied.
             Object.keys(mat_settings)
                 .filter(function(key){return [
                     "type","map","texture","lightTexture",
@@ -15,6 +16,7 @@ export class MaterialFactory{
                 });
             if(mat_settings.map&&typeof mat_settings.map === "string"){
                 try{
+                    // TODO: need to generate all other maps here too.
                     let texture = new THREE.TextureLoader().load(mat_settings.map,()=>{
                         // in this example we create the material when the texture is loaded
                         resolve(new THREE[mat_settings.type](new_settings))
@@ -38,6 +40,7 @@ export class MaterialFactory{
         })
     }
     phongSettingsWithDefaults(materialSettings,settings){
+        // default phong settings - used for toon material too.
         let mapCompatibles = [
             "MeshPhongMaterial",
             "MeshToonMaterial"
@@ -67,6 +70,7 @@ export class MaterialFactory{
         }
     }
     standardSettingsWithDefaults(materialSettings,settings){
+        // Standard settings used for physical material too.
         let mapCompatibles = [
             "MeshStandardMaterial",
             "MeshPhysicalMaterial"
@@ -96,6 +100,7 @@ export class MaterialFactory{
         }
     }
     wireframeSettingsWithDefaults(mat_settings,settings){
+        // Common wireframe settings.
         let mapCompatibles = [
             "MeshBasicMaterial",
             "MeshStandardMaterial",
@@ -112,6 +117,7 @@ export class MaterialFactory{
         }
     }
     mapSettingsWithDefaults(mat_settings,settings){
+        // Common map settings.
         let mapCompatibles = [
             "MeshBasicMaterial",
             "MeshStandardMaterial",
@@ -131,7 +137,7 @@ export class MaterialFactory{
         }
     }
     materialSettingsWithDefaults(settings){
-
+        // Seed the default material settings with overrides to create a material with.
         let materialSettings = {
             type:settings.type||'MeshStandardMaterial',
             visible:settings.visible===false?settings.visible:true,

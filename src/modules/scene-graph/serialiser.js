@@ -26,6 +26,8 @@ export class Serialiser{
                     return this.sceneGraph.objectFactory.make(child).then(object=>{
                         if(object){
                             current.add(object);
+                            object.userData.sceneObject = child;
+                            child.object3D = object;
                             child.parent = scene_current;
                             this.deSerialiseScene(child,object,promises);
                             return {object:object,child:child};

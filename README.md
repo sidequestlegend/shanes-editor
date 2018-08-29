@@ -1,9 +1,33 @@
 # Shane's Editor
-![Image](https://i.imgur.com/5i63FdD.png)
+![Demo](https://raw.githubusercontent.com/shaneharris/shanes-editor/master/demo.gif)
 
 Shane's Editor makes it possible to create content in VR using web technologies.
-It supports many 3d shapes, a rich set of optimised prefab models built in and supports javascript scripting.
 
-The editor interface uses `aframe-material-collection` for all UI components and interaction.
+It supports many 3d shapes, a rich set of optimised prefab models built in and scripting in javascript.
 
-Video Demo - https://www.youtube.com/watch?v=7i2peYBWtdI;
+The editor interface uses [aframe-material-collection](https://npmjs.com/package/aframe-material-collection/) for all UI components and interaction.
+
+[Longer Video Demo](https://www.youtube.com/watch?v=I57za9UXiTI)
+
+
+## Getting Started
+
+#### Installing
+
+```
+git clone https://github.com/shaneharris/shanes-editor.git
+cd shanes-editor
+npm install
+```
+
+#### Running
+
+```
+npm start
+```
+
+#### Building
+
+```
+npm run build
+```

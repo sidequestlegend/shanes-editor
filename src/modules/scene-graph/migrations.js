@@ -1,6 +1,7 @@
 export class Migrations{
     constructor(context){
         this.context = context;
+        // Migrate the scene graph versions when there are breaking changes to the scene graph definition.
     }
     getVersion(){
         if(!this.context.currentScene)return;
@@ -10,9 +11,7 @@ export class Migrations{
     migrate(){
         switch(this.getVersion()){
             case "1.0":
-                console.log('migration started');
                 this.migrateV2();
-                console.log('migration done');
                 break;
         }
     }

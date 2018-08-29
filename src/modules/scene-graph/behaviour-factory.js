@@ -1,6 +1,7 @@
 export class BehaviourFactory{
 
     constructor(scene_graph){
+        // TODO: This is just a transplant of the old behaviour code. This is not functional and needs to be re-implemented.
         this.scene_graph = scene_graph;
     }
     resetBehaviours(object){

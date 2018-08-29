@@ -1,6 +1,8 @@
 export class BehaviourHelper{
 
     constructor(scene_graph){
+        // TODO: This is just a transplant of the old behaviour helper. Some behaviours depend on these methods so i
+        // TODO: need to be careful not to break anything. This is not functional and needs to be re-implemented.
         this.scene_graph = scene_graph;
         this.store = {
             _cannon:{

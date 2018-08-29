@@ -1,7 +1,7 @@
 export class Session{
     constructor(context){
         this.context = context;
-        //this.setupSocket();
+        // Dummy session data.
         this.userData = {
             "user_id": 45,
             "token": "some-secret-token",
@@ -12,11 +12,6 @@ export class Session{
                     "short_code": "16t"
                 },
                 {
-                    "scene_id": 598,
-                    "name": "Superb",
-                    "short_code": "gm"
-                },
-                {
                     "scene_id": 597,
                     "name": "Thirsty",
                     "short_code": "gl"
@@ -24,21 +19,4 @@ export class Session{
             ]
         }
     }
-    onLogin(){
-
-    }
-    setupSocket(){
-        this.socket = io.connect('https://shanesedit.org',{ ////http://localhost:8082
-            reconnection: true,
-            reconnectionDelay: 1000,
-            reconnectionDelayMax : 5000,
-            reconnectionAttempts: 99999
-        });
-        this.socket.on('login',msg=>{
-            // this.userData = msg;
-            // console.log(JSON.stringify(this.userData,null,4))
-            this.onLogin(msg);
-        });
-    }
-
 }

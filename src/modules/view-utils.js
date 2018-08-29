@@ -1,12 +1,15 @@
 export class ViewUtils{
     constructor(context){
         this.context = context;
+        // A collection of helper methods used by many views.
     }
     title(name,uuid){
+        // Set the title section of the current screen.
         return this.context.content.compileTemplates('title-section',[{name:name,uuid:uuid}],true)
             .then(contents=>this.context.content.addTemplateItem('#titleSection',contents[0]))
     }
     async stats(object){
+        // Populate the stats section on the current view.
         if(this.context.sceneGraph.canOpen()){
             let statsParent = document.querySelector('#sceneStats')
             statsParent.parentElement.removeChild(statsParent);

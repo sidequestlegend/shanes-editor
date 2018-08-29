@@ -14,6 +14,7 @@ module.exports = AFRAME.registerComponent('display-box', {
         this.setupElements();
     },
     setupElements(){
+        // Create box with back side texture barely opaque to show the currently selected object.
         this.display_box = document.createElement('a-box');
         this.display_box.setAttribute('src','images/display_texture.png');
         this.display_box.setAttribute('side','back');
@@ -21,8 +22,11 @@ module.exports = AFRAME.registerComponent('display-box', {
         this.display_box.setAttribute('shader','flat');
         this.display_box.setAttribute('opacity',0.1);
         this.el.appendChild(this.display_box);
+        // Create an empty entity to contain the corners. As we scale the box the corners should stay the same size
+        // so they are positioned outside the display box.
         this.cornerContainer = document.createElement('a-entity');
         this.el.appendChild(this.cornerContainer);
+        // Setup all corners of the box.
         this.corner_ftl = this.createCorner('FTL');
         this.corner_ftr = this.createCorner('FTR');
         this.corner_fbl = this.createCorner('FBL');
@@ -33,6 +37,7 @@ module.exports = AFRAME.registerComponent('display-box', {
         this.corner_bbr = this.createCorner('BBR');
     },
     hide(){
+        // Set an empty object to hide.
         this.setObject();
     },
     setObject(object){
@@ -50,10 +55,13 @@ module.exports = AFRAME.registerComponent('display-box', {
                 })
                 .easing(TWEEN.Easing.Exponential.Out).start();
         }
-
+        // Show the transform button to swap between gizmos
+        // TODO:  move this out of this component
         this.el.sceneEl.context.viewUtils.showTransformOptions();
+        // Get box fromt he selected object.
         this.boundingBox = new THREE.Box3().setFromObject(object);
         this.boundingBoxSize = this.boundingBox.getSize();
+        // Animate the display box to the new object position and scale.
         new TWEEN.Tween(this.el.getAttribute('scale'))
             .to(new THREE.Vector3(1,1,1), 250)
             .easing(TWEEN.Easing.Exponential.Out).start();
@@ -63,16 +71,21 @@ module.exports = AFRAME.registerComponent('display-box', {
         new TWEEN.Tween(this.display_box.getAttribute('position'))
             .to(this.boundingBox.getCenter(), 250)
             .easing(TWEEN.Easing.Exponential.Out).start();
+        // Animate the corner container scale
         this.cornerContainer.setAttribute('scale','0.000001 0.000001 0.000001');
         new TWEEN.Tween(this.cornerContainer.getAttribute('scale'))
             .to(new THREE.Vector3(1,1,1), 250)
             .easing(TWEEN.Easing.Exponential.Out).start();
+        // Move the corners to the new positions.
         this.setCornerPositions();
+        // Trigger the object on the gizmos also
+        // TODO: Move this out of this component
         if(this.data.gizmoEl.components['gizmo']){
             this.data.gizmoEl.components['gizmo'].setObject(object,this.boundingBox)
         }
     },
     setCornerPositions(){
+        // Set all the corner positions from the min/max of the Box3
         let min = this.boundingBox.min;
         let max = this.boundingBox.max;
         this.corner_ftl.setAttribute('position',{x:min.x,y:max.y,z:min.z});
@@ -84,24 +97,16 @@ module.exports = AFRAME.registerComponent('display-box', {
         this.corner_btr.setAttribute('position',{x:max.x,y:max.y,z:max.z});
         this.corner_bbl.setAttribute('position',{x:min.x,y:min.y,z:max.z});
         this.corner_bbr.setAttribute('position',{x:max.x,y:min.y,z:max.z});
-        // let minScale = Math.min(this.boundingBoxSize.x,this.boundingBoxSize.y,this.boundingBoxSize.z)+0.15;
-        // this.corner_ftl.setAttribute('scale',{x:minScale,y:minScale,z:minScale});
-        // this.corner_ftr.setAttribute('scale',{x:minScale,y:minScale,z:minScale});
-        // this.corner_fbl.setAttribute('scale',{x:minScale,y:minScale,z:minScale});
-        // this.corner_fbr.setAttribute('scale',{x:minScale,y:minScale,z:minScale});
-        //
-        // this.corner_btl.setAttribute('scale',{x:minScale,y:minScale,z:minScale});
-        // this.corner_btr.setAttribute('scale',{x:minScale,y:minScale,z:minScale});
-        // this.corner_bbl.setAttribute('scale',{x:minScale,y:minScale,z:minScale});
-        // this.corner_bbr.setAttribute('scale',{x:minScale,y:minScale,z:minScale});
     },
     createCorner(corner){
+        // Create three boxes for the corner indicators.
         let box_1 = document.createElement('a-box');
         let box_2 = document.createElement('a-box');
         let box_3 = document.createElement('a-box');
         box_1.setAttribute('scale','0.16 0.009 0.009');
         box_2.setAttribute('scale','0.01 0.16 0.01');
         box_3.setAttribute('scale','0.009 0.009 0.16');
+        // Position all three boxes to the correct corner within the corner container.
         let extraScale = 0.055;
         let longScale = 0.075;
         switch(corner){
@@ -147,10 +152,12 @@ module.exports = AFRAME.registerComponent('display-box', {
                 box_3.setAttribute('position',extraScale+' -'+extraScale+' '+(-longScale+extraScale));
                 break;
         }
+        // Contain this corner inside an entity to be able to move it as one piece.
         let cornerIndicator = document.createElement('a-entity');
         cornerIndicator.appendChild(box_1);
         cornerIndicator.appendChild(box_2);
         cornerIndicator.appendChild(box_3);
+        // Add to container
         this.cornerContainer.appendChild(cornerIndicator);
         return cornerIndicator;
     }
