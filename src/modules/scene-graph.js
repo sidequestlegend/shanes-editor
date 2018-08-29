@@ -17,7 +17,9 @@ export class SceneGraph{
         this.resetContainer();
         this.containerComponentName = 'scene-graph-container';
         this.setupAframeContainer();
-        console.log('Shane\'s Editor Version 0.2.0')
+
+        let version = require('./../../package.json').version;
+        console.log('Shane\'s Editor Version '+version);
     }
 
     async load(scene){
