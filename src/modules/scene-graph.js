@@ -24,7 +24,7 @@ export class SceneGraph{
 
     async load(scene){
         // Get the current scene json definition
-        return fetch(window.location.protocol+'//'+window.location.host+'/scene/'+scene.short_code+'.json')
+        return fetch(window.location.href+'/scene/'+scene.short_code+'.json')
             .then(response=>response.json())
             .then(_scene=>{
                 // Clear anything out of the scene first.
