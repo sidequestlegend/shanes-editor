@@ -6,6 +6,7 @@ export class MaterialSettingsModal{
     open(){
         this.material = this.context.currentObject.settings.material;
         this.type =  this.material.type.substr(4,this.material.type.length-12).toLowerCase();
+        document.getElementById('backButton').setAttribute('scale','0.00001 0.00001 0.00001');
         this.resetTemplate();
         switch(this.type){
             case "basic":
@@ -47,7 +48,8 @@ export class MaterialSettingsModal{
             'color',
             'color-intensity',
             'number',
-            'map-settings'
+            'map-settings',
+            'add-items'
         ])
     }
 
@@ -56,7 +58,7 @@ export class MaterialSettingsModal{
             .then(()=>{
                 this.templates.switches.push({settings:[{name:'Wireframe',selected:this.material.wireframe}]},{settings:[{name:'Fog',selected:this.material.fog}]},{settings:[{name:'Lights',selected:this.material.lights}]});
                 this.templates.color.push({color:this.material.color});
-                this.templates.mapSettings.push({});
+                this.templates.mapSettings.push({map:this.material.map});
                 this.templates.number.push({name:'Refraction Ratio',number:this.material.refractionRatio});
             })
             .then(()=>this.compile())
@@ -73,10 +75,11 @@ export class MaterialSettingsModal{
                 return this.context.content.popup.setContent(fullContents);
             })
             .then(()=>{
-                this.setupColorUpdate('.colorInputField','color');
+                this.context.viewUtils.setupColorUpdate('.colorInputField','color');
                 this.context.viewUtils.setupNumberUpdate('material','.refractionratio','refractionRatio');
                 this.context.viewUtils.setupSwitcheInput('material','.switch-fog','fog');
                 this.context.viewUtils.setupSwitcheInput('material','.switch-lights','lights');
+                this.setupMapSettings();
                 this.setupDefaultUpdate();
             })
     }
@@ -87,7 +90,7 @@ export class MaterialSettingsModal{
                 this.templates.switches.push({settings:[{name:'Wireframe',selected:this.material.wireframe}]});
                 this.templates.color.push({color:this.material.color});
                 this.templates.colorIntensity.push({name:'Emissiveness',color:this.material.emissive,intensity:this.material.emissiveIntensity});
-                this.templates.mapSettings.push({});
+                this.templates.mapSettings.push({map:this.material.map});
                 this.templates.number.push(
                     {name:'Metalness',number:this.material.metalness},
                     {name:'Roughness',number:this.material.roughness},
@@ -122,7 +125,7 @@ export class MaterialSettingsModal{
                 return this.context.content.popup.setContent(fullContents);
             })
             .then(()=>{
-                this.setupColorUpdate('.colorInputField','color');
+                this.context.viewUtils.setupColorUpdate('.colorInputField','color');
                 this.setupEmissiveUpdate();
                 this.context.viewUtils.setupNumberUpdate('material','.metalness','metalness');
                 this.context.viewUtils.setupNumberUpdate('material','.opacity','opacity');
@@ -134,8 +137,23 @@ export class MaterialSettingsModal{
                     this.context.viewUtils.setupNumberUpdate('material','.clearcoatroughness','clearCoatRoughness');
                     this.context.viewUtils.setupNumberUpdate('material','.reflectivity','reflectivity');
                 }
+                this.setupMapSettings();
                 this.setupDefaultUpdate();
             });
+    }
+
+    setupMapSettings(){
+        let mapButton = this.context.content.popup.querySelector('.map-settings');
+        mapButton.addEventListener('mousedown',()=>{
+            this.context.mapSettingsModal.open();
+        });
+        this.context.viewUtils.setupSaveMap('.save','.textureImage','map');
+        let loadButton = this.context.content.popup.querySelector('.load');
+        loadButton.addEventListener('mousedown',()=>{
+            this.context.popupBackStack.push(()=>this.open());
+            document.getElementById('backButton').setAttribute('scale','1 1 1');
+            this.context.loadTextureModal.open();
+        });
     }
 
     setupDefaultUpdate(){
@@ -152,25 +170,9 @@ export class MaterialSettingsModal{
         this.context.viewUtils.setupRadioInput('.radio-double',updateSide);
     }
 
-    setupColorUpdate(cssClass,field){
-        let colorButton = this.context.content.popup
-            .querySelector(cssClass);
-
-        let colorText = this.context.content.popup
-            .querySelector(cssClass+'Text');
-            colorButton.addEventListener('mousedown',()=>{
-                document.getElementById('colorPicker').open()
-                    .then(color=>{
-                        colorText.setAttribute('value',color);
-                        colorButton.setAttribute('color',color);
-                        this.context.currentObject.settings.material[field] = color;
-                        this.context.currentObject.object3D.material[field] = new THREE.Color(color);
-                    });
-            });
-    }
 
     setupEmissiveUpdate(){
-        this.setupColorUpdate('.colorIntensityInput','emissive');
+        this.context.viewUtils.setupColorUpdate('.colorIntensityInput','emissive');
         this.context.viewUtils.setupNumberUpdate('material','.emissiveness','emissiveIntensity');
     }
 
@@ -180,7 +182,7 @@ export class MaterialSettingsModal{
                 this.templates.switches.push({settings:[{name:'Wireframe',selected:this.material.wireframe}]});
                 this.templates.color.push({color:this.material.color},{color:this.material.color,colorName:'Specular',colorButtonClass:'specularInput',colorButtonTextClass:'specularInputText'});
                 this.templates.colorIntensity.push({name:'Emissiveness',color:this.material.emissive,intensity:this.material.emissiveIntensity});
-                this.templates.mapSettings.push({});
+                this.templates.mapSettings.push({map:this.material.map});
 
                 this.templates.number.push(
                     {name:'Reflectivity',number:this.material.reflectivity},
@@ -204,12 +206,13 @@ export class MaterialSettingsModal{
                 let fullContents = this.startSection+standardContents+this.midSection+defaultContents+this.endSection;
                 return this.context.content.popup.setContent(fullContents);
             }).then(()=>{
-                this.setupColorUpdate('.colorInputField','color');
-                this.setupColorUpdate('.specularInput','specular');
+                this.context.viewUtils.setupColorUpdate('.colorInputField','color');
+                this.context.viewUtils.setupColorUpdate('.specularInput','specular');
                 this.setupEmissiveUpdate();
                 this.context.viewUtils.setupNumberUpdate('material','.reflectivity','reflectivity');
                 this.context.viewUtils.setupNumberUpdate('material','.refractionratio','refractionRatio');
                 this.context.viewUtils.setupNumberUpdate('material','.shininess','shininess');
+                this.setupMapSettings();
                 this.setupDefaultUpdate();
             })
     }
@@ -221,7 +224,7 @@ export class MaterialSettingsModal{
                 this.templates.switches.push({settings:[{name:'Wireframe',selected:this.material.wireframe}]});
                 this.templates.color.push({color:this.material.color});
                 this.templates.colorIntensity.push({name:'Emissiveness',color:this.material.emissive,intensity:this.material.emissiveIntensity});
-                this.templates.mapSettings.push({});
+                this.templates.mapSettings.push({map:this.material.map});
                 this.templates.number.push({name:'Reflectivity',number:this.material.reflectivity},{name:'Refraction Ratio',number:this.material.refractionRatio});
             })
             .then(()=>this.compile())
@@ -238,10 +241,11 @@ export class MaterialSettingsModal{
                 return this.context.content.popup.setContent(fullContents);
             })
             .then(()=>{
-                this.setupColorUpdate('.colorInputField','color');
+                this.context.viewUtils.setupColorUpdate('.colorInputField','color');
                 this.setupEmissiveUpdate();
                 this.context.viewUtils.setupNumberUpdate('material','.reflectivity','reflectivity');
                 this.context.viewUtils.setupNumberUpdate('material','.refractionratio','refractionRatio');
+                this.setupMapSettings();
                 this.setupDefaultUpdate();
             })
     }

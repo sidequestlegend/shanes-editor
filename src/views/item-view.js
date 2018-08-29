@@ -61,7 +61,7 @@ export class ItemView {
                 buttonText:'ADD OBJECT',
                 children:this.context.currentObject.children.map(c=>this.context.viewUtils.childObject(c))
             }]))
-            .then(contents=>this.context.content.addTemplateItem('#childObjectsContainer',contents[0]))
+            .then(contents=>this.context.content.addTemplateItem('#childObjectsContainer',contents[0],true))
             .then(()=>this.setupChildren())
             .then(()=>this.setupAddItem())
             .then(()=>this.uiRenderer.components['ui-renderer'].play())
@@ -92,13 +92,21 @@ export class ItemView {
             buttonTwoText:'MATERIAL SETTINGS',
             descriptionHeight:0.21,
         }])
-            .then(contents=>this.context.content.addTemplateItem('#materialSettings',contents[0]))
+            .then(contents=>this.context.content.addTemplateItem('#materialSettings',contents[0]+
+            `<a-ui-button class="intersectable doubleButton3" text-value="MAP SETTINGS" width="1.2" height="0.2" ripple-size="1.2 0.2" wrap-count="24" ui-modal="modal:#modalRenderer;main:#mainRenderer" font-color="#009688" color="white" ripple-color="#009688"></a-ui-button>
+             <a-ui-button class="intersectable doubleButton4" text-value="REPEAT & OFFSET" width="1.2" height="0.2" ripple-size="1.2 0.2" wrap-count="24" ui-modal="modal:#modalRenderer;main:#mainRenderer" font-color="#009688" color="white" ripple-color="#009688"></a-ui-button>`))
             .then(()=>{
                 document.querySelector('#materialSettings').querySelector('.doubleButton1').addEventListener('mousedown',()=>{
                     this.context.materialTypeModal.open();
                 });
                 document.querySelector('#materialSettings').querySelector('.doubleButton2').addEventListener('mousedown',()=>{
                     this.context.materialSettingsModal.open();
+                });
+                document.querySelector('#materialSettings').querySelector('.doubleButton3').addEventListener('mousedown',()=>{
+                    this.context.mapSettingsModal.open();
+                });
+                document.querySelector('#materialSettings').querySelector('.doubleButton4').addEventListener('mousedown',()=>{
+                    this.context.repeatSettingsModal.open();
                 });
             })
             .then(()=>this.context.content.compileTemplates('double-item-button',[{

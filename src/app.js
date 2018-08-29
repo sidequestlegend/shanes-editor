@@ -1,3 +1,4 @@
+import '../../aframe-material-components/index';
 import {Content} from "./modules/content";
 import {Session} from './modules/session';
 import {SceneGraph} from './modules/scene-graph';
@@ -31,6 +32,9 @@ import {MaterialSettingsModal} from "./views/modals/material/material-settings";
 import {GeometrySettingsModal} from "./views/modals/geometry/geometry-settings";
 import {TransformModal} from "./views/modals/transform-modal";
 import {ObjectMaterial} from "./views/modals/object-material";
+import {MapSettingsModal} from "./views/modals/material/map-settings-advanced";
+import {RepeatSettingsModal} from "./views/modals/material/repeat-offset";
+import {LoadTextureModal} from "./views/modals/material/load-texture";
 
 class Main{
     constructor(){
@@ -44,6 +48,7 @@ class Main{
         this.setupModals();
         this.editor = document.getElementById('editorContainer');
         this.sceneEl = document.querySelector('a-scene');
+
 
         this.sceneEl.addEventListener('modal-closed',()=>{
             this.content.popup.components['ui-scroll-pane'].setContent('');
@@ -75,6 +80,9 @@ class Main{
 
         this.showAlphaMap = new THREE.TextureLoader().load('images/nav-alpha.jpg');
         this.hideAlphaMap = new THREE.TextureLoader().load('images/nav-alpha-hide.jpg');
+        // document.getElementById('uiPanel').addEventListener('loaded',()=>{
+        //     console.log('loaded');
+        // });
         this.showMaterial = document.getElementById('uiPanel').getObject3D('mesh').material;
         this.showMaterial.transparent = true;
         this.showMaterial.alphaMap = this.hideAlphaMap;
@@ -141,6 +149,10 @@ class Main{
 
         this.materialTypeModal = new MaterialTypeModal(this);
         this.materialSettingsModal = new MaterialSettingsModal(this);
+        this.mapSettingsModal = new MapSettingsModal(this);
+        this.repeatSettingsModal = new RepeatSettingsModal(this);
+
+        this.loadTextureModal = new LoadTextureModal(this);
 
         this.geometryTypeModal = new GeometryTypeModal(this);
         this.geometrySettingsModal = new GeometrySettingsModal(this);
@@ -210,5 +222,7 @@ class Main{
     }
 }
 document.addEventListener("DOMContentLoaded", ()=> {
-    window.main = new Main();
+    document.querySelector('a-scene').addEventListener('loaded',()=>{
+        window.main = new Main();
+    })
 });

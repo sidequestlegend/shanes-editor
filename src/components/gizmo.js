@@ -71,20 +71,20 @@ module.exports = AFRAME.registerComponent('gizmo', {
         this.addListeners(this.x_box);
         this.addListeners(this.y_box);
         this.addListeners(this.z_box);
+        this.el.sceneEl.addEventListener('mouseup',this.mouseup);
     },
     pause(){
         this.removeListeners(this.top_box);
         this.removeListeners(this.x_box);
         this.removeListeners(this.y_box);
         this.removeListeners(this.z_box);
+        this.el.sceneEl.removeEventListener('mouseup',this.mouseup);
     },
     addListeners(el){
         el.addEventListener('mousedown',this.mousedown);
-        el.addEventListener('mouseup',this.mouseup);
     },
     removeListeners(el){
         el.removeEventListener('mousedown',this.mousedown);
-        el.removeEventListener('mouseup',this.mouseup);
     },
     getDraggingSpine(){
         let spine,axis,offset;

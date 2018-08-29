@@ -55,37 +55,77 @@ export class ViewUtils{
         return _child;
     }
 
-    setupNumberUpdate(object,cssClass,field,isDegrees){
+    setupColorUpdate(cssClass,field){
+        let colorButton = this.context.content.popup
+            .querySelector(cssClass);
+
+        let colorText = this.context.content.popup
+            .querySelector(cssClass+'Text');
+        colorButton.addEventListener('mousedown',()=>{
+            document.getElementById('colorPicker').open()
+                .then(color=>{
+                    colorText.setAttribute('value',color);
+                    colorButton.setAttribute('color',color);
+                    this.context.currentObject.settings.material[field] = color;
+                    this.context.currentObject.object3D.material[field] = new THREE.Color(color);
+                });
+        });
+    }
+
+    setupNumberUpdate(object,cssClass,field,isDegrees,textureType,textureProperty){
         let upButton = this.context.content.popup.querySelector(cssClass)
             .querySelector('.xInputUp');
         let downButton = this.context.content.popup.querySelector(cssClass)
             .querySelector('.xInputDown');
         let text = this.context.content.popup.querySelector(cssClass)
             .querySelector('.xText');
-        upButton.addEventListener('mousedown',()=>{
-            this.context.currentObject.settings[object][field]+=this.context.precision;
+        let material = this.context.currentObject.object3D.material;
+        let changeTextureValue = modifier=>{
+            console.log([object],[textureType],[textureProperty],[field]);
+            this.context.currentObject.settings[object][textureType][textureProperty][field]+=this.context.precision*modifier;
+            let value = this.context.currentObject.settings[object][textureType][textureProperty][field];
+            if(textureType==="lightTexture"){
+                if(material.lightMap)material.lightMap[textureProperty][field] = value;
+                if(material.aoMap)material.aoMap[textureProperty][field] = value;
+            }else{
+                if(material.map)material.map[textureProperty][field] = value;
+                if(material.specularMap)material.specularMap[textureProperty][field] = value;
+                if(material.bumpMap)material.bumpMap[textureProperty][field] = value;
+                if(material.emissiveMap)material.emissiveMap[textureProperty][field] = value;
+
+                if(material.roughnessMap)material.roughnessMap[textureProperty][field] = value;
+                if(material.metalnessMap)material.metalnessMap[textureProperty][field] = value;
+
+                if(material.displacementMap)material.displacementMap[textureProperty][field] = value;
+                if(material.normalMap)material.normalMap[textureProperty][field] = value;
+                if(material.alphaMap)material.alphaMap[textureProperty][field] = value;
+                if(material.envMap)material.envMap[textureProperty][field] = value;
+            }
+            material.needsUpdate = true;
+            text.setAttribute('text','value:'+(this.context.currentObject.settings[object][textureType][textureProperty][field]).toFixed(3));
+        };
+        let changeMaterialValue = modifier=>{
+            this.context.currentObject.settings[object][field]+=this.context.precision*modifier;
             this.context.currentObject.object3D[object][field]=isDegrees?
                 THREE.Math.degToRad(this.context.currentObject.settings[object][field]):
                 this.context.currentObject.settings[object][field];
 
+            if(object==="material")material.needsUpdate = true;
             text.setAttribute('text','value:'+(this.context.currentObject.settings[object][field]).toFixed(3));
+        };
+        let changeValue = modifier=>{
+            if(textureType){
+                changeTextureValue(modifier);
+            }else{
+                changeMaterialValue(modifier);
+            }
             if(object==="geometry"){
                 this.context.sceneGraph.objectFactory.resetGeometry();
                 this.context.displayBox.setObject(this.context.currentObject.object3D);
             }
-        });
-        downButton.addEventListener('mousedown',()=>{
-
-            this.context.currentObject.settings[object][field]-=this.context.precision;
-            this.context.currentObject.object3D[object][field]=
-                this.context.currentObject.settings[object][field];
-
-            text.setAttribute('text','value:'+(this.context.currentObject.settings[object][field]).toFixed(3));
-            if(object==="geometry"){
-                this.context.sceneGraph.objectFactory.resetGeometry();
-                this.context.displayBox.setObject(this.context.currentObject.object3D);
-            }
-        });
+        };
+        upButton.addEventListener('mousedown',()=>changeValue(1));
+        downButton.addEventListener('mousedown',()=>changeValue(-1));
     }
 
     setupRadioInput(cssClass,callback){
@@ -94,6 +134,34 @@ export class ViewUtils{
             .addEventListener('ui-radio-changed',e=>{
                 callback(e.detail);
             })
+    }
+
+    setupSaveMap(save,inputField,property){
+        let textureImage = this.context.content.popup.querySelector(inputField);
+        let saveButton = this.context.content.popup.querySelector(save);
+        saveButton.addEventListener('mousedown',()=> {
+            let new_image = textureImage.getValue();
+            if (new_image) {
+                let material = this.context.currentObject.settings.material;
+                let textureProperty = 'texture';
+                if(property==='aoMap'||property==='lightMap'){
+                    textureProperty = 'lightTexture';
+                }
+                material[property] = new_image;
+                new THREE.TextureLoader().load(new_image,texture => {
+                    texture.repeat.set(material[textureProperty].repeat.x, material[textureProperty].repeat.y);
+                    texture.offset.set(material[textureProperty].offset.x, material[textureProperty].offset.y);
+                    texture.wrapS = material[textureProperty].wrapping.s;
+                    texture.wrapT = material[textureProperty].wrapping.t;
+                    texture.minFilter = material[textureProperty].filters.min;
+                    texture.magFilter = material[textureProperty].filters.mag;
+                    this.context.currentObject.object3D.material[property] = texture;
+                    this.context.currentObject.object3D.material[property].needsUpdate = true;
+                    this.context.currentObject.object3D.material[property].needsUpdate = true;
+                    console.log(save,inputField,property);
+                });
+            }
+        });
     }
 
     setupSwitcheInput(object,cssClass,field){

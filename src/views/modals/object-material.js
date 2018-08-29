@@ -40,16 +40,15 @@ export class ObjectMaterial {
                     this.uiRenderer.modal.close();
                 });
                 this.context.content.popup.querySelector('.right-button').addEventListener('mousedown',()=>{
-                    this.uiRenderer.modal.close();
                     newObject.mat_settings = {type:this.type,color:this.color};
                     this.context.sceneGraph
                         .add(this.context.currentObject,newObject)
                         .then(child=>{
+                            this.uiRenderer.modal.close();
                             this.context.showObject();
                             this.context.displayBox.setObject(child.object3D);
                             setTimeout(()=>this.context.itemView.open(child),250);
                         });
-                    this.uiRenderer.modal.close();
                 });
             });
     }

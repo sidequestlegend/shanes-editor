@@ -22,6 +22,9 @@ module.exports = {
     devServer: {
         stats: "errors-only",
         contentBase: __dirname+"/dist",
-        open:true
+        open:true,
+        disableHostCheck: true,
+        public: 'http://192.168.0.8:8080',
+        host:'192.168.0.8'
     }
 };
