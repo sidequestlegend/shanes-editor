@@ -183,7 +183,7 @@ export class LoadTextureModal {
                 },
                 {
                     "name": "Organic_Abstract_001_SD",
-                    "image": "Organic_Abstract_001_COLOR.jpg"
+                    "image": "Organic_abstract_001_COLOR.jpg"
                 }
             ],
             "Asphalt": [
@@ -229,7 +229,7 @@ export class LoadTextureModal {
                 },
                 {
                     "name": "Brick_Wall_008_SD",
-                    "image": "Brick_Wall_008_COLOR.jpg"
+                    "image": "Brick_wall_008_COLOR.jpg"
                 },
                 {
                     "name": "Brick_Wall_009_SD",
@@ -245,7 +245,7 @@ export class LoadTextureModal {
                 },
                 {
                     "name": "Brick_wall_012_SD",
-                    "image": "Brick_wall_012_COLOR.jpg"
+                    "image": "Brick_Wall_012_COLOR.jpg"
                 },
                 {
                     "name": "Brick_Wall_013_SD",
@@ -325,7 +325,7 @@ export class LoadTextureModal {
                 },
                 {
                     "name": "Concrete_panels_001_SD",
-                    "image": "Concrete_panels_001_COLOR.jpg"
+                    "image": "Concrete_Panels_001_COLOR.jpg"
                 }
             ],
             "Dirt": [
@@ -565,7 +565,7 @@ export class LoadTextureModal {
                 },
                 {
                     "name": "Coin_Stack_001_SD",
-                    "image": "Coin_Stack_001_COLOR.jpg"
+                    "image": "Coin_stack_001_COLOR.jpg"
                 },
                 {
                     "name": "Corrugated_Metal_001_SD",
@@ -597,7 +597,7 @@ export class LoadTextureModal {
                 },
                 {
                     "name": "Metal Panel 002_SD",
-                    "image": "Metal_Panel_002_COLOR.jpg"
+                    "image": "Metal_panel_002_COLOR.jpg"
                 },
                 {
                     "name": "Metal Panel 003_SD",
@@ -719,7 +719,7 @@ export class LoadTextureModal {
                 },
                 {
                     "name": "Metal_Plate_001",
-                    "image": "Metal_Plate_001_COLOR.jpg"
+                    "image": "Metal_plate_001_COLOR.jpg"
                 },
                 {
                     "name": "Metal_Plate_002_SD",
@@ -735,11 +735,11 @@ export class LoadTextureModal {
                 },
                 {
                     "name": "Metal_Plate_005_SD",
-                    "image": "Metal_Plate_005_COLOR.jpg"
+                    "image": "Metal_plate_005_COLOR.jpg"
                 },
                 {
                     "name": "Metal_Plate_006_SD",
-                    "image": "Metal_Plate_006_COLOR.jpg"
+                    "image": "Metal_plate_006_COLOR.jpg"
                 },
                 {
                     "name": "Metal_Plate_007_SD",
@@ -977,7 +977,7 @@ export class LoadTextureModal {
                 },
                 {
                     "name": "Rough Rock 001",
-                    "image": "Rough_Rock_001_COLOR.jpg"
+                    "image": "Rough_rock_001_COLOR.jpg"
                 },
                 {
                     "name": "Rough Rock 002",
@@ -985,15 +985,15 @@ export class LoadTextureModal {
                 },
                 {
                     "name": "Rough Rock 003",
-                    "image": "Rough_Rock_003_COLOR.jpg"
+                    "image": "Rough_rock_003_COLOR.jpg"
                 },
                 {
                     "name": "Rough Rock 004",
-                    "image": "Rough_Rock_004_COLOR.jpg"
+                    "image": "Rough_rock_004_COLOR.jpg"
                 },
                 {
                     "name": "Rough Rock 005",
-                    "image": "Rough_Rock_005_COLOR.jpg"
+                    "image": "Rough_rock_005_COLOR.jpg"
                 },
                 {
                     "name": "Rough Rock 006",
@@ -1009,7 +1009,7 @@ export class LoadTextureModal {
                 },
                 {
                     "name": "Rough Rock 009",
-                    "image": "Rough_Rock_009_COLOR.jpg"
+                    "image": "Rough_rock_009_COLOR.jpg"
                 },
                 {
                     "name": "Rough_rock_011",
@@ -1247,7 +1247,7 @@ export class LoadTextureModal {
                 },
                 {
                     "name": "Stone_wall_008_SD",
-                    "image": "Stone_wall_008_COLOR.jpg"
+                    "image": "Stone_Wall_008_COLOR.jpg"
                 },
                 {
                     "name": "Stone_Wall_009_SD",
