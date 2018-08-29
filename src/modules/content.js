@@ -1,4 +1,4 @@
-import ContentWorker from 'worker-loader!./content-worker.js';
+import ContentWorker from 'worker-loader?inline!./content-worker.js';
 
 export class Content{
     constructor(context){
