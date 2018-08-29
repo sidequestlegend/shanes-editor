@@ -833,7 +833,7 @@ export class LoadTextureModal {
             "Organic Animal": [
                 {
                     "name": "Alien Flesh 002",
-                    "image": "Alien_Flesh_002_COLOR.jpg"
+                    "image": "Alien_flesh_002_COLOR.jpg"
                 },
                 {
                     "name": "Alien_Flesh_001",
@@ -1201,7 +1201,7 @@ export class LoadTextureModal {
             "Wall Damaged": [
                 {
                     "name": "Wall Damaged 001",
-                    "image": "Wall_Damaged_001_COLOR.jpg"
+                    "image": "Wall_damaged_001_COLOR.jpg"
                 }
             ],
             "Wall Painted": [
