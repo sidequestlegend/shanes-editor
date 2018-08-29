@@ -1,9 +1,12 @@
 node_modules
+!dist/models/
 dist/models/*
+!dist/images/textures/
 dist/images/textures/*
 dist/images/3DTextures-1024
 dist/images/3DTextures-512
 dist/images/3DTextures
+!dist/images/skybox/
 dist/images/skybox/*
 dist/images/3d-scan
 .idea
