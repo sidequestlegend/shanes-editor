@@ -45,7 +45,9 @@ export class LoadTextureModal {
             });
     }
     openImage(folder,image){
-        this.context.content.compileTemplates('add-items',[{items:[
+        this.context.content.compileTemplates('add-items',[{items:
+                window.location.host==='shaneharris.github.io'?
+                    [{name:"128",friendly_name:'0.128K Image',image_url:'images/icons/128.jpg'}]:[
                 {name:"1024",friendly_name:'1K Image',image_url:'images/icons/1024.jpg'},
                 {name:"512",friendly_name:'0.5K Image',image_url:'images/icons/512.jpg'},
                 {name:"128",friendly_name:'0.128K Image',image_url:'images/icons/128.jpg'}
