@@ -7,6 +7,7 @@ import {ItemView} from "./views/item-view";
 import './components/right_look_controls';
 import './components/gizmo';
 import './components/display-box';
+import './components/editor';
 import {PopupView} from "./views/popup-view";
 import {Namer} from "./modules/namer";
 import {FriendlyNames} from "./modules/friendly-names";
@@ -193,28 +194,28 @@ class Main{
     openEditor(){
         this.cameraDummy.object3D.position.set(0,0,-0.8);
         this.cameraDummy.object3D.updateMatrixWorld();
-            let _this = this;
-            new TWEEN.Tween({x:0.0000001})
-                .to({x:0.5}, 650)
-                .onUpdate(function(){
-                    _this.editor.setAttribute('scale',this.x+' '+this.x+' '+this.x);
-                })
-                .easing(TWEEN.Easing.Exponential.Out).start();
+        let _this = this;
+        new TWEEN.Tween({x:0.0000001})
+            .to({x:0.5}, 650)
+            .onUpdate(function(){
+                _this.editor.setAttribute('scale',this.x+' '+this.x+' '+this.x);
+            })
+            .easing(TWEEN.Easing.Exponential.Out).start();
 
-            new TWEEN.Tween(_this.editor.getAttribute('position'))
-                .to(this.cameraDummy.object3D.localToWorld(new THREE.Vector3(0,0,0)), 250)
-                .easing(TWEEN.Easing.Exponential.Out).start();
+        new TWEEN.Tween(_this.editor.getAttribute('position'))
+            .to(this.cameraDummy.object3D.localToWorld(new THREE.Vector3(0,0,0)), 250)
+            .easing(TWEEN.Easing.Exponential.Out).start();
 
 
-            let quaternion = new THREE.Quaternion();
-            this.cameraDummy.object3D.updateMatrixWorld();
-            this.cameraDummy.object3D.matrixWorld.decompose( new THREE.Vector3(), quaternion, new THREE.Vector3() );
-            new TWEEN.Tween(this.editor.object3D.quaternion).to(quaternion, 500)
-                .easing(TWEEN.Easing.Exponential.Out)
-                //.onUpdate(function () {
-                    //_this.getKeyboardDummyPosition();
-                //})
-                .start();
+        let quaternion = new THREE.Quaternion();
+        this.cameraDummy.object3D.updateMatrixWorld();
+        this.cameraDummy.object3D.matrixWorld.decompose( new THREE.Vector3(), quaternion, new THREE.Vector3() );
+        new TWEEN.Tween(this.editor.object3D.quaternion).to(quaternion, 500)
+            .easing(TWEEN.Easing.Exponential.Out)
+            //.onUpdate(function () {
+            //_this.getKeyboardDummyPosition();
+            //})
+            .start();
     }
 }
 document.addEventListener("DOMContentLoaded", ()=> {
@@ -222,3 +223,4 @@ document.addEventListener("DOMContentLoaded", ()=> {
         window.main = new Main();
     })
 });
+

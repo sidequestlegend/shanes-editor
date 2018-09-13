@@ -13,10 +13,6 @@
 <body>
 <a-scene stats background="color: black">
     <a-assets>
-        <canvas id="textCanvas"></canvas>
-        <script id="templateContainer">
-
-        </script>
         <img id="sceneImage" src="images/icons/objects/scene.jpg"/>
         <img id="navBack" src="images/nav-back.jpg"/>
         <img id="iconEdit" src="images/icons/edit.png"/>
@@ -89,105 +85,7 @@
         <!--<a-entity id="rhand" mixin="controller-right"></a-entity>-->
         <!--<a-entity id="lhand" mixin="controller-left"></a-entity>-->
     </a-entity>
-
-    <a-ui-renderer id="modalRenderer" ui-panel="#modalPanel">
-        <a-entity geometry="primitive:plane;width:4;height:1.9" material="side:double;shader:flat;color:#efefef" position="0 0 -0.695">
-
-            <a-ui-toast id="popupToastMessage" position="1 0.4 0.1" visible="false" wrap-count="15"></a-ui-toast>
-            <a-plane id="closePopup" width="0.12" height="0.12" position="1.57 0.740 0.001" transparent="true" opacity="0.00001" shader="flat"
-                     class="intersectable close-modal">
-                <a-plane src="#closeIcon" width="0.12" height="0.12" shader="flat" transparent="true" color="#4db6ac"></a-plane>
-            </a-plane>
-            <a-plane id="popupPrecision" width="0.12" height="0.12" position="1.4 0.740 0.001" transparent="true" opacity="0.00001" shader="flat"
-                     class="intersectable"
-                     ui-toast="toastEl:#popupToastMessage;message:here!"
-                     ui-ripple="size:0.225 0.225;clampToSquare:true;zIndex:0.001;">
-                <a-plane src="#precisionIcon" width="0.12" height="0.12" shader="flat" transparent="true" color="#4db6ac"></a-plane>
-            </a-plane>
-            <a-plane id="backButton" scale="0.00001 0.00001 0.00001" width="0.225" height="0.225" position="-1.55 0.738 0.001" transparent="true" opacity="0.00001" shader="flat"
-                     class="intersectable">
-                <a-plane src="#iconBack" width="0.12" height="0.12" shader="flat" transparent="true" color="#4db6ac"></a-plane>
-            </a-plane>
-            <a-ui-scroll-pane id="popupContent" handle-color="#4db6ac" position="0 -0.05 0.01" width="3" height="1.35" look-controls-el="#camera" look-controls-component="">
-                <a-entity class="container">
-
-                </a-entity>
-            </a-ui-scroll-pane>
-            <a-entity ui-color-picker id="colorPicker" position="0 0.25 0.2"></a-entity>
-        </a-entity>
-    </a-ui-renderer>
-
-    <a-entity id="editorContainer" scale="0.0001 0.0001 0.0001">
-        <a-plane id="modalPanel" ui-curved-plane width="4.222" height="2" scale="0.0001 0.0001 0.0001" position="0 0 -1.7" side="double" shader="flat" class="intersect"></a-plane>
-
-        <a-plane id="uiPanel" ui-curved-plane width="6" height="3" position="0 0 -2" side="double" shader="flat" transparent="true" alpha-test="0.01" class="intersect">
-
-            <a-text font="roboto" baseLine="center" align="center" id="loadingText" value="" alpha-test="0.01"
-                    position="0 0 0.01" color="#212121" wrap-count="5" width="1" height="0.2">
-                <a-plane id="loadingTextBack" shader="flat" ui-rounded="borderRadius:0.05;curveSegments:3" width="1" height="0.4" position="0 0 -0.001"></a-plane>
-
-            </a-text>
-
-        </a-plane>
-    </a-entity>
-
-    <a-ui-renderer id="mainRenderer" ui-panel="#uiPanel">
-        <a-entity id="editor" geometry="primitive:plane;width:4;height:2;" material="src:#navBack;side:double;shader:flat;" position="0 0 -0.835">
-
-            <a-text id="topTitle" font="roboto" baseLine="center" anchor="center" value="Shane's Editor"
-                    class="intersectable" geometry="primitive:plane;width:1.8;height:0.3;" position="-1.05 0.88 0" color="#ffffff" wrap-count="25" width="1.8" height="0.3"></a-text>
-
-            <a-ui-toast id="toastMessage" position="1.4 0.5 0.1" visible="false" wrap-count="15" ></a-ui-toast>
-
-            <a-entity id="breadcrumbsContainer" position="-1.69 0.68 0.001">
-
-            </a-entity>
-
-            <a-entity id="topMenu">
-                <a-plane width="0.225" id="precisionButton" height="0.225" position="1.66 0.885 0.001"
-                         class="intersectable" shader="flat"
-                         ui-toast="toastEl:#toastMessage;message:here!"
-                         ui-ripple="size:0.225 0.225;clampToSquare:true;zIndex:0.001;" transparent="true" opacity="0.1">
-                    <a-plane src="#precisionIcon" width="0.1" height="0.1" shader="flat" transparent="true"></a-plane>
-                </a-plane>
-
-                <!--<a-plane width="0.225" height="0.225" position="1.21 0.885 0.001"-->
-                <!--class="intersectable" shader="flat"-->
-                <!--id="myScenes"-->
-                <!--ui-ripple="size:0.225 0.225;clampToSquare:true;zIndex:0.001;" transparent="true" opacity="0.1">-->
-                <!--<a-plane src="#iconSend" width="0.1" height="0.1" shader="flat" transparent="true"></a-plane>-->
-                <!--</a-plane>-->
-
-                <!--<a-plane width="0.225" height="0.225" position="1.435 0.885 0.001"-->
-                <!--class="intersectable" shader="flat"-->
-                <!--id="openScene"-->
-                <!--ui-ripple="size:0.225 0.225;clampToSquare:true;zIndex:0.001;" transparent="true" opacity="0.1">-->
-                <!--<a-plane src="#swapVirtIcon" width="0.1" height="0.1" shader="flat" transparent="true"></a-plane>-->
-                <!--</a-plane>-->
-
-                <!--<a-plane width="0.225" height="0.225" position="1.66 0.885 0.001"-->
-                <!--class="intersectable" shader="flat"-->
-                <!--id="openObject"-->
-                <!--ui-toast="toastEl:#toastMessage;message:here!"-->
-                <!--ui-ripple="size:0.225 0.225;clampToSquare:true;zIndex:0.001;" transparent="true" opacity="0.1">-->
-                <!--<a-plane src="#helpIcon" width="0.1" height="0.1" shader="flat" transparent="true"></a-plane>-->
-                <!--</a-plane>-->
-
-                <a-plane width="0.225" height="0.225" position="1.885 0.885 0.001"
-                         class="intersectable" shader="flat"
-                         id="closeEditor"
-                         ui-ripple="size:0.225 0.225;clampToSquare:true;zIndex:0.001;" transparent="true" opacity="0.1">
-                    <a-plane src="#closeIcon" width="0.1" height="0.1" shader="flat" transparent="true"></a-plane>
-                </a-plane>
-            </a-entity>
-
-            <a-ui-scroll-pane id="mainContent" handle-color="#4db6ac" position="0 -0.205 0.01" width="3.8" height="1.57" look-controls-el="#camera" look-controls-component="">
-                <a-entity class="container">
-
-                </a-entity>
-            </a-ui-scroll-pane>
-        </a-entity>
-    </a-ui-renderer>
+    <a-editor></a-editor>
     <a-entity id="selectionBox">
         <a-entity gizmo="raycasterEl:#cursor;cameraEl:#camera;displayEl:#displayBox" id="gizmos" position="-0.6 -0.45 -0.6"></a-entity>
         <a-entity display-box="gizmoEl:#gizmos" id="displayBox"></a-entity>
