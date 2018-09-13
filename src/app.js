@@ -1,4 +1,4 @@
-import '../../aframe-material-components/index';
+import 'aframe-material-collection';
 import {Content} from "./modules/content";
 import {Session} from './modules/session';
 import {SceneGraph} from './modules/scene-graph';
@@ -20,7 +20,6 @@ import {KennyCategoriesModal} from "./views/modals/kenny-categories";
 import {KennyModalsModal} from "./views/modals/kenny-modals";
 import {AvatarCategoriesModal} from "./views/modals/avatar-categories";
 import {AvatarModalsModal} from "./views/modals/avatar-models";
-import {PlaceModels} from "./modules/place-models";
 import {ViewUtils} from "./modules/view-utils";
 import {BreadCrumbs} from "./modules/breadcrumbs";
 import {ClearSceneModal} from "./views/modals/clear-scene";
