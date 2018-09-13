@@ -5,7 +5,7 @@
  * @component editor
  * @author Shane Harris
  */
-AFRAME.registerPrimitive('a-editor', AFRAME.utils.extendDeep({}, AFRAME.primitives.getMeshMixin(), {
+AFRAME.registerPrimitive('a-shanes-editor', AFRAME.utils.extendDeep({}, AFRAME.primitives.getMeshMixin(), {
     defaultComponents: {
         editor:{}
     }

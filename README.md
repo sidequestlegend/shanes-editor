@@ -19,9 +19,7 @@ The editor interface uses [aframe-material-collection](https://npmjs.com/package
 #### Installing
 
 ```
-git clone https://github.com/shaneharris/shanes-editor.git
-cd shanes-editor
-npm install
+npm i shanes-editor
 ```
 
 #### Running
