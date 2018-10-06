@@ -86,7 +86,7 @@ export class SceneGraph{
         // Create and attach the aframe entity container to the scene
         this.entityContainer = document.createElement('a-entity');
         this.entityContainer.setAttribute('scene-graph-container',"");
-        this.entityContainer.setAttribute('position',"0 -1.6 0");
+        this.entityContainer.setAttribute('position',"0 0 0");
         document.querySelector('a-scene').appendChild(this.entityContainer);
     }
 

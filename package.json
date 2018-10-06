@@ -20,7 +20,7 @@
     "worker-loader": "^2.0.0"
   },
   "dependencies": {
-    "aframe-material-collection": "^0.4.10",
+    "aframe-material-collection": "^0.4.31",
     "handlebars": "^4.0.11"
   }
 }

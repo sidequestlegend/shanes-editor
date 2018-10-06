@@ -4,7 +4,7 @@ import {Session} from './modules/session';
 import {SceneGraph} from './modules/scene-graph';
 import {SceneListView} from "./views/scene-list-view";
 import {ItemView} from "./views/item-view";
-import './components/right_look_controls';
+//import '../../expanse-app/modules/expanse/components/right_look_controls';
 import './components/gizmo';
 import './components/display-box';
 import './components/editor';
@@ -47,9 +47,9 @@ class Main{
         this.setupViews();
         this.setupModals();
         this.editor = document.getElementById('editorContainer');
+        document.getElementById('uiPanel').setAttribute('scale','1 1 1');
         this.sceneEl = document.querySelector('a-scene');
-
-
+        //this.editor.setAttribute('visible')
         this.sceneEl.addEventListener('modal-closed',()=>{
             this.content.popup.components['ui-scroll-pane'].setContent('');
         });
@@ -72,7 +72,7 @@ class Main{
         });
         new PreloadTemplates(this).preload();
         this.sceneEl.context = this;
-        this.sceneList.open()
+        this.sceneList.open();
         this.setupTopMenu();
         this.setupPopupNavigation();
         this.setupTransformOptions();

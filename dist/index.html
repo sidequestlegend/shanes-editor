@@ -29,10 +29,10 @@
         <img id="precisionIcon" src="images/icons/baseline_gps_fixed_white_18dp.png"/>
 
         <a-mixin id="pointer" raycaster="showLine: true; objects: .intersect" ui-mouse-shim="fps:90"
-                 super-hands="colliderEvent: raycaster-intersection;
-                               colliderEventProperty: els;
-                               colliderEndEvent:raycaster-intersection-cleared;
-                               colliderEndEventProperty: clearedEls;">
+             super-hands="colliderEvent: raycaster-intersection;
+               colliderEventProperty: els;
+               colliderEndEvent:raycaster-intersection-cleared;
+               colliderEndEventProperty: clearedEls;">
         </a-mixin>
         <a-mixin id="controller-right" mixin="pointer"
                  vive-controls="hand: right" oculus-touch-controls="hand: right"
@@ -46,17 +46,15 @@
 
 
     </a-assets>
-    <a-entity id="rig"
+    <a-entity id="rig" position="0 1.6 0"
               movement-controls="camera:#camera;fly:true">
-        <a-entity id="camera" camera="near:0.1;far:500" right-look-controls wasd-controls="fly:true">
+        <a-entity id="camera" camera="near:0.1;far:500" look-controls wasd-controls="fly:true">
             <a-entity id="cursor"  cursor="rayOrigin: mouse"
-                      raycaster="far: 30; objects: .intersect;" ui-mouse-shim="fps:60"
-                      super-hands="colliderEvent: raycaster-intersection;
-            colliderEventProperty: els;
-            colliderEndEvent:raycaster-intersection-cleared;
-            colliderEndEventProperty: clearedEls;" ></a-entity>
-
-                <!---->
+              raycaster="far: 30; objects: .intersect;" ui-mouse-shim="fps:60"
+              super-hands="colliderEvent: raycaster-intersection;
+              colliderEventProperty: els;
+              colliderEndEvent:raycaster-intersection-cleared;
+              colliderEndEventProperty: clearedEls;" ></a-entity>
 
             <a-entity id="cameraDummyPosition"></a-entity>
         </a-entity>

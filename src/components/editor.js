@@ -24,6 +24,7 @@ module.exports = AFRAME.registerComponent('editor', {
         // Outer editor Container
         this.editorContainer = document.createElement('a-entity');
         this.editorContainer.setAttribute('scale','0.0001 0.0001 0.0001');
+        this.editorContainer.setAttribute('position','0 0 0');
         this.editorContainer.id = 'editorContainer';
         this.el.appendChild(this.editorContainer);
     },
@@ -38,6 +39,7 @@ module.exports = AFRAME.registerComponent('editor', {
         uiPanel.setAttribute('position','0 0 -2');
         uiPanel.setAttribute('side','double');
         uiPanel.setAttribute('shader','flat');
+        uiPanel.setAttribute('scale','0.0001 0.0001 0.0001');
         uiPanel.setAttribute('transparent',true);
         uiPanel.setAttribute('alpha-test','0.01');
         uiPanel.setAttribute('class','intersect');
