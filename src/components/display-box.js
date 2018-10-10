@@ -16,7 +16,7 @@ module.exports = AFRAME.registerComponent('display-box', {
     setupElements(){
         // Create box with back side texture barely opaque to show the currently selected object.
         this.display_box = document.createElement('a-box');
-        this.display_box.setAttribute('src','images/display_texture.png');
+        this.display_box.setAttribute('src','https://cdn.theexpanse.app/images/display_texture.png');
         this.display_box.setAttribute('side','back');
         this.display_box.setAttribute('transparent',true);
         this.display_box.setAttribute('shader','flat');

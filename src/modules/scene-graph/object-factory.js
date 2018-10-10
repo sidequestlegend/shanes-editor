@@ -226,6 +226,11 @@ export class ObjectFactory{
                             loader.load( settings.url, ( response )=>this.resolveObject(object,response.scene,child,resolve));
                             break;
                         case "OBJ":
+                            if(settings.url.substr(0,7)==="models/"){
+                                settings.url = this.sceneGraph.context.rootUrl+settings.url;
+                                settings.mtl_url = this.sceneGraph.context.rootUrl+settings.mtl_url;
+                                settings.mtl_path = this.sceneGraph.context.rootUrl+settings.mtl_path;
+                            }
                             promise = Promise.resolve({obj:settings.url,mtl:settings.mtl_url,mtl_path:settings.mtl_path});
                             if(settings.type==="Poly"){
                                 promise = Promise.all([new Promise(function(r){

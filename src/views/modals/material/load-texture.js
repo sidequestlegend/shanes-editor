@@ -8,7 +8,7 @@ export class LoadTextureModal {
         this.uiRenderer = document.getElementById('mainRenderer');
         let items = [];
         for(let key in this.textures){
-            items.push({name:key,friendly_name:key,image_url:'images/3DTextures-128/'+key+'/'+this.textures[key][0].name+'/'+this.textures[key][0].image});
+            items.push({name:key,friendly_name:key,image_url:'https://cdn.theexpanse.app/images/3DTextures-128/'+key+'/'+this.textures[key][0].name+'/'+this.textures[key][0].image});
         }
         this.context.content.compileTemplates('add-items',[{items:items}],true)
             .then(contents=>this.context.content.popup.setContent(contents[0]))
@@ -28,7 +28,7 @@ export class LoadTextureModal {
         let items = [];
         for(let i = 0;i < this.textures[folder].length; i++){
             let texture = this.textures[folder][i];
-            items.push({name:texture.name+'/'+texture.image,friendly_name:texture.name,image_url:'images/3DTextures-128/'+folder+'/'+texture.name+'/'+texture.image});
+            items.push({name:texture.name+'/'+texture.image,friendly_name:texture.name,image_url:'https://cdn.theexpanse.app/images/3DTextures-128/'+folder+'/'+texture.name+'/'+texture.image});
         }
         this.context.content.compileTemplates('add-items',[{items:items}],true)
             .then(contents=>this.context.content.popup.setContent(contents[0]))
@@ -47,10 +47,10 @@ export class LoadTextureModal {
     openImage(folder,image){
         this.context.content.compileTemplates('add-items',[{items:
                 window.location.host==='shaneharris.github.io'?
-                    [{name:"128",friendly_name:'0.128K Image',image_url:'images/icons/128.jpg'}]:[
-                {name:"1024",friendly_name:'1K Image',image_url:'images/icons/1024.jpg'},
-                {name:"512",friendly_name:'0.5K Image',image_url:'images/icons/512.jpg'},
-                {name:"128",friendly_name:'0.128K Image',image_url:'images/icons/128.jpg'}
+                    [{name:"128",friendly_name:'0.128K Image',image_url:'https://cdn.theexpanse.app/images/icons/128.jpg'}]:[
+                {name:"1024",friendly_name:'1K Image',image_url:'https://cdn.theexpanse.app/images/icons/1024.jpg'},
+                {name:"512",friendly_name:'0.5K Image',image_url:'https://cdn.theexpanse.app/images/icons/512.jpg'},
+                {name:"128",friendly_name:'0.128K Image',image_url:'https://cdn.theexpanse.app/images/icons/128.jpg'}
             ]}],true)
             .then(contents=>this.context.content.popup.setContent(contents[0]))
             .then(()=>{
@@ -66,11 +66,11 @@ export class LoadTextureModal {
             });
     }
     setTextures(folder,image,size){
-        let map = 'images/3DTextures-'+size+'/'+folder+'/'+image;
-        let disp = 'images/3DTextures-'+size+'/'+folder+'/'+image.replace('COLOR.jpg','DISP.jpg');
-        let normal = 'images/3DTextures-'+size+'/'+folder+'/'+image.replace('COLOR.jpg','NRM.jpg');
-        let occ = 'images/3DTextures-'+size+'/'+folder+'/'+image.replace('COLOR.jpg','OCC.jpg');
-       // let spec = 'images/3DTextures-'+size+'/'+folder+'/'+image.replace('COLOR.jpg','SPEC.jpg');
+        let map = 'https://cdn.theexpanse.app/images/3DTextures-'+size+'/'+folder+'/'+image;
+        let disp = 'https://cdn.theexpanse.app/images/3DTextures-'+size+'/'+folder+'/'+image.replace('COLOR.jpg','DISP.jpg');
+        let normal = 'https://cdn.theexpanse.app/images/3DTextures-'+size+'/'+folder+'/'+image.replace('COLOR.jpg','NRM.jpg');
+        let occ = 'https://cdn.theexpanse.app/images/3DTextures-'+size+'/'+folder+'/'+image.replace('COLOR.jpg','OCC.jpg');
+       // let spec = 'https://cdn.theexpanse.app/images/3DTextures-'+size+'/'+folder+'/'+image.replace('COLOR.jpg','SPEC.jpg');
         this.setTexture(map,'map');
         this.setTexture(disp,'displacementMap');
         this.context.currentObject.settings.material.displacementScale =

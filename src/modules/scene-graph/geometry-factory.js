@@ -116,7 +116,7 @@ export class GeometryFactory{
                 return {
                     name:settings.name || "",
                     description:settings.description || "",
-                    image:settings.image || "images/parametric.png",
+                    image:settings.image || "https://cdn.theexpanse.app/images/parametric.png",
                     method:settings.method || "",
                     user_config:settings.user_config || "",
                     user_options:settings.user_options || {},

@@ -1,7 +1,7 @@
 export class ObjectTypeModal{
     constructor(context) {
         this.context = context;
-        let icon_path = 'images/icons/objects/';
+        let icon_path = 'https://cdn.theexpanse.app/images/icons/objects/';
         this.types = [
             {name:'Group',friendly_name:'Group',image_url:icon_path+'folder.jpg',extra_class:'close-modal'},
             {name:'Primitive',friendly_name:'Simple',image_url:icon_path+'geometries/primitive/Box.jpg'},

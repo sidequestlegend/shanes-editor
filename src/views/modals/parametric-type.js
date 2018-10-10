@@ -1,11 +1,11 @@
 export class ParametricTypeModal{
     constructor(context) {
         this.context = context;
-        let icon_path = 'images/icons/objects/geometries/parametric/';
+        let icon_path = 'https://cdn.theexpanse.app/images/icons/objects/geometries/parametric/';
         this.types = [
-            {name:'My Parametrics',friendly_name:'My Fancys',image_url:'images/icons/objects/parametric.jpg'},
-            {name:'Parametric Market',friendly_name:'Fancy Market',image_url:'images/icons/objects/market.jpg'},
-            {name:'Create',friendly_name:'Create',image_url:'images/icons/objects/custom.jpg'},
+            {name:'My Parametrics',friendly_name:'My Fancys',image_url:'https://cdn.theexpanse.app/images/icons/objects/parametric.jpg'},
+            {name:'Parametric Market',friendly_name:'Fancy Market',image_url:'https://cdn.theexpanse.app/images/icons/objects/market.jpg'},
+            {name:'Create',friendly_name:'Create',image_url:'https://cdn.theexpanse.app/images/icons/objects/custom.jpg'},
             {name:'Apple',friendly_name:'Apple',image_url:icon_path+'Apple.jpg'},
             {name:'AppleInverted',friendly_name:'Apple Inverted',image_url:icon_path+'Apple.jpg'},
             {name:'Catenoid',friendly_name:'Catenoid',image_url:icon_path+'Catenoid.jpg'},

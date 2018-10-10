@@ -405,10 +405,10 @@ module.exports = AFRAME.registerComponent('gizmo', {
     },
     setImage(mode){
         // Set the image on the intractable dragging boxes to match the mode
-        this.top_box.setAttribute('src','images/gizmos/'+mode+'_top.jpg');
-        this.x_box.setAttribute('src','images/gizmos/'+mode+'_top.jpg');
-        this.y_box.setAttribute('src','images/gizmos/'+mode+'_top.jpg');
-        this.z_box.setAttribute('src','images/gizmos/'+mode+'_top.jpg');
+        this.top_box.setAttribute('src','https://cdn.theexpanse.app/images/gizmos/'+mode+'_top.jpg');
+        this.x_box.setAttribute('src','https://cdn.theexpanse.app/images/gizmos/'+mode+'_top.jpg');
+        this.y_box.setAttribute('src','https://cdn.theexpanse.app/images/gizmos/'+mode+'_top.jpg');
+        this.z_box.setAttribute('src','https://cdn.theexpanse.app/images/gizmos/'+mode+'_top.jpg');
     },
     createRail(rotation,color){
         // Create a partial/full ring for the rail indicator for rotations.

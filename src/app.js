@@ -1,4 +1,4 @@
-import 'aframe-material-collection';
+import '../../../aframe-material-components';
 import {Content} from "./modules/content";
 import {Session} from './modules/session';
 import {SceneGraph} from './modules/scene-graph';
@@ -38,6 +38,7 @@ import {LoadTextureModal} from "./views/modals/material/load-texture";
 
 class Main{
     constructor(){
+        this.rootUrl = 'https://cdn.theexpanse.app/';
         this.session = new Session(this);
         this.content = new Content(this);
         this.friendly_names = new FriendlyNames();
@@ -47,7 +48,6 @@ class Main{
         this.setupViews();
         this.setupModals();
         this.editor = document.getElementById('editorContainer');
-        document.getElementById('uiPanel').setAttribute('scale','1 1 1');
         this.sceneEl = document.querySelector('a-scene');
         //this.editor.setAttribute('visible')
         this.sceneEl.addEventListener('modal-closed',()=>{
@@ -73,44 +73,39 @@ class Main{
         new PreloadTemplates(this).preload();
         this.sceneEl.context = this;
         this.sceneList.open();
-        this.setupTopMenu();
         this.setupPopupNavigation();
         this.setupTransformOptions();
 
-        this.showAlphaMap = new THREE.TextureLoader().load('images/nav-alpha.jpg');
-        this.hideAlphaMap = new THREE.TextureLoader().load('images/nav-alpha-hide.jpg');
-        this.showMaterial = document.getElementById('uiPanel').getObject3D('mesh').material;
-        this.showMaterial.transparent = true;
-        this.showMaterial.alphaMap = this.hideAlphaMap;
-        this.displayBox = document.getElementById('displayBox').components['display-box'];
-        this.displayBox.hide();
-        this.sceneEl.addEventListener('transform-update',()=>{
-            if(this.transformUpdate)this.transformUpdate();
-        });
-        document.getElementById('topTitle').addEventListener('mousedown',()=>{
-            this.itemView.open();
-        });
-        this.precision = 1;
-        let precisionButton = document.getElementById('precisionButton');
-        precisionButton.addEventListener('mousedown',()=>{
-            this.precision/=10;
-            if(this.precision<0.001){
-                this.precision = 100;
-            }
-            precisionButton.components["ui-toast"].data.toastEl.setAttribute('text-value','Precision: '+this.precision)
-        });
-        let popupPrecision = document.getElementById('popupPrecision');
-        popupPrecision.addEventListener('mousedown',()=>{
-            this.precision/=10;
-            if(this.precision<0.001){
-                this.precision = 100;
-            }
-            popupPrecision.components["ui-toast"].data.toastEl.setAttribute('text-value','Precision: '+this.precision)
-        });
-
-        this.cameraDummy = document.getElementById('cameraDummyPosition');
-        document.getElementById('menuButton').addEventListener('click',()=>this.openEditor());
-        document.getElementById('closeEditor').addEventListener('mousedown',()=>this.closeEditor());
+        this.showAlphaMap = new THREE.TextureLoader().load('https://cdn.theexpanse.app/images/nav-alpha.jpg');
+        this.hideAlphaMap = new THREE.TextureLoader().load('https://cdn.theexpanse.app/images/nav-alpha-hide.jpg');
+            this.showMaterial = document.getElementById('uiPanel').getObject3D('mesh').material;
+            this.showMaterial.transparent = true;
+            this.showMaterial.alphaMap = this.hideAlphaMap;
+            this.displayBox = document.getElementById('displayBox').components['display-box'];
+            this.displayBox.hide();
+            this.sceneEl.addEventListener('transform-update',()=>{
+                if(this.transformUpdate)this.transformUpdate();
+            });
+            document.getElementById('topTitle').addEventListener('mousedown',()=>{
+                this.itemView.open();
+            });
+            this.precision = 1;
+            let precisionButton = document.getElementById('precisionButton');
+            precisionButton.addEventListener('mousedown',()=>{
+                this.precision/=10;
+                if(this.precision<0.001){
+                    this.precision = 100;
+                }
+                precisionButton.components["ui-toast"].data.toastEl.setAttribute('text-value','Precision: '+this.precision)
+            });
+            let popupPrecision = document.getElementById('popupPrecision');
+            popupPrecision.addEventListener('mousedown',()=>{
+                this.precision/=10;
+                if(this.precision<0.001){
+                    this.precision = 100;
+                }
+                popupPrecision.components["ui-toast"].data.toastEl.setAttribute('text-value','Precision: '+this.precision)
+            });
     }
     setupPopupNavigation(){
         document.getElementById('backButton').addEventListener('mousedown',()=>this.popupBack());
@@ -177,49 +172,10 @@ class Main{
         },2500);
 
     }
-
-    setupTopMenu(){
-
-    }
-    closeEditor(){
-        let _this = this;
-        new TWEEN.Tween({x:0.5})
-            .to({x:0.0000001}, 650)
-            .onUpdate(function(){
-                _this.editor.setAttribute('scale',this.x+' '+this.x+' '+this.x);
-            })
-            .easing(TWEEN.Easing.Exponential.Out).start();
-    }
-    openEditor(){
-        this.cameraDummy.object3D.position.set(0,0,-0.8);
-        this.cameraDummy.object3D.updateMatrixWorld();
-        let _this = this;
-        new TWEEN.Tween({x:0.0000001})
-            .to({x:0.5}, 650)
-            .onUpdate(function(){
-                _this.editor.setAttribute('scale',this.x+' '+this.x+' '+this.x);
-            })
-            .easing(TWEEN.Easing.Exponential.Out).start();
-
-        new TWEEN.Tween(_this.editor.getAttribute('position'))
-            .to(this.cameraDummy.object3D.localToWorld(new THREE.Vector3(0,0,0)), 250)
-            .easing(TWEEN.Easing.Exponential.Out).start();
-
-
-        let quaternion = new THREE.Quaternion();
-        this.cameraDummy.object3D.updateMatrixWorld();
-        this.cameraDummy.object3D.matrixWorld.decompose( new THREE.Vector3(), quaternion, new THREE.Vector3() );
-        new TWEEN.Tween(this.editor.object3D.quaternion).to(quaternion, 500)
-            .easing(TWEEN.Easing.Exponential.Out)
-            //.onUpdate(function () {
-            //_this.getKeyboardDummyPosition();
-            //})
-            .start();
-    }
 }
 document.addEventListener("DOMContentLoaded", ()=> {
     document.querySelector('a-scene').addEventListener('loaded',()=>{
-        window.main = new Main();
+        setTimeout(()=>window.main = new Main());
     })
 });
 

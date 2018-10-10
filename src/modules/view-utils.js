@@ -29,7 +29,7 @@ export class ViewUtils{
         document.getElementById('scaleButton').parentElement.setAttribute('visible',!!!shouldHide);
     }
     childObject(child){
-        let icon_path = 'images/icons/objects/';
+        let icon_path = 'https://cdn.theexpanse.app/images/icons/objects/';
         let _child = {
             uuid:child.settings.uuid,
             image_url:icon_path+"custom.jpg",

@@ -197,7 +197,7 @@ export class BehaviourHelper{
         this.cannonBodyAxisSwap(body);
         var obj = new THREE.Object3D();
         parent.add(obj);
-        var currentMaterial = new THREE.MeshBasicMaterial(should_hide?{visible:false}:{side:THREE.DoubleSide,color: color,map:new THREE.TextureLoader().load('/images/display_texture.png')});
+        var currentMaterial = new THREE.MeshBasicMaterial(should_hide?{visible:false}:{side:THREE.DoubleSide,color: color,map:new THREE.TextureLoader().load('https://cdn.theexpanse.app/images/display_texture.png')});
         for (var l = 0; l < body.shapes.length; l++) {
             var shape = body.shapes[l];
             var mesh;

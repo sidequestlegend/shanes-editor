@@ -1,7 +1,7 @@
 export class PrimitiveTypeModal{
     constructor(context) {
         this.context = context;
-        let icon_path = 'images/icons/objects/geometries/primitive/';
+        let icon_path = 'https://cdn.theexpanse.app/images/icons/objects/geometries/primitive/';
         this.types = [
             {name:'Box',friendly_name:'Box',image_url:icon_path+'Box.jpg'},
             {name:'Circle',friendly_name:'Circle',image_url:icon_path+'Circle.jpg'},

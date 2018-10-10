@@ -23,9 +23,9 @@ export class KennyModalsModal{
         this.uiRenderer = document.getElementById('mainRenderer');
         for(let i = 0; i < this.types[category].length; i++){
             let name = this.types[category][i].substr(0,this.types[category][i].length-4);
-            namedItems.push({name:this.types[category][i],friendly_name:name,image_url:'images/kenney/'+category+'/'+name+'.jpg'});
+            namedItems.push({name:this.types[category][i],friendly_name:name,image_url:'https://cdn.theexpanse.app/images/kenney/'+category+'/'+name+'.jpg'});
         }
-        this.context.content.compileTemplates('add-items',[{top_image_url:'images/kenney/'+category+'/Preview.png',items:namedItems}],true)
+        this.context.content.compileTemplates('add-items',[{top_image_url:'https://cdn.theexpanse.app/images/kenney/'+category+'/Preview.png',items:namedItems}],true)
             .then(contents=>this.context.content.popup.setContent(contents[0]))
             .then(()=>{
                 let buttons = this.context.content.popup.querySelectorAll('.type-select');
