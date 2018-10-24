@@ -13,18 +13,21 @@ export class SceneGraph{
         this.serialiser = new Serialiser(this);
         this.behaviourFactory = new BehaviourFactory(this);
         // Seed the current scene object - this is replaced when you load a scene in.
-        this.currentScene = {settings:this.objectFactory.defaultUserData(),children:[]};
+        this.currentScene = {settings:this.objectFactory.defaultUserData(),children:[],behaviours:{}};
         this.resetContainer();
         this.containerComponentName = 'scene-graph-container';
         this.setupAframeContainer();
-
+        // this.currentScene = {"settings":{"altspace":{"behaviours":[]},"object":{"type":"Object3D","name":"Silly","uuid":"5FFF0276-8E78-4CE8-8EDF-2E3E5EDDD42B","transform":{"position":{"x":0,"y":0,"z":0},"rotation":{"x":0,"y":0,"z":0},"scale":{"x":1,"y":1,"z":1}},"baked_lighting":false,"geometry_subdivision":0,"geometry_tessellation":0,"geometry_simplification":0,"geometry_subdivision_enabled":false,"geometry_tessellation_enabled":false,"geometry_simplification_enabled":false,"hide_on_mobile":false,"show_only_on_mobile":false,"object_is_added":false,"object_is_updated":false,"object_is_transform_updated":false,"object_is_removed":false,"lighting_position":{"x":-10,"y":450,"z":0}},"geometry":{"sub_type":""},"material":{"visible":true,"color":"#ffffff","transparent":false,"opacity":1,"map":"","repeatX":1,"repeatY":1,"offsetX":0,"offsetY":0,"wrapping":1000,"side":0}},"children":[{"settings":{"altspace":{"behaviours":[]},"object":{"type":"Primitive","name":"Timely Sphere","uuid":"92A21D61-D987-4E89-8323-0EAFDB6DCB19","transform":{"position":{"x":0,"y":0,"z":0},"rotation":{"x":-1.5707963267948966,"y":0,"z":1.5707963267948966},"scale":{"x":1,"y":1,"z":1}},"baked_lighting":false,"geometry_subdivision":0,"geometry_tessellation":0,"geometry_simplification":0,"geometry_subdivision_enabled":false,"geometry_tessellation_enabled":false,"geometry_simplification_enabled":false,"hide_on_mobile":false,"show_only_on_mobile":false,"object_is_added":false,"object_is_updated":false,"object_is_transform_updated":false,"object_is_removed":false,"is_native":false},"geometry":{"radius":500,"widthSegments":16,"heightSegments":16,"phiStart":0,"phiLength":3.142,"thetaStart":0,"thetaLength":3.142,"type":"SphereGeometry","sub_type":"Sphere"},"material":{"visible":true,"color":"#ffffff","transparent":false,"opacity":1,"map":"https://xactaccounts.co.uk/model/aurora-sky.jpg","repeatX":1,"repeatY":1,"offsetX":0,"offsetY":0,"wrapping":1000,"side":1}},"children":[]},{"settings":{"altspace":{"behaviours":[{"type":"Mesh Collider","sub_type":"environment","settings":{"type":"environment","isTrigger":false,"center":[0,0,0],"convex":false,"trigger":"auto-trigger","sync":false}}]},"object":{"type":"Custom","name":"Heavy","uuid":"262D72D2-C86B-4E4F-83FF-A39AFC1640C8","transform":{"position":{"x":1.364007892,"y":34.141,"z":-5.34796027617727},"rotation":{"x":0,"y":0,"z":0},"scale":{"x":2000,"y":2000,"z":2000}},"baked_lighting":false,"geometry_subdivision":0,"geometry_tessellation":0,"geometry_simplification":0,"geometry_subdivision_enabled":false,"geometry_tessellation_enabled":false,"geometry_simplification_enabled":false,"hide_on_mobile":false,"show_only_on_mobile":false,"object_is_added":false,"object_is_updated":false,"object_is_transform_updated":false,"object_is_removed":false,"url":"https://xactaccounts.co.uk/model/Model.gltf","is_native":false},"geometry":{"type":"GLTF2","sub_type":""},"material":{"visible":true,"color":"#ffffff","transparent":false,"opacity":1,"map":"","repeatX":1,"repeatY":1,"offsetX":0,"offsetY":0,"wrapping":1000,"side":0}},"children":[]},{"settings":{"altspace":{"behaviours":[{"type":"Custom Behaviour","sub_type":"test","settings":{"name":"test","description":"testd","image":"images/behaviour.png","author":"Shane","obfuscate":false,"user_options":{"text":{"type":"string","value":"hello world"},"intensity":{"type":"number","value":1},"is_enabled":{"type":"boolean","value":true},"tint":{"type":"array","value":"#ffffff","values":["#ffffff","#ff55ff","#ff5500"]}},"code":{"awake_errors":0,"awake":"\n//Behaviour.awake\n//Paste ( or type if you dare ) the body of your awake method here...\n\n//@param globals Object:{\n//\tdocument:HTMLDocument,\n//\tscene:THREE.Scene\n//}\n//@param object3d THREE.Object3D|THREE.Mesh|THREE.Group\n//@param behaviour_config Object:{\n//\tname:string,\n//\tdescription:string,\n//\timage:string,\n//\tauthor:string,\n//\tis_public:boolean\n//}\n//function awake(globals,object3d,behaviour_config){\n\nconsole.log(\"awake called\",globals,object3d,behaviour_config,user_config);\n\n//}","update_errors":0,"update":"\n//Behaviour.update\n//Paste ( or type if you dare ) the body of your update method here...\n\n//@param globals Object:{\n//\tdocument:HTMLDocument,\n//\tscene:THREE.Scene\n//}\n//@param object3d THREE.Object3D|THREE.Mesh|THREE.Group\n//@param behaviour_config Object:{\n//\tname:string,\n//\tdescription:string,\n//\timage:string,\n//\tauthor:string,\n//\tis_public:boolean\n//}\n//function update(globals,object3d,behaviour_config,user_config,delta,serverTime){\n\n\n//}","dispose":"","dispose_errors":0,"user_config_errors":0,"user_config":"\n//Paste ( or type if you dare ) the user configuration settings here...\n//they will be presented as settings to the user when adding/editing the \n//behaviour. They will also be passed to the awake and update methods. You can \n//use the following types: number, string, boolean ( switch ) and array ( radio selection )\n//Array type also has a values property for the \n//options.\nreturn {\n\ttext:{\n\t\ttype:\"string\",\n\t\tvalue:\"hello world\",\n\t},\n\tintensity:{\n\t\ttype:\"number\",\n\t\tvalue:1.000,\n\t},\n\tis_enabled:{\n\t\ttype:\"boolean\",\n\t\tvalue:true,\n\t},\n\ttint:{\n\t\ttype:\"array\",\n\t\tvalue:\"#ffffff\",\n\t\tvalues:[\n\t\t\t\"#ffffff\",\n\t\t\t\"#ff55ff\",\n\t\t\t\"#ff5500\"\n\t\t]\n\t}\n}"},"trigger":"auto-trigger","sync":true,"cost":0,"behaviour_id":"1115"}}]},"object":{"type":"Primitive","name":"Wild Plane","uuid":"56059B79-4092-4533-A846-9F6E2B37E1DF","transform":{"position":{"x":0,"y":-0.5,"z":0},"rotation":{"x":-1.5707963267948966,"y":0,"z":0},"scale":{"x":2000,"y":2000,"z":1}},"baked_lighting":false,"geometry_subdivision":0,"geometry_tessellation":0,"geometry_simplification":0,"geometry_subdivision_enabled":false,"geometry_tessellation_enabled":false,"geometry_simplification_enabled":false,"hide_on_mobile":false,"show_only_on_mobile":false,"object_is_added":false,"object_is_updated":false,"object_is_transform_updated":false,"object_is_removed":false,"is_native":false},"geometry":{"width":1,"height":1,"widthSegments":1,"heightSegments":1,"type":"PlaneGeometry","sub_type":"Plane"},"material":{"visible":true,"color":"#c6e2ff","transparent":true,"opacity":0.6,"map":"","repeatX":1,"repeatY":1,"offsetX":0,"offsetY":0,"wrapping":1000,"side":0}},"children":[]}]};
+        // this.migrations.migrate();
+        // console.log(JSON.stringify(this.currentScene.behaviours));
         let version = require('./../../package.json').version;
         console.log('Shane\'s Editor Version '+version);
     }
 
-    async load(scene){
+    async load(scene,isEditing){
+        this.isEditing = isEditing;
         // Get the current scene json definition
-        return fetch(window.location.href+'/scene/'+scene.short_code+'.json')
+        return fetch(this.context.rootUrl+scene.url)
             .then(response=>response.json())
             .then(_scene=>{
                 // Clear anything out of the scene first.
@@ -33,12 +36,15 @@ export class SceneGraph{
                 this.sceneLoaded = false;
                 // Set the current scene object
                 this.currentScene = _scene || this.currentScene;
-                // Migrate the current scene object fromthe old altspace format
+                // Migrate the current scene object from the old altspace format
                 this.migrations.migrate();
+                // Prompt to save parsed behaviours
+                if(this.isEditing){
+                    this.behaviourFactory.checkBehaviours();
+                }
                 // Store the scene details in the scene definition
                 this.currentScene.metadata = scene;
                 console.log('Scene Downloaded.');
-                return Promise.resolve();
             });
     }
 
@@ -51,6 +57,9 @@ export class SceneGraph{
         // Send back load events to facilitate displaying loading percentages.
         let completeCount = 0;
         let total = promises.length;
+        if(!promises.length){
+            this.context.sceneEl.emit('scene-loading',1);
+        }
         for(let i = 0; i < total; i++){
             let promise = promises[i];
             promise.then(()=>{
@@ -75,12 +84,21 @@ export class SceneGraph{
 
     setupAframeContainer(){
         let _this = this;
-        // Register aframe component to attach the scene to teh aframe container
-        // I didnt use aframe for the scene graph as i wanted more granular control over the
-        // hierarchy and wanted to be able to use fancy geometries and more material settings.
+        // Register component to kick things off in aframe.
         AFRAME.registerComponent(this.containerComponentName, {
             init(){
+                this.fireLight = document.getElementById('firelight');
                 this.el.setObject3D('mesh',_this.container);
+                this.flick();
+            },
+            flick(){
+                setTimeout(() =>{
+                    this.fireLight.setAttribute('light',{intensity:8+(Math.random()*5)});
+                    this.flick();
+                }, 50+(Math.random()*50));
+            },
+            tick(time,delta){
+                _this.behaviourFactory.updateBehaviours(delta);
             }
         });
         // Create and attach the aframe entity container to the scene
@@ -88,6 +106,10 @@ export class SceneGraph{
         this.entityContainer.setAttribute('scene-graph-container',"");
         this.entityContainer.setAttribute('position',"0 0 0");
         document.querySelector('a-scene').appendChild(this.entityContainer);
+
+        this.aframeContainer = document.createElement('a-entity');
+        this.aframeContainer.setAttribute('position',"0 0 0");
+        document.querySelector('a-scene').appendChild(this.aframeContainer);
     }
 
     totals(object,totals,desktopOverride,mobileOverride){
@@ -114,11 +136,22 @@ export class SceneGraph{
         }
     }
 
+    createNew(){
+        // Create an empty scene object
+        return {
+            settings:this.objectFactory.defaultUserData(),
+            children:[],
+            version:"2.0",
+            behaviours:{}
+        }
+    }
+
     resetContainer(){
         // Reset the scene container.
         this.container = new THREE.Object3D();
         this.currentScene.settings = this.objectFactory.defaultUserData();
         this.currentScene.children.length=0;
+        this.currentScene.behaviours = {};
         this.container.userData.sceneObject = this.currentScene;
     }
 
@@ -141,20 +174,32 @@ export class SceneGraph{
         return uuids.length===1?results[uuids[0]]:results;
     }
 
-    remove(parent,index){
+    removeObject(){
         // Remove an object from the scene graph freeing the resources is consumes.
-        let child = parent.children[index];
-        // TODO: needs to be updated to use the referenced object3d at child.object3D
-        if(child&&child.settings.uuid){
-            let object = this.findByUUID(child.settings.uuid);
-            if(object){
-                object.parent.remove(object);
-                this.clearObject(object);
-            }
-            parent.children.splice(index, 1);
+        if(this.context.currentObject.settings.type === "Aframe"){
+            // remove the aframe reference element of its is attached.
+            let element = this.aframeContainer.querySelector('.o-'+this.context.currentObject.settings.uuid);
+            this.aframeContainer.removeChild(element);
+            element = null;
         }
+        let object3D = this.context.currentObject.object3D;
+        UI.utils.clearObject(object3D);
+        object3D.parent.remove(object3D);
+        let parent = this.context.currentObject.parent;
+        let i = parent.children.indexOf(this.context.currentObject);
+        if (i !== -1) {
+            parent.children.splice(i, 1);
+        }
+        this.context.currentObject.object3D = null;
+        this.context.currentObject = null;
     }
-
+    serialiseScene(object){
+        let behaviours = {};
+        let scene = this.serialiser.serialiseScene(this.context.currentObject,behaviours);
+        scene.version = "2.0";
+        scene.behaviours = behaviours;
+        return scene;
+    }
     async add(parent,settings){
         // Add an object to the scene.
         // If there is a camera dummy ( positioned 4m in front of the camera ) object
@@ -188,39 +233,14 @@ export class SceneGraph{
             })
     }
 
-    // getPointInBetweenByPerc(pointA, pointB, percentage) {
-    //     let dir = pointB.clone().sub(pointA).normalize().multiplyScalar(pointA.distanceTo(pointB)*(percentage||0.5));
-    //     return pointA.clone().add(dir);
-    // }
-
-    clearObject(object){
-        // TODO: need to investigate what of this is necessary - or if there are other things to do also
-        object.traverse(child=>{
-            if(child.material&&child.material.map&&child.material.map.dispose){
-                child.material.map.dispose();
-                if(child.material.dispose)
-                    child.material.dispose();
-            }
-            if(child.material&&child.material.length){
-                for(let i =0; i < child.material.length; i++){
-                    if(child.material[i].map&&child.material[i].map.dispose){
-                        child.material[i].map.dispose();
-                    }
-                }
-            }
-            if(child.geometry){
-                child.geometry.dispose();
-            }
-            if(child.dispose)child.dispose();
-        });
-    }
-
     clearScene(){
         this.hasScene = false;
         // Clean up all textures, materials, multi-materials, geometries and meshes.
-        this.clearObject(this.container);
+        UI.utils.clearObject(this.container);
         // Reset the content container.
         this.resetContainer();
+        this.objectFactory.clearAframeContainer();
         this.entityContainer.setObject3D('mesh',this.container);
     }
+
 }

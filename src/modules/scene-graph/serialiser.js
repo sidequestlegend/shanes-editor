@@ -1,6 +1,9 @@
 export class Serialiser{
     constructor(sceneGraph){
         this.sceneGraph = sceneGraph;
+        this.isMobile = AFRAME.utils.device.isGearVR()
+            ||AFRAME.utils.device.isMobile()
+        ||/Pacific Build.+OculusBrowser.+SamsungBrowser.+Mobile VR/i.test(window.navigator.userAgent);
     }
     deSerialiseScene(scene_current,current,promises){
         if(!scene_current||!scene_current.settings)return;
@@ -16,18 +19,15 @@ export class Serialiser{
                 if(!child){
                     return;
                 }
-                // TODO: Implement new mobile checks with aframe. Look at getting an oculus go for testing.
-                // if(this.sceneGraph.context.is_renderer&&!this.sceneGraph.context.is_mobile&&child.settings.object.show_only_on_mobile){
-                //     should_show = false;
-                // }else if(this.sceneGraph.context.is_renderer&&this.sceneGraph.context.is_mobile&&child.settings.object.hide_on_mobile){
-                //     should_show = false;
-                // }
+                if(this.sceneGraph.context.is_renderer&&!this.isMobile&&child.settings.hide_on_desktop){
+                    should_show = false;
+                }else if(this.sceneGraph.context.is_renderer&&this.isMobile&&child.settings.object.hide_on_mobile){
+                    should_show = false;
+                }
                 if(should_show){
                     return this.sceneGraph.objectFactory.make(child).then(object=>{
                         if(object){
                             current.add(object);
-                            object.userData.sceneObject = child;
-                            child.object3D = object;
                             child.parent = scene_current;
                             this.deSerialiseScene(child,object,promises);
                             return {object:object,child:child};
@@ -38,24 +38,15 @@ export class Serialiser{
         }
         return promises;
     }
-    serialiseScene(current){
-        current = current||this.sceneGraph.container;
-        if(!this.isObject(current))return;
-        let output = {settings:{},children:[]};
-        current.userData = current.userData||{};
-        current.userData.plusspace = current.userData.plusspace||this.sceneGraph.objectFactory.defaultUserData();
-        output.settings = current.userData.plusspace;
-        if(output.settings.type!=="Custom"&&output.settings.type!=="Poly"){
-            if(current.children&&current.children.length){
-                current.children.forEach(child=>{
-                    output.children.push(this.serialiseScene(child))
-                });
+    serialiseScene(current,behaviours){
+        current = current||this.sceneGraph.currentScene;
+        let output = {settings:current.settings,children:[]};
+        current.children.forEach(child=>{
+            for(let i = 0; i < child.settings.behaviours.length; i++){
+                behaviours[child.settings.behaviours[i]] = this.sceneGraph.currentScene.behaviours[child.settings.behaviours[i]];
             }
-        }
+            output.children.push(this.serialiseScene(child,behaviours));
+        });
         return output;
-    }
-    isObject(object){
-        return object.userData&&object.userData.plusspace&&object.userData.plusspace.object
-            &&object.userData.plusspace.geometry&&object.userData.plusspace.material;
     }
 }

@@ -1,0 +1,12 @@
+<a-entity width="2.2">
+    {{#compare page 0 operator=">"}}
+        <a-ui-button text-value="Prev Page" class="prev-button intersectable"></a-ui-button>
+        <a-entity width="1"></a-entity>
+    {{/compare}}
+    {{#compare scenes_length 10 operator="=="}}
+        {{#compare page 0 operator="=="}}
+            <a-entity width="1.55"></a-entity>
+        {{/compare}}
+    <a-ui-button text-value="Next Page" class="next-button intersectable"></a-ui-button>
+    {{/compare}}
+</a-entity>

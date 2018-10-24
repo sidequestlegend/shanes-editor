@@ -37,7 +37,7 @@ export class BreadCrumbs{
             items = items.concat(this.fromObject(object.parent));
         }
         items.push({
-            name:object.parent?object.settings.name:this.context.sceneGraph.currentScene.metadata.name+' Scene',
+            name:object.parent?object.settings.name:this.context.sceneGraph.currentScene.metadata.name,
             callback:()=>this.context.itemView.open(object),
             isTop:!object.parent
         });
@@ -50,12 +50,12 @@ export class BreadCrumbs{
         button.setAttribute('height',0.13);
         button.setAttribute('ripple-size','0.5 0.19');
         button.setAttribute('position',(this.isOverloaded&&index>0?((index*0.52)+0.2):(index*0.52))+' 0 0');
-        button.setAttribute('wrap-count',13);
+        button.setAttribute('wrap-count',15);
         button.setAttribute('text-value',this.shorten(item.name,14));
         button.setAttribute('color','#42b8ac');
         button.className = 'intersectable';
         button.addEventListener('mousedown',()=>{
-            item.callback()
+            item.callback();
         });
         return button;
     }

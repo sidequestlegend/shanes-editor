@@ -1,26 +1,28 @@
 {{#each scenes}}
-<a-plane shader="flat" width="0.5" height="0.5" src="#sceneImage" transparent="true">
+<a-entity width="2.95">
+    <a-plane shader="flat" width="0.3" height="0.3" src="#sceneImage" transparent="true">
 
-</a-plane>
-<a-entity width="2.35" height="0.5" position="0 0 0.05" class="no-z-offset" >
+    </a-plane>
+    <a-entity width="1.95" height="0.3" position="0 0 0.05" class="no-z-offset" >
 
-    <a-text font="roboto" baseLine="top" value="{{name}}"
-            anchor="center" color="#515151" wrap-count="40" width="2.55" height="0.2"></a-text>
+        <a-text font="roboto" value="{{name}}"
+                anchor="center" color="#515151" wrap-count="40" width="2.55" height="0.2"></a-text>
 
-    <a-text font="roboto" baseLine="bottom" value="https://shanesedit.org/r/{{short_code}}"
-            anchor="center" color="#515151" wrap-count="60" width="2.55" height="0.05"></a-text>
+        <a-text font="roboto" baseLine="bottom" value="{{date}}"
+                anchor="center" color="#515151" wrap-count="60" width="2.55" height="0.05"></a-text>
 
-</a-entity>
-<a-entity width="0.2" height="0.5">
-    <a-entity width="0.2" height="0.05"></a-entity>
-    <a-plane shader="flat" width="0.2" height="0.2" data-scene="{{scene_id}}" data-view_only="true"
-             class="loadScene intersectable view" src="#viewIcon" color="#009688" transparent="true" alpha-test="0.5"
-             ui-ripple="size:0.15 0.15;zIndex:-0.001;color:#999;duration:500;fadeDuration:250;"></a-plane>
-</a-entity>
-<a-entity width="0.2" height="0.5">
-    <a-entity width="0.2" height="0.05"></a-entity>
-    <a-plane shader="flat" width="0.2" height="0.2" data-scene="{{scene_id}}"
-             class="loadScene intersectable" src="#iconSend" color="#009688" transparent="true" alpha-test="0.5"
-             ui-ripple="size:0.15 0.15;zIndex:-0.001;color:#999;duration:500;fadeDuration:250;"></a-plane>
+    </a-entity>
+    <a-entity width="0.2" height="0.3">
+        <a-entity width="0.2" height="0.05"></a-entity>
+        <a-plane shader="flat" width="0.2" height="0.2" data-scene="{{scenes_id}}" data-view_only="true"
+                 class="loadScene intersectable view" src="#viewIcon" color="#009688" transparent="true" alpha-test="0.5"
+                 ui-ripple="size:0.15 0.15;zIndex:-0.001;color:#999;duration:500;fadeDuration:250;"></a-plane>
+    </a-entity>
+    <a-entity width="0.2" height="0.3">
+        <a-entity width="0.2" height="0.05"></a-entity>
+        <a-plane shader="flat" width="0.2" height="0.2" data-scene="{{scenes_id}}"
+                 class="loadScene intersectable" src="#iconSend" color="#009688" transparent="true" alpha-test="0.5"
+                 ui-ripple="size:0.15 0.15;zIndex:-0.001;color:#999;duration:500;fadeDuration:250;"></a-plane>
+    </a-entity>
 </a-entity>
 {{/each}}

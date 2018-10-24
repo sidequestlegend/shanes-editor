@@ -23,10 +23,16 @@ export class ViewUtils{
     hideTransformOptions(){
         this.showTransformOptions(true);
     }
+    scaleGizmoMenuButton(id,scale){
+        new TWEEN.Tween(document.getElementById(id).getAttribute('scale'))
+            .to(new THREE.Vector3(scale,scale,scale), 250)
+            .easing(TWEEN.Easing.Exponential.Out).start();
+    }
     showTransformOptions(shouldHide){
-        document.getElementById('positionButton').parentElement.setAttribute('visible',!!!shouldHide);
-        document.getElementById('rotationButton').parentElement.setAttribute('visible',!!!shouldHide);
-        document.getElementById('scaleButton').parentElement.setAttribute('visible',!!!shouldHide);
+        let scale = shouldHide?0.00001:1;
+        this.scaleGizmoMenuButton('positionButton',scale);
+        this.scaleGizmoMenuButton('rotationButton',scale);
+        this.scaleGizmoMenuButton('scaleButton',scale);
     }
     childObject(child){
         let icon_path = 'https://cdn.theexpanse.app/images/icons/objects/';

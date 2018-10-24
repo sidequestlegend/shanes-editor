@@ -1,10 +1,8 @@
 import '../../../aframe-material-components';
 import {Content} from "./modules/content";
-import {Session} from './modules/session';
 import {SceneGraph} from './modules/scene-graph';
 import {SceneListView} from "./views/scene-list-view";
 import {ItemView} from "./views/item-view";
-//import '../../expanse-app/modules/expanse/components/right_look_controls';
 import './components/gizmo';
 import './components/display-box';
 import './components/editor';
@@ -35,11 +33,19 @@ import {ObjectMaterial} from "./views/modals/object-material";
 import {MapSettingsModal} from "./views/modals/material/map-settings-advanced";
 import {RepeatSettingsModal} from "./views/modals/material/repeat-offset";
 import {LoadTextureModal} from "./views/modals/material/load-texture";
+import {CreateSceneModal} from "./views/modals/add-scene";
+import {DeleteSceneModal} from "./views/modals/delete-scene";
+import {BehaviourView} from "./views/behaviour-view";
+import {RemoveObjectModal} from "./views/modals/remove-object";
+import {ImportBehavioursModal} from "./views/modals/import-behaviours";
 
-class Main{
-    constructor(){
-        this.rootUrl = 'https://cdn.theexpanse.app/';
-        this.session = new Session(this);
+export class Editor{
+    constructor(context,rootUrl){
+        this.context = context;
+       //this.isDev = !!localStorage.getItem('isDev');
+        this.rootUrl = rootUrl;//this.isDev?'http://localhost:47000/':'https://cdn.theexpanse.app/';
+        //this.rootUrl = 'https://cdn.theexpanse.app/';
+        //this.session = new Session(this);
         this.content = new Content(this);
         this.friendly_names = new FriendlyNames();
         this.namer = new Namer();
@@ -47,32 +53,12 @@ class Main{
         this.breadCrumbs = new BreadCrumbs(this);
         this.setupViews();
         this.setupModals();
-        this.editor = document.getElementById('editorContainer');
         this.sceneEl = document.querySelector('a-scene');
-        //this.editor.setAttribute('visible')
         this.sceneEl.addEventListener('modal-closed',()=>{
             this.content.popup.components['ui-scroll-pane'].setContent('');
         });
-        let loadingText = document.getElementById('loadingText');
-        let loadingTextBack = document.getElementById('loadingTextBack');
-        let start = 0;
-        this.sceneEl.addEventListener('scene-load-start',()=>{
-            start = new Date().getTime();
-            loadingTextBack.setAttribute('scale','1 1 1');
-        });
-        this.sceneEl.addEventListener('scene-loading',e=>{
-            loadingText.setAttribute('value',Math.round(e.detail*100)+'%');
-            if(e.detail===1){
-                console.log('Scene loaded in: '+((new Date().getTime()-start)/1000)+"s");
-                setTimeout(()=>{
-                    loadingText.setAttribute('value','');
-                    loadingTextBack.setAttribute('scale','0 0 0');
-                },500)
-            }
-        });
         new PreloadTemplates(this).preload();
         this.sceneEl.context = this;
-        this.sceneList.open();
         this.setupPopupNavigation();
         this.setupTransformOptions();
 
@@ -112,6 +98,20 @@ class Main{
         document.getElementById('closePopup').addEventListener('mousedown',()=>this.popupBackStack.length=0);
         this.popupBackStack = [];
     }
+    loader(scale){
+        if(this.loaderTween){
+            this.loaderTween.stop();
+        }
+        this.loaderTween = new TWEEN.Tween(document.getElementById('editorLoader').getAttribute('scale'))
+            .to(new THREE.Vector3(scale,scale,scale), 250)
+            .easing(TWEEN.Easing.Exponential.Out).start();
+    }
+    showLoader(){
+        this.loader(1);
+    }
+    hideLoader(){
+        this.loader(0.00001);
+    }
     popupBack(){
         let back = this.popupBackStack.pop();
         if(back)back();
@@ -119,6 +119,7 @@ class Main{
     setupViews(){
         this.sceneList = new SceneListView(this);
         this.itemView = new ItemView(this);
+        this.behaviourView = new BehaviourView(this);
         this.popupView = new PopupView(this);
         this.viewUtils = new ViewUtils(this);
     }
@@ -133,8 +134,11 @@ class Main{
         this.avatarCategories = new AvatarCategoriesModal(this);
         this.avatarModelsModal = new AvatarModalsModal(this);
         this.clearSceneModal = new ClearSceneModal(this);
+        this.deleteSceneModal = new DeleteSceneModal(this);
         this.savePrefabModal = new SavePrefabModal(this);
         this.behavioursModal = new BehavioursModal(this);
+        this.removeObjectModal = new RemoveObjectModal(this);
+        this.importBehavioursModal = new ImportBehavioursModal(this);
 
         this.transformModal = new TransformModal(this);
 
@@ -149,6 +153,9 @@ class Main{
         this.geometrySettingsModal = new GeometrySettingsModal(this);
 
         this.objectMaterial = new ObjectMaterial(this);
+
+        this.createSceneModal = new CreateSceneModal(this);
+
     }
 
     setupTransformOptions(){
@@ -170,12 +177,6 @@ class Main{
             this.showMaterial.alphaMap = this.hideAlphaMap;
             this.showMaterial.alphaMap.needsUpdate = true;
         },2500);
-
     }
 }
-document.addEventListener("DOMContentLoaded", ()=> {
-    document.querySelector('a-scene').addEventListener('loaded',()=>{
-        setTimeout(()=>window.main = new Main());
-    })
-});
 

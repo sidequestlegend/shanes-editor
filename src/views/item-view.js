@@ -11,6 +11,7 @@ export class ItemView {
         }
         this.isGroup = object.settings.type==="Object3D";
         this.is3dModel = object.settings.type==="Poly"||object.settings.type==="Custom";
+        this.isAframe = object.settings.type==="Aframe";
         this.context.currentObject = object;
         this.uiRenderer = document.getElementById('mainRenderer');
         this.uiRenderer.components['ui-renderer'].pause();
@@ -27,19 +28,8 @@ export class ItemView {
             .then(()=>this.showTransformSettings(object))
             .then(()=>this.context.viewUtils.title(this.isTop?object.metadata.name:object.settings.name,object.settings.uuid))
             .then(()=>this.context.viewUtils.stats(object))
-            .then(()=>this.context.content.compileTemplates('single-item-button',[{
-                title:'Save Prefab',
-                description:'Save this scene as a prefab to import it later',
-                buttonText:'SAVE PREFAB',
-                descriptionHeight:0.21,
-            }]))
-            .then(contents=>this.context.content.addTemplateItem('#savePrefab',contents[0]))
-            .then(()=>{
-                document.querySelector('#savePrefab').querySelector('.singleButton').addEventListener('mousedown',()=>{
-                    this.context.savePrefabModal.open();
-                });
-            })
             .then(()=>this.showMaterialAndGeometrySettings())
+            .then(()=>this.setupSavePrefab())
             .then(()=>this.context.content.compileTemplates('single-item-button',[{
                 title:'Behaviours',
                 description:'Add/update behaviours on the scene',
@@ -49,11 +39,13 @@ export class ItemView {
             .then(contents=>this.context.content.addTemplateItem('#behavioursContainer',contents[0]))
             .then(()=>{
                 document.querySelector('#behavioursContainer').querySelector('.singleButton').addEventListener('mousedown',()=>{
-                    this.context.behavioursModal.open();
+                    this.context.behavioursModal.open(object);
                 });
             })
+            .then(()=>this.setupTitleSection())
             .then(()=>this.setupRemoveObject())
             .then(()=>this.show3dModelSettings())
+            .then(()=>this.showAframeSettings())
             .then(()=>this.setupClearScene())
             .then(()=>this.setupMobileResponse(object))
             .then(()=>this.context.content.compileTemplates('side-item-add',[{
@@ -67,6 +59,57 @@ export class ItemView {
             .then(()=>this.uiRenderer.components['ui-renderer'].play())
             .then(()=>this.context.content.reloadContent());
     }
+    setupSavePrefab(){
+        return this.context.content.compileTemplates('single-item-button',[{
+            title:'Save Prefab',
+            description:'Save this scene as a prefab to import it later',
+            buttonText:'SAVE PREFAB',
+            descriptionHeight:0.21,
+        }])
+            .then(contents=>this.context.content.addTemplateItem('#savePrefab',contents[0]))
+            .then(()=>{
+                document.querySelector('#savePrefab').querySelector('.singleButton').addEventListener('mousedown',()=>{
+                    this.context.savePrefabModal.open();
+                });
+            });
+    }
+    setupTitleSection(){
+        let itemTitle = document.getElementById('itemTitle');
+        let itemTitleEdit = document.getElementById('itemTitleEdit');
+        let cancelEditItemTitle = document.getElementById('cancelEditItemTitle');
+        let editItemTitle = document.getElementById('editItemTitle');
+        let saveItemTitle = document.getElementById('saveItemTitle');
+        let showHide = (showScale,hideScale)=>{
+            itemTitle.setAttribute('scale',hideScale+' '+hideScale+' '+hideScale);
+            itemTitleEdit.setAttribute('scale',showScale+' '+showScale+' '+showScale);
+            cancelEditItemTitle.setAttribute('scale',showScale+' '+showScale+' '+showScale);
+            editItemTitle.setAttribute('scale',hideScale+' '+hideScale+' '+hideScale);
+            saveItemTitle.setAttribute('scale',showScale+' '+showScale+' '+showScale);
+        };
+        document.getElementById('editItemTitle').addEventListener('click',()=>{
+            showHide(1,0.00001);
+            itemTitleEdit.value(this.isTop?this.context.currentObject.metadata.name:this.context.currentObject.settings.name);
+            let component = itemTitleEdit.components["ui-input-text"];
+            component.text.selectionStart = component.chars.length;
+            setTimeout(()=>itemTitleEdit.focus(),100);
+            document.getElementById('rig').components['smooth-wasd-controls'].pause();
+        });
+        cancelEditItemTitle.addEventListener('click',()=>showHide(0.00001,1));
+        saveItemTitle.addEventListener('click',()=>{
+            let value = itemTitleEdit.getValue();
+            if(this.isTop){
+                this.context.currentObject.metadata.name = value;
+            }else{
+                this.context.currentObject.settings.name = value;
+            }
+            itemTitle.setAttribute('value',value);
+            showHide(0.00001,1);
+        });
+        document.getElementById('copyUuid')
+            .addEventListener('click',()=>{
+                UI.utils.copyToClipboard(this.context.currentObject.settings.uuid);
+            });
+    }
     setupRemoveObject(){
         if(this.isTop)return;
         return this.context.content.compileTemplates('single-item-button',[{
@@ -77,11 +120,16 @@ export class ItemView {
             buttonFontColor:'white',
             descriptionHeight:0.21,
         }])
-            .then(contents=>this.context.content.addTemplateItem('#removeObject',contents[0]));
+            .then(contents=>this.context.content.addTemplateItem('#removeObject',contents[0]))
+            .then(()=>{
+                document.querySelector('#removeObject').querySelector('.singleButton').addEventListener('mousedown',()=>{
+                    this.context.removeObjectModal.open();
+                });
+            });
 
     }
     showMaterialAndGeometrySettings(){
-        if(this.isTop||this.isGroup||this.is3dModel)return;
+        if(this.isTop||this.isGroup||this.is3dModel||this.isAframe)return;
         let isPrimitive = this.context.currentObject.settings.type==="Primitive";
         let material = this.context.currentObject.settings.material;
         let geometry = this.context.currentObject.settings.geometry;
@@ -167,20 +215,7 @@ export class ItemView {
                 document.querySelector('#transformSettings').querySelector('.singleButton').addEventListener('mousedown',()=>{
                     this.context.transformModal.open();
                 });
-            })
-        // let rotation = object.settings.transform.rotation;
-        // return this.context.content.compileTemplates('three-number-inputs',[
-        //     {name:'Position',vector:object.settings.transform.position,className:'positionSettings'},
-        //     {name:'Rotation',vector:{x:THREE.Math.radToDeg(rotation.x),y:THREE.Math.radToDeg(rotation.y),z:THREE.Math.radToDeg(rotation.z)},className:'rotationSettings'},
-        //     {name:'Scale',vector:object.settings.transform.scale,className:'scaleSettings'}
-        // ])
-        //     .then(contents=>{
-        //         for(let i = 0; i < contents.length; i++){
-        //             this.context.content.addTemplateItem('#transformSettings',contents[i]);
-        //         }
-        //         this.setupTransformListeners();
-        //         this.setupTransformButtons();
-        //     })
+            });
     }
     show3dModelSettings(){
         if(!this.is3dModel) return;
@@ -191,6 +226,27 @@ export class ItemView {
             descriptionHeight: 0.21,
         }])
             .then(contents => this.context.content.addTemplateItem('#modelSettings', contents[0]));
+    }
+    showAframeSettings(){
+        if(!this.isAframe) return;
+        return this.context.content.compileTemplates('single-item-button', [{
+            title: 'Aframe Settings',
+            description: 'Update the Aframe code.',
+            buttonText: 'AFRAME CODE',
+            descriptionHeight: 0.21,
+        }])
+            .then(contents => this.context.content.addTemplateItem('#aframeSettings', contents[0]))
+            .then(()=>{
+                let settingsButton = document.querySelector('#aframeSettings').querySelector('.singleButton');
+                settingsButton.removeAttribute('ui-modal');
+                settingsButton.addEventListener('mousedown',()=>{
+                    this.context.sceneEl.emit('openAframe',{
+                        name:this.context.currentObject.settings.name,
+                        definition:this.context.currentObject.settings.aframeCode,
+                        aframe_id:this.context.currentObject.settings.uuid
+                    });
+                });
+            });
     }
     setupAddItem(){
         let loadButton = document.querySelector('#childObjectsContainer').querySelector('.loadItem');
@@ -231,7 +287,22 @@ export class ItemView {
             modelSettings.parentElement.removeChild(modelSettings);
             let sceneSettings = document.getElementById('sceneSettings');
             sceneSettings.parentElement.removeChild(sceneSettings);
+            let aframeSettings = document.getElementById('aframeSettings');
+            aframeSettings.parentElement.removeChild(aframeSettings);
         }else if(this.isGroup){
+            let clearScene = document.getElementById('clearScene');
+            clearScene.parentElement.removeChild(clearScene);
+            let transformSection = document.getElementById('sceneSettings');
+            transformSection.parentElement.removeChild(transformSection);
+            let geometrySettings = document.getElementById('geometrySettings');
+            geometrySettings.parentElement.removeChild(geometrySettings);
+            let materialSettings = document.getElementById('materialSettings');
+            materialSettings.parentElement.removeChild(materialSettings);
+            let modelSettings = document.getElementById('modelSettings');
+            modelSettings.parentElement.removeChild(modelSettings);
+            let aframeSettings = document.getElementById('aframeSettings');
+            aframeSettings.parentElement.removeChild(aframeSettings);
+        }else if(this.isAframe){
             let clearScene = document.getElementById('clearScene');
             clearScene.parentElement.removeChild(clearScene);
             let transformSection = document.getElementById('sceneSettings');
@@ -251,6 +322,8 @@ export class ItemView {
             geometrySettings.parentElement.removeChild(geometrySettings);
             let materialSettings = document.getElementById('materialSettings');
             materialSettings.parentElement.removeChild(materialSettings);
+            let aframeSettings = document.getElementById('aframeSettings');
+            aframeSettings.parentElement.removeChild(aframeSettings);
         }else{
             let clearScene = document.getElementById('clearScene');
             clearScene.parentElement.removeChild(clearScene);
@@ -258,6 +331,8 @@ export class ItemView {
             transformSection.parentElement.removeChild(transformSection);
             let modelSettings = document.getElementById('modelSettings');
             modelSettings.parentElement.removeChild(modelSettings);
+            let aframeSettings = document.getElementById('aframeSettings');
+            aframeSettings.parentElement.removeChild(aframeSettings);
         }
     }
 }

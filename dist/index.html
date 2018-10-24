@@ -64,15 +64,19 @@
                     ui-btn radius-inner="0.085" class="intersect" radius-outer="0.1">
                 <a-plane class="intersect" id="menuButton" shader="flat" src="images/icons/edit.png" width="0.1" height="0.1" alpha-test="0.5" transparent="true"></a-plane>
             </a-ring>
-            <a-ring segments-theta="6" theta-start="90" shader="flat" position="0 0.25 0" visible="false"
+            <a-ring segments-theta="6" theta-start="90" rotation="0 0 0" shader="flat" position="0 0.25 0"
                     ui-btn radius-inner="0.085" class="intersect" radius-outer="0.1">
-                <a-plane class="intersect" id="positionButton" shader="flat" src="images/gizmos/position.png" width="0.1" height="0.1" alpha-test="0.5" transparent="true"></a-plane>
+                <a-plane class="intersect" id="closeButton" shader="flat" src="images/icons/baseline_close_white_18dp.png" width="0.1" height="0.1" alpha-test="0.5" transparent="true"></a-plane>
             </a-ring>
             <a-ring segments-theta="6" theta-start="90" shader="flat" position="0 0.5 0" visible="false"
                     ui-btn radius-inner="0.085" class="intersect" radius-outer="0.1">
-                <a-plane class="intersect" id="rotationButton" shader="flat" src="images/gizmos/rotation.png" width="0.1" height="0.1" alpha-test="0.5" transparent="true"></a-plane>
+                <a-plane class="intersect" id="positionButton" shader="flat" src="images/gizmos/position.png" width="0.1" height="0.1" alpha-test="0.5" transparent="true"></a-plane>
             </a-ring>
             <a-ring segments-theta="6" theta-start="90" shader="flat" position="0 0.75 0" visible="false"
+                    ui-btn radius-inner="0.085" class="intersect" radius-outer="0.1">
+                <a-plane class="intersect" id="rotationButton" shader="flat" src="images/gizmos/rotation.png" width="0.1" height="0.1" alpha-test="0.5" transparent="true"></a-plane>
+            </a-ring>
+            <a-ring segments-theta="6" theta-start="90" shader="flat" position="0 1 0" visible="false"
                     ui-btn radius-inner="0.085" class="intersect" radius-outer="0.1">
                 <a-plane class="intersect" id="scaleButton" shader="flat" src="images/gizmos/scale.png" width="0.1" height="0.1" alpha-test="0.5" transparent="true"></a-plane>
             </a-ring>

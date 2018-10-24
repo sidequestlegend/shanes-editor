@@ -16,11 +16,6 @@ export class MaterialFactory{
                 });
             if(mat_settings.map&&typeof mat_settings.map === "string"){
                 try{
-                    // Correct relative paths to absolute urls.
-                    if(mat_settings.map.substr(0,7)==="images/"){
-                        mat_settings.map = this.sceneGraph.context.rootUrl+mat_settings.map
-                    }
-                    // TODO: need to generate all other maps here too.
                     let texture = new THREE.TextureLoader().load(mat_settings.map,()=>{
                         // in this example we create the material when the texture is loaded
                         resolve(new THREE[mat_settings.type](new_settings))

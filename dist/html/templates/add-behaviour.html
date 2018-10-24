@@ -1,0 +1,39 @@
+<a-entity width="2.9">
+    <a-entity width="2">
+        <a-text font="roboto" baseLine="center" anchor="center" value="Behaviours"
+                color="#212121" wrap-count="24" width="2" height="0.1"></a-text>
+        <a-text font="roboto" baseLine="center" value="Select a behaviour to edit, or add a new one."
+                anchor="center" color="#515151" wrap-count="40" width="2" height="0.2"></a-text>
+    </a-entity>
+    <a-entity width="0.8">
+        <a-entity height="0.05" width="0.8"></a-entity>
+        <a-ui-button class="intersectable addBehaviour" text-value="ADD"
+                     color="#009688" width="0.8" height="0.2" ripple-size="0.8 0.2"
+                     wrap-count="18"></a-ui-button>
+    </a-entity>
+    {{#unless behaviours.length}}
+        <a-text font="roboto" baseLine="top" anchor="center" value="Nothing found :) ..."
+                color="#212121" wrap-count="60" width="2.9" height="0.15"></a-text>
+    {{/unless}}
+    <a-entity width="2.9">
+        {{#each behaviours}}
+            <a-ui-radio value="{{behaviours_id}}" class="radio-{{behaviours_id}}" {{#unless @index}}selected="true"{{/unless}}></a-ui-radio>
+            <a-text font="roboto" baseLine="center" anchor="center" value="{{name}}"
+                    color="#212121" wrap-count="35" width="2.3" height="0.15"></a-text>
+            <a-plane shader="flat" width="0.2" height="0.2"
+                     class="deleteScene intersectable view"
+                     src="#closeIcon" color="orange" transparent="true"></a-plane>
+        {{/each}}
+    </a-entity>
+
+    <a-entity height="0.05" width="2.9"></a-entity>
+    <a-entity height="0.2" width="0.1"></a-entity>
+    <a-ui-button class="intersectable right-button cancelAddBehaviour" text-value="CANCEL"
+                 font-color="#009688" color="#fff" ripple-color="#009688" width="1.2" height="0.2" ripple-size="1.2 0.2"
+                 wrap-count="24"></a-ui-button>
+
+    <a-entity height="0.2" width="0.1"></a-entity>
+    <a-ui-button class="intersectable right-button editBehaviour" text-value="EDIT"
+                 font-color="#fff" color="#009688" ripple-color="#fff" width="1.2" height="0.2" ripple-size="1.2 0.2"
+                 wrap-count="24"></a-ui-button>
+</a-entity>

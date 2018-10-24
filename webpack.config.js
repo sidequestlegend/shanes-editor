@@ -2,7 +2,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WorkerLoader = require('worker-loader');
 module.exports = {
     entry: {
-        app:"./src/app.js",
+        app:"./src/index.js",
         renderer:"./src/renderer.js"
     },
     mode:"development",

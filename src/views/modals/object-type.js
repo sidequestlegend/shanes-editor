@@ -8,6 +8,7 @@ export class ObjectTypeModal{
             {name:'Parametric',friendly_name:'Fancy',image_url:icon_path+'geometries/parametric/Apple.jpg'},
             {name:'Prefab',friendly_name:'Prefab',image_url:icon_path+'prefab.jpg'},
             {name:'Light',friendly_name:'Light',image_url:icon_path+'lights.jpg'},
+            {name:'Aframe',friendly_name:'Aframe',image_url:icon_path+'aframe.jpg'},
             {name:'Poly',friendly_name:'Google Poly',image_url:icon_path+'poly.jpg'},
             {name:'Sketchfab',friendly_name:'Sketchfab',image_url:icon_path+'sketchfab.jpg'},
             {name:'Kenney',friendly_name:'Kenney\'s',image_url:icon_path+'kenny-logo.jpg'},
@@ -45,6 +46,17 @@ export class ObjectTypeModal{
                             case "Light":
                                 this.context.lightTypeModal.open();
                                 break;
+                            case "Aframe":
+                                this.context.sceneGraph.add(this.context.currentObject,{
+                                    type:"Aframe",
+                                    aframeCode:'<a-entity></a-entity>'
+                                })
+                                    .then(child=>{
+                                        this.context.displayBox.setObject(child.object3D);
+                                        setTimeout(()=>this.context.itemView.open(child),150);
+                                    });
+                                this.uiRenderer.modal.close();
+                                break;
                             case "Kenney":
                                 this.context.kennyCategories.open();
                                 break;
@@ -52,7 +64,12 @@ export class ObjectTypeModal{
                                 this.context.avatarCategories.open();
                                 break;
                             case "Group":
-                                this.context.sceneGraph.add(this.context.sceneGraph.currentScene,{type:"Object3D"});
+                                this.context.sceneGraph.add(this.context.currentObject,{type:"Object3D"})
+                                    .then(child=>{
+                                        this.context.showObject();
+                                        this.context.displayBox.setObject(child.object3D);
+                                        setTimeout(()=>this.context.itemView.open(child),250);
+                                    });
                                 this.uiRenderer.modal.close();
                                 break;
                         }

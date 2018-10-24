@@ -1,5 +1,26 @@
-<a-entity width="3.65">
-    <a-entity id="sceneList">
+<a-entity width="3.75">
 
+    <a-entity width="3.75">
+        <a-ui-button text-value="SCENES" wrap-count="11" width="0.5" class="intersectable scene-menu-button no-yoga-layout" data-line_width="1" data-position_x="1"
+                     hover-height="0.001" position="2.3 -0.1 0.001" color="#ececec" font-color="#000000" ripple-color="#009688" height="0.1"></a-ui-button>
+        <a-ui-button text-value="PREFABS" wrap-count="11" width="0.5" class="intersectable scene-menu-button no-yoga-layout" data-line_width="1" data-position_x="1"
+                     hover-height="0.001" position="2.8 -0.1 0.001" color="#ececec" font-color="#000000" ripple-color="#009688" height="0.1"></a-ui-button>
+        <a-ui-button text-value="BEHAVIOURS" wrap-count="15" width="0.7" ripple-size="0.7 0.2" class="intersectable scene-menu-button no-yoga-layout" data-line_width="1" data-position_x="1"
+                     hover-height="0.001" position="3.4 -0.1 0.001" color="#ececec" font-color="#000000" ripple-color="#009688" height="0.1"></a-ui-button>
+        <a-plane class="under-line" width="0.35" height="0.015" position="2.3 -0.18 0.001" color="#009688" shader="flat"></a-plane>
+    </a-entity>
+    <a-entity width="0.2"></a-entity>
+    <a-text font="roboto" anchor="center" value="My Scenes" color="#212121" wrap-count="45" width="2.9" height="0.1"></a-text>
+    <a-entity width="3.75"></a-entity>
+    <a-entity width="0.4"></a-entity>
+    <a-entity width="2.9">
+        <a-plane width="2.8" height="0.008" color="#cfcfcf" shader="flat"></a-plane>
+        <a-entity width="2"></a-entity>
+        <a-ui-button class="intersectable createScene" position="0.5 -0.1 0"
+                     text-value="CREATE SCENE" width="0.7" height="0.2" ripple-size="0.7 0.2" ui-modal="modal:#modalRenderer;main:#mainRenderer"
+                     wrap-count="15" font-color="#009688" color="white" ripple-color="#009688"></a-ui-button>
+        <a-entity id="sceneList" width="2.9">
+
+        </a-entity>
     </a-entity>
 </a-entity>

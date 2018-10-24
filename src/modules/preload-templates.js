@@ -18,6 +18,7 @@ export class PreloadTemplates{
             'radios',
             'switches',
             'color',
+            'aframe',
             'color-intensity',
             'number',
             'map-settings',

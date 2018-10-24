@@ -44,6 +44,15 @@ module.exports = AFRAME.registerComponent('editor', {
         uiPanel.setAttribute('alpha-test','0.01');
         uiPanel.setAttribute('class','intersect');
 
+    // <menu-item scale="2 2 2" class="intersect" id="closeEditorPanel" src="https://cdn.theexpanse.app/images/menu_close.png" position="0 -2.4 -1" rotation="-30 0 0"></menu-item>
+        let editorLoader = document.createElement('a-entity');
+        editorLoader.id = 'editorLoader';
+        editorLoader.setAttribute('geometry','primitive:plane;width:0.25;height:0.25');
+        editorLoader.setAttribute('material','shader:flat;color:#48aba1;transparent:true;src:https://cdn.theexpanse.app/images/loader.png');
+        editorLoader.setAttribute('position','0 0 0.1');
+        editorLoader.setAttribute('scale','0.00001 0.00001 0.00001');
+        uiPanel.appendChild(editorLoader);
+        this.editorLoader = editorLoader;
 
         // Loading Text
         let loadingText = document.createElement('a-text');
@@ -110,8 +119,13 @@ module.exports = AFRAME.registerComponent('editor', {
 
         let topMenu = document.createElement('a-entity');
         topMenu.id = 'topMenu';
-        topMenu.appendChild(this.makeIcon('precisionButton','1.66 0.885 0.001','intersectable','#precisionIcon','toastEl:#toastMessage;message:here!',false,true));
-        topMenu.appendChild(this.makeIcon('closeEditor','1.885 0.885 0.001','intersectable','#closeIcon',false,false,true));
+
+        topMenu.appendChild(this.makeIcon('backToScenes','0.76 0.885 0.0001','intersectable','#iconBack',false,false,true));
+        topMenu.appendChild(this.makeIcon('userManagement','0.985 0.885 0.0001','intersectable','#usersIcon','toastEl:#toastMessage;message:Coming soon!',false,true));
+        topMenu.appendChild(this.makeIcon('marketSection','1.21 0.885 0.0001','intersectable','#marketIcon','toastEl:#toastMessage;message:Coming soon!',false,true));
+        topMenu.appendChild(this.makeIcon('helpSection','1.435 0.885 0.0001','intersectable','#helpIcon','toastEl:#toastMessage;message:Coming soon!',false,true));
+        topMenu.appendChild(this.makeIcon('precisionButton','1.66 0.885 0.0001','intersectable','#precisionIcon','toastEl:#toastMessage;message:here!',false,true));
+        topMenu.appendChild(this.makeIcon('hideEditor','1.885 0.885 0.0001','intersectable','#swapVirtIcon',false,false,true));
 
         mainEditor.appendChild(topMenu);
         let scrollPane = document.createElement('a-ui-scroll-pane');
@@ -190,9 +204,10 @@ module.exports = AFRAME.registerComponent('editor', {
     makeIcon(id,position,className,src,toast,isHidden,isEditor){
         let button = document.createElement('a-plane');
         button.id = id;
-        button.setAttribute('width','0.12');
-        button.setAttribute('height','0.12');
+        button.setAttribute('width','0.225');
+        button.setAttribute('height','0.225');
         button.setAttribute('position',position);
+        button.setAttribute('color','#159e92');
         button.setAttribute('transparent','true');
         if(isHidden){
             button.setAttribute('scale','0.00001 0.00001 0.00001');
@@ -200,13 +215,17 @@ module.exports = AFRAME.registerComponent('editor', {
         if(toast){
             button.setAttribute('ui-toast',toast);
         }
-        button.setAttribute('opacity','0.00001');
+       // button.setAttribute('opacity','0.00001');
         button.setAttribute('shader','flat');
         button.setAttribute('class',className);
 
         let buttonIcon = document.createElement('a-plane');
         buttonIcon.setAttribute('src',src);
+        buttonIcon.setAttribute('class','intersectable');
+        buttonIcon.setAttribute('ui-btn','hoverHeight:0.005');
+        buttonIcon.setAttribute('ui-ripple','size:0.12 0.12;zIndex:0.001');
         buttonIcon.setAttribute('width','0.12');
+        buttonIcon.setAttribute('position','0 0 0.001');
         buttonIcon.setAttribute('height','0.12');
         buttonIcon.setAttribute('shader','flat');
         buttonIcon.setAttribute('transparent','true');
@@ -214,5 +233,10 @@ module.exports = AFRAME.registerComponent('editor', {
         button.appendChild(buttonIcon);
 
         return button;
+    },
+    tick(delta){
+        if(this.editorLoader){
+            this.editorLoader.object3D.rotation.z = delta/180 % Math.PI*2;
+        }
     }
 });

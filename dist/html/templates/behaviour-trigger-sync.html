@@ -1,0 +1,104 @@
+
+<a-text font="roboto" baseLine="center" anchor="center" value="Behaviour Trigger"
+        color="#212121" wrap-count="40" width="2.95" height="0.2"></a-text>
+
+<a-plane width="3.75" height="0.008" color="#cfcfcf" shader="flat"></a-plane>
+
+<a-entity width="1.01" height="0.2"></a-entity>
+<a-text font="roboto" baseLine="center" anchor="center" value="AL"
+        color="#212121" wrap-count="3" width="0.15" height="0.2"></a-text>
+<a-text font="roboto" baseLine="center" anchor="center" value="MO"
+        color="#212121" wrap-count="3" width="0.15" height="0.2"></a-text>
+<a-text font="roboto" baseLine="center" anchor="center" value="EM"
+        color="#212121" wrap-count="3" width="0.15" height="0.2"></a-text>
+<a-entity width="1.01" height="0.2"></a-entity>
+<a-text font="roboto" baseLine="center" anchor="center" value="AL"
+        color="#212121" wrap-count="3" width="0.15" height="0.2"></a-text>
+<a-text font="roboto" baseLine="center" anchor="center" value="MO"
+        color="#212121" wrap-count="3" width="0.15" height="0.2"></a-text>
+<a-text font="roboto" baseLine="center" anchor="center" value="EM"
+        color="#212121" wrap-count="3" width="0.15" height="0.2"></a-text>
+
+<a-text font="roboto" baseLine="center" anchor="center" value="Auto Trigger"
+        color="#212121" wrap-count="22" width="1" height="0.1"></a-text>
+
+<a-ui-radio value="auto-trigger" class="radio-autoEveryone"
+            {{#compare behaviour.trigger "auto-trigger" operator="=="}}selected="true"{{/compare}}></a-ui-radio>
+
+<a-ui-radio value="mod-auto-trigger" class="radio-autoMod"
+            {{#compare behaviour.trigger "mod-auto-trigger" operator="=="}}selected="true"{{/compare}}></a-ui-radio>
+
+<a-ui-radio value="no-mod-auto-trigger" class="radio-autoNoMod"
+            {{#compare behaviour.trigger "no-mod-auto-trigger" operator="=="}}selected="true"{{/compare}}></a-ui-radio>
+
+
+
+<a-text font="roboto" baseLine="center" anchor="center" value="Enter Trigger"
+        color="#212121" wrap-count="22" width="1" height="0.1"></a-text>
+
+<a-ui-radio value="enter-trigger" class="radio-enterEveryone"
+            {{#compare behaviour.trigger "enter-trigger" operator="=="}}selected="true"{{/compare}}></a-ui-radio>
+
+<a-ui-radio value="mod-enter-trigger" class="radio-enterMod"
+            {{#compare behaviour.trigger "mod-enter-trigger" operator="=="}}selected="true"{{/compare}}></a-ui-radio>
+
+<a-ui-radio value="no-mod-enter-trigger" class="radio-enterNoMod"
+            {{#compare behaviour.trigger "no-mod-enter-trigger" operator="=="}}selected="true"{{/compare}}></a-ui-radio>
+
+
+
+
+<a-text font="roboto" baseLine="center" anchor="center" value="Click Trigger"
+        color="#212121" wrap-count="22" width="1" height="0.1"></a-text>
+
+
+<a-ui-radio value="click-trigger" class="radio-clickEveryone"
+            {{#compare behaviour.trigger "click-trigger" operator="=="}}selected="true"{{/compare}}></a-ui-radio>
+
+<a-ui-radio value="mod-click-trigger" class="radio-clickMod"
+            {{#compare behaviour.trigger "mod-click-trigger" operator="=="}}selected="true"{{/compare}}></a-ui-radio>
+
+<a-ui-radio value="no-mod-click-trigger" class="radio-clickNoMod"
+            {{#compare behaviour.trigger "no-mod-click-trigger" operator="=="}}selected="true"{{/compare}}></a-ui-radio>
+
+
+
+
+<a-text font="roboto" baseLine="center" anchor="center" value="Exit Trigger"
+        color="#212121" wrap-count="22" width="1" height="0.1"></a-text>
+
+<a-ui-radio value="exit-trigger" class="radio-exitEveryone"
+            {{#compare behaviour.trigger "exit-trigger" operator="=="}}selected="true"{{/compare}}></a-ui-radio>
+
+<a-ui-radio value="mod-exit-trigger" class="radio-exitMod"
+            {{#compare behaviour.trigger "mod-exit-trigger" operator="=="}}selected="true"{{/compare}}></a-ui-radio>
+
+<a-ui-radio value="no-mod-exit-trigger" class="radio-exitNoMod"
+            {{#compare behaviour.trigger "no-mod-exit-trigger" operator="=="}}selected="true"{{/compare}}></a-ui-radio>
+
+
+
+
+<a-text font="roboto" baseLine="center" anchor="center" value="Toggle Trigger"
+        color="#212121" wrap-count="22" width="1" height="0.1"></a-text>
+
+<a-ui-radio value="toggle-trigger" class="radio-toggleEveryone"
+            {{#compare behaviour.trigger "toggle-trigger" operator="=="}}selected="true"{{/compare}}></a-ui-radio>
+
+<a-ui-radio value="mod-toggle-trigger" class="radio-toggleMod"
+            {{#compare behaviour.trigger "mod-toggle-trigger" operator="=="}}selected="true"{{/compare}}></a-ui-radio>
+
+<a-ui-radio value="no-mod-toggle-trigger" class="radio-toggleNoMod"
+            {{#compare behaviour.trigger "no-mod-toggle-trigger" operator="=="}}selected="true"{{/compare}}></a-ui-radio>
+
+<a-entity width="3.75">
+    <a-entity width="1.01" height="0.2"></a-entity>
+
+    <a-text font="roboto" baseLine="center" anchor="center" value="AL = All Users, MO = Mod Users Only, EM = Except Mod Users"
+            color="#212121" wrap-count="75" width="2.60" height="0.1"></a-text>
+</a-entity>
+
+<a-text font="roboto" baseLine="center" anchor="center" value="Sync Trigger to Others:"
+        color="#212121" wrap-count="22" width="1" height="0.1"></a-text>
+
+<a-ui-switch id="syncTrigger" value="{{behaviour.sync}}"></a-ui-switch>

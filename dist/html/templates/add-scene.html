@@ -1,0 +1,22 @@
+<a-entity width="2.9">
+    <a-text font="roboto" baseLine="center" anchor="center" value="Scene Name"
+            color="#212121" wrap-count="30" width="2.6" height="0.1"></a-text>
+    <a-entity height="0.2" width="2.9"></a-entity>
+    <a-entity height="0.2" width="0.1"></a-entity>
+    <a-ui-input-text class="sceneName" rig-el="#rig" camera-el="#camera" place-holder="Other..."
+                     value="{{name}}" wasd-controls-component="smooth-wasd-controls"
+                     look-controls-component="right-look-controls" width="2.6" height="0.2"></a-ui-input-text>
+    <a-entity width="2.9"></a-entity>
+    <a-entity width="1.55"></a-entity>
+
+    <a-entity height="0.2" width="2.9"></a-entity>
+    <a-entity height="0.2" width="0.1"></a-entity>
+    <a-ui-button class="intersectable right-button cancelAddScene" text-value="CANCEL"
+                 font-color="#009688" color="#fff" ripple-color="#009688" width="1.2" height="0.2" ripple-size="1.2 0.2"
+                 wrap-count="24"></a-ui-button>
+
+    <a-entity height="0.2" width="0.1"></a-entity>
+    <a-ui-button class="intersectable right-button createSceneConfirm" text-value="CREATE SCENE"
+                 font-color="#fff" color="#009688" ripple-color="#fff" width="1.2" height="0.2" ripple-size="1.2 0.2"
+                 wrap-count="24"></a-ui-button>
+</a-entity>

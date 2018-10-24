@@ -56,6 +56,9 @@ export class ObjectFactory{
             userData.mtl_url = settings.mtl_url;
             userData.mtl_path = settings.mtl_path;
         }
+        if(settings.aframeCode){
+            userData.aframeCode = settings.aframeCode;
+        }
         // Set the added flag to propagate this change to the sync system
         userData.state.added = true;
         return userData;
@@ -191,6 +194,17 @@ export class ObjectFactory{
                     object.userData.sceneObject.stats = {points:0,pixels:0};
                     resolve(object);
                     break;
+                case "Aframe":
+                    object = new THREE.Object3D();
+                    this.addAframeItem(child)
+                        .then(aobject=>{
+                            this.scaleAndCenterObject(aobject);
+                            this.transform(object,child);
+                            object.add(aobject);
+                            return object;
+                        })
+                        .then(resolve);
+                    break;
                 case "Poly":
                 case "Custom":
                     // Load a 3d model from any source.
@@ -296,5 +310,61 @@ export class ObjectFactory{
         object.scale.set( 1/ratio.x, 1/ratio.y, 1/ratio.z );
         let offset = box.getCenter().clone().negate();
         object.position.copy(new THREE.Vector3(offset.x/ratio.x,offset.y/ratio.y,offset.z/ratio.z));
+    }
+
+    addAframeItem(object){
+        return new Promise(resolve=>{
+            let loadedWrapper = document.createElement('a-entity');
+            loadedWrapper.className = 'o-'+object.settings.uuid;
+            loadedWrapper.setAttribute('visible',false);
+            loadedWrapper.insertAdjacentHTML('afterbegin',object.settings.aframeCode);
+            loadedWrapper.addEventListener('loaded',e=>{
+                // Trigger an update to redraw scrollbars and fire change events.
+                loadedWrapper.object3D.parent.remove(loadedWrapper.object3D);
+                loadedWrapper.object3D.name=object.settings.uuid;
+                resolve(loadedWrapper.object3D);
+                loadedWrapper.setAttribute('visible',true);
+            });
+            this.sceneGraph.aframeContainer.appendChild(loadedWrapper);
+        })
+    }
+
+    resetAframeContainerItem(uuid,aframeItem){
+        let object;
+        this.sceneGraph.container.traverse(child=>{
+            if(child.userData.sceneObject&&child.userData.sceneObject.settings.uuid === uuid){
+                object = child.userData.sceneObject;
+            }
+        });
+        if(object){
+            object.object3D.children.forEach(child=>{
+                if(child.name === uuid){
+                    child.parent.remove(child);
+                    UI.utils.clearObject(child);
+                }
+            });
+            let element = this.sceneGraph.aframeContainer.querySelector('.o-'+uuid);
+            this.sceneGraph.aframeContainer.removeChild(element);
+            element = null;
+            object.settings.aframeCode = aframeItem;
+            this.addAframeItem(object)
+                .then(aobject=>{
+                    this.scaleAndCenterObject(aobject);
+                    this.transform(object.object3D,object);
+                    object.object3D.add(aobject);
+                    this.sceneGraph.context.displayBox.setObject(object.object3D);
+                });
+        }
+    }
+
+    clearAframeContainer(){
+        while (this.sceneGraph.aframeContainer.firstChild) {
+            let child = this.sceneGraph.aframeContainer.firstChild;
+            if(child.object3D){
+                UI.utils.clearObject(child.object3D);
+            }
+            this.sceneGraph.aframeContainer.removeChild(child);
+            this.sceneGraph.aframeContainer.firstChild = null;
+        }
     }
 }
