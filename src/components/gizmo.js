@@ -416,6 +416,7 @@ module.exports = AFRAME.registerComponent('gizmo', {
         rail.setAttribute('radius-inner',0.45);
         rail.setAttribute('radius-outer',0.5);
         rail.setAttribute('segments-theta',36);
+        rail.setAttribute('shader','flat');
         rail.setAttribute('theta-length',color==="green"?270:360);
         rail.setAttribute('rotation',rotation);
         rail.setAttribute('side','double');
@@ -426,6 +427,7 @@ module.exports = AFRAME.registerComponent('gizmo', {
     createElement(scale,color,intersectable){
         // Create a dragging box.
         let element = document.createElement('a-box');
+        element.setAttribute('shader','flat');
         element.setAttribute('scale',scale);
         if(intersectable){
             element.className = 'intersect';

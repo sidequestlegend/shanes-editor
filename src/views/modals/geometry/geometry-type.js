@@ -82,5 +82,8 @@ export class GeometryTypeModal{
                 .replace('Inverted',''));
             this.context.displayBox.setObject(this.context.currentObject.object3D);
         });
+        this.context.content.popup.querySelector('.close-modal-type').addEventListener('mousedown',()=>{
+            document.querySelector('#geometrySettings').querySelector('.doubleButton1').close();
+        })
     }
 }

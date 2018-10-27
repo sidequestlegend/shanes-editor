@@ -2,7 +2,9 @@ export class ItemView {
     constructor(context) {
         this.context = context;
     }
-    open(object) {
+    open(object,page) {
+        this.context.showLoader();
+        this.page = page||0;
         object = object || this.context.sceneGraph.currentScene;
         this.isTop = object === this.context.sceneGraph.currentScene;
         this.context.breadCrumbs.make(this.context.breadCrumbs.fromObject(object));
@@ -17,6 +19,7 @@ export class ItemView {
         this.uiRenderer.components['ui-renderer'].pause();
         this.context.content.loadScreen('item-view',[
             'title-section',
+            'light-settings',
             'three-number-inputs',
             'object-stats',
             'mobile-response',
@@ -47,17 +50,26 @@ export class ItemView {
             .then(()=>this.show3dModelSettings())
             .then(()=>this.showAframeSettings())
             .then(()=>this.setupClearScene())
-            .then(()=>this.setupMobileResponse(object))
-            .then(()=>this.context.content.compileTemplates('side-item-add',[{
-                title:'Objects',
-                buttonText:'ADD OBJECT',
-                children:this.context.currentObject.children.map(c=>this.context.viewUtils.childObject(c))
-            }]))
+            .then(()=>this.setupMobileResponse())
+            .then(()=>this.setupLightSettings())
+            .then(()=>{
+                let start = this.page*10;
+                let end  = start+10;
+                let children = this.context.currentObject.children.slice(start,end);
+
+                return this.context.content.compileTemplates('side-item-add',[{
+                    title:'Objects',
+                    buttonText:'ADD OBJECT',
+                    children:children.map(c=>this.context.viewUtils.childObject(c)),
+                    page:this.page
+                }])
+            })
             .then(contents=>this.context.content.addTemplateItem('#childObjectsContainer',contents[0],true))
             .then(()=>this.setupChildren())
             .then(()=>this.setupAddItem())
             .then(()=>this.uiRenderer.components['ui-renderer'].play())
-            .then(()=>this.context.content.reloadContent());
+            .then(()=>this.context.content.reloadContent())
+            .then(()=>this.context.hideLoader());
     }
     setupSavePrefab(){
         return this.context.content.compileTemplates('single-item-button',[{
@@ -141,7 +153,7 @@ export class ItemView {
             descriptionHeight:0.21,
         }])
             .then(contents=>this.context.content.addTemplateItem('#materialSettings',contents[0]+
-            `<a-ui-button class="intersectable doubleButton3" text-value="MAP SETTINGS" width="1.2" height="0.2" ripple-size="1.2 0.2" wrap-count="24" ui-modal="modal:#modalRenderer;main:#mainRenderer" font-color="#009688" color="white" ripple-color="#009688"></a-ui-button>
+                `<a-ui-button class="intersectable doubleButton3" text-value="MAP SETTINGS" width="1.2" height="0.2" ripple-size="1.2 0.2" wrap-count="24" ui-modal="modal:#modalRenderer;main:#mainRenderer" font-color="#009688" color="white" ripple-color="#009688"></a-ui-button>
              <a-ui-button class="intersectable doubleButton4" text-value="REPEAT & OFFSET" width="1.2" height="0.2" ripple-size="1.2 0.2" wrap-count="24" ui-modal="modal:#modalRenderer;main:#mainRenderer" font-color="#009688" color="white" ripple-color="#009688"></a-ui-button>`))
             .then(()=>{
                 document.querySelector('#materialSettings').querySelector('.doubleButton1').addEventListener('mousedown',()=>{
@@ -177,13 +189,45 @@ export class ItemView {
                 });
             })
     }
-    setupMobileResponse(object){
+    setupLightSettings(){
+        if(this.isTop||this.isGroup||this.isAframe)return;
+        return this.context.content.compileTemplates('light-settings',[{
+            shadow:this.context.currentObject.shadow
+        }])
+            .then(contents=>this.context.content.addTemplateItem('#lightSettings',contents[0]))
+            .then(()=>{
+                let shadowCast = document.querySelector('.shadowCast');
+                let shadowReceive = document.querySelector('.shadowReceive');
+                shadowCast.addEventListener('mousedown',()=>{
+                    this.context.currentObject.settings.shadow.cast = shadowCast.getValue();
+                    this.context.currentObject.object3D.castShadow = shadowCast.getValue();
+                });
+                shadowReceive.addEventListener('mousedown',()=>{
+                    this.context.currentObject.settings.shadow.receive = shadowReceive.getValue();
+                    this.context.currentObject.object3D.receiveShadow = shadowCast.getValue();
+                });
+            });
+    }
+    setupMobileResponse(){
         if(this.isTop) return;
         return this.context.content.compileTemplates('mobile-response',[{
-            hide_on_mobile:object.settings.hide_on_mobile,
-            show_only_on_mobile:object.settings.hide_on_desktop
+            hide_on_mobile:this.context.currentObject.settings.hide_on_mobile,
+            hide_on_desktop:this.context.currentObject.settings.hide_on_desktop
         }])
-            .then(contents=>this.context.content.addTemplateItem('#mobileSettings',contents[0]));
+            .then(contents=>this.context.content.addTemplateItem('#mobileSettings',contents[0]))
+            .then(()=>{
+                let hideOnMobile = document.querySelector('.hideOnMobile');
+                let hideOnDesktop = document.querySelector('.hideOnDesktop');
+                hideOnMobile.addEventListener('mousedown',()=>{
+                    console.log('ui-switch-change',hideOnMobile.getValue());
+                    this.context.currentObject.settings.hide_on_mobile = hideOnMobile.getValue();
+                });
+                hideOnDesktop.addEventListener('mousedown',()=>{
+                    console.log('ui-switch-change',hideOnDesktop.getValue());
+                    this.context.currentObject.settings.hide_on_desktop = hideOnDesktop.getValue();
+                });
+
+            });
     }
     setupClearScene(){
         if(!this.isTop) return;
@@ -255,6 +299,18 @@ export class ItemView {
         });
     }
     setupChildren(){
+        let prev = document.querySelector('.prev-button-children');
+        if(prev){
+            prev.addEventListener('click',()=>{
+                this.open(this.context.currentObject,--this.page);
+            });
+        }
+        let next = document.querySelector('.next-button-children')
+        if(next){
+            next.addEventListener('click',()=>{
+                this.open(this.context.currentObject,++this.page);
+            });
+        }
         let openButtons = document.querySelector('#childObjectsContainer').querySelectorAll('.openItem');
         for(let i = 0; i < openButtons.length; i++){
             let openButton = openButtons[i];
@@ -289,6 +345,8 @@ export class ItemView {
             sceneSettings.parentElement.removeChild(sceneSettings);
             let aframeSettings = document.getElementById('aframeSettings');
             aframeSettings.parentElement.removeChild(aframeSettings);
+            let lightSettings = document.getElementById('lightSettings');
+            lightSettings.parentElement.removeChild(lightSettings);
         }else if(this.isGroup){
             let clearScene = document.getElementById('clearScene');
             clearScene.parentElement.removeChild(clearScene);
@@ -302,6 +360,8 @@ export class ItemView {
             modelSettings.parentElement.removeChild(modelSettings);
             let aframeSettings = document.getElementById('aframeSettings');
             aframeSettings.parentElement.removeChild(aframeSettings);
+            let lightSettings = document.getElementById('lightSettings');
+            lightSettings.parentElement.removeChild(lightSettings);
         }else if(this.isAframe){
             let clearScene = document.getElementById('clearScene');
             clearScene.parentElement.removeChild(clearScene);
@@ -313,6 +373,8 @@ export class ItemView {
             materialSettings.parentElement.removeChild(materialSettings);
             let modelSettings = document.getElementById('modelSettings');
             modelSettings.parentElement.removeChild(modelSettings);
+            let lightSettings = document.getElementById('lightSettings');
+            lightSettings.parentElement.removeChild(lightSettings);
         }else if(this.is3dModel){
             let clearScene = document.getElementById('clearScene');
             clearScene.parentElement.removeChild(clearScene);

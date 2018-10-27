@@ -49,7 +49,7 @@ module.exports = AFRAME.registerComponent('editor', {
         editorLoader.id = 'editorLoader';
         editorLoader.setAttribute('geometry','primitive:plane;width:0.25;height:0.25');
         editorLoader.setAttribute('material','shader:flat;color:#48aba1;transparent:true;src:https://cdn.theexpanse.app/images/loader.png');
-        editorLoader.setAttribute('position','0 0 0.1');
+        editorLoader.setAttribute('position','0 0 0.3');
         editorLoader.setAttribute('scale','0.00001 0.00001 0.00001');
         uiPanel.appendChild(editorLoader);
         this.editorLoader = editorLoader;
@@ -120,11 +120,12 @@ module.exports = AFRAME.registerComponent('editor', {
         let topMenu = document.createElement('a-entity');
         topMenu.id = 'topMenu';
 
-        topMenu.appendChild(this.makeIcon('backToScenes','0.76 0.885 0.0001','intersectable','#iconBack',false,false,true));
-        topMenu.appendChild(this.makeIcon('userManagement','0.985 0.885 0.0001','intersectable','#usersIcon','toastEl:#toastMessage;message:Coming soon!',false,true));
-        topMenu.appendChild(this.makeIcon('marketSection','1.21 0.885 0.0001','intersectable','#marketIcon','toastEl:#toastMessage;message:Coming soon!',false,true));
-        topMenu.appendChild(this.makeIcon('helpSection','1.435 0.885 0.0001','intersectable','#helpIcon','toastEl:#toastMessage;message:Coming soon!',false,true));
-        topMenu.appendChild(this.makeIcon('precisionButton','1.66 0.885 0.0001','intersectable','#precisionIcon','toastEl:#toastMessage;message:here!',false,true));
+        topMenu.appendChild(this.makeIcon('backToScenes','0.535 0.885 0.0001','intersectable','#iconBack',false,false,true));
+        topMenu.appendChild(this.makeIcon('saveScene','0.76 0.885 0.0001','intersectable','#iconSave',false,false,true));
+        topMenu.appendChild(this.makeIcon('precisionButton','0.985 0.885 0.0001','intersectable','#precisionIcon','toastEl:#toastMessage;message:here!',false,true));
+        topMenu.appendChild(this.makeIcon('userManagement','1.21 0.885 0.0001','intersectable','#usersIcon','toastEl:#toastMessage;message:Coming soon!',false,true));
+        topMenu.appendChild(this.makeIcon('marketSection','1.435 0.885 0.0001','intersectable','#marketIcon','toastEl:#toastMessage;message:Coming soon!',false,true));
+        topMenu.appendChild(this.makeIcon('helpSection','1.66 0.885 0.0001','intersectable','#helpIcon','toastEl:#toastMessage;message:Coming soon!',false,true));
         topMenu.appendChild(this.makeIcon('hideEditor','1.885 0.885 0.0001','intersectable','#swapVirtIcon',false,false,true));
 
         mainEditor.appendChild(topMenu);
@@ -207,7 +208,11 @@ module.exports = AFRAME.registerComponent('editor', {
         button.setAttribute('width','0.225');
         button.setAttribute('height','0.225');
         button.setAttribute('position',position);
-        button.setAttribute('color','#159e92');
+        if(isEditor){
+            button.setAttribute('color','#159e92');
+        }else{
+            button.setAttribute('color','#efefef');
+        }
         button.setAttribute('transparent','true');
         if(isHidden){
             button.setAttribute('scale','0.00001 0.00001 0.00001');
@@ -223,13 +228,15 @@ module.exports = AFRAME.registerComponent('editor', {
         buttonIcon.setAttribute('src',src);
         buttonIcon.setAttribute('class','intersectable');
         buttonIcon.setAttribute('ui-btn','hoverHeight:0.005');
-        buttonIcon.setAttribute('ui-ripple','size:0.12 0.12;zIndex:0.001');
+        buttonIcon.setAttribute('ui-ripple','size:0.12 0.12;zIndex:0.001;color:'+(isEditor?'#ffffff':'#4db6ac'));
         buttonIcon.setAttribute('width','0.12');
         buttonIcon.setAttribute('position','0 0 0.001');
         buttonIcon.setAttribute('height','0.12');
         buttonIcon.setAttribute('shader','flat');
         buttonIcon.setAttribute('transparent','true');
-        if(!isEditor)buttonIcon.setAttribute('color','#4db6ac');
+        if(!isEditor){
+            buttonIcon.setAttribute('color','#4db6ac');
+        }
         button.appendChild(buttonIcon);
 
         return button;

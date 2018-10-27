@@ -1,42 +1,62 @@
 export class MaterialFactory{
     constructor(sceneGraph){
         this.sceneGraph = sceneGraph;
+
+        this.mapOptions = [
+            "map","normalMap","lightMap","envMap","alphaMap","aoMap","emissiveMap","metalnessMap",
+            "normalMap","roughnessMap","bumpMap","specularMap","gradientMap"
+        ];
+
+        this.safeSettings = [
+            "color","bumpScale","displacementScale","displacementBias","emissive","emissiveIntensity","skinning","side",
+            "morphNormals","morphTargets","normalScale","shininess","specular","reflectivity","refractionRatio",
+            "envMapIntensity","metalness","roughness","wireframe","wireframeLinecap","wireframeLinejoin","wireframeLinewidth",
+            "aoMapIntensity","lightMapIntensity","fog","lights","depthPacking","clearCoat","clearCoatRoughness","reflectivity",
+            "visible","transparent","opacity","alphaTest"
+        ];
+        this.loader = new THREE.TextureLoader();
     }
-    makeMaterial(mat_settings){
+    async makeMaterial(mat_settings){
         let new_settings = {};
+        // Filter out all properties not to be applied or to be processed before being applied.
+        for(let i = 0; i < this.safeSettings.length; i++){
+            if(mat_settings.hasOwnProperty(this.safeSettings[i])){
+                new_settings[this.safeSettings[i]] = mat_settings[this.safeSettings[i]];
+            }
+        }
+        for(let i = 0; i < this.mapOptions.length; i++){
+            if(mat_settings.hasOwnProperty(this.mapOptions[i])&&mat_settings[this.mapOptions[i]]){
+                new_settings[this.mapOptions[i]] = await this.makeTexture(mat_settings,this.mapOptions[i]);
+            }
+        }
+        return new THREE[mat_settings.type](new_settings);
+    }
+    makeTexture(mat_settings,mapName){
         return new Promise(resolve=>{
-            // Filter out all properties not to be applied or to be processed before being applied.
-            Object.keys(mat_settings)
-                .filter(function(key){return [
-                    "type","map","texture","lightTexture",
-                    "normalMap","lightMap","envMap","alphaMap","aoMap","emissiveMap","metalnessMap","normalMap","roughnessMap","bumpMap"
-                ].indexOf(key)===-1;})
-                .forEach(function(key){
-                    new_settings[key] = mat_settings[key];
-                });
-            if(mat_settings.map&&typeof mat_settings.map === "string"){
-                try{
-                    let texture = new THREE.TextureLoader().load(mat_settings.map,()=>{
-                        // in this example we create the material when the texture is loaded
-                        resolve(new THREE[mat_settings.type](new_settings))
-                    });
-                    texture.offset.set(mat_settings.texture.offset.x||0,mat_settings.texture.offset.y||0);
-                    texture.repeat.set(mat_settings.texture.repeat.x||1,mat_settings.texture.repeat.y||1);
-                    if(mat_settings.texture.wrapping){
-                        texture.wrapS = mat_settings.texture.wrapping.s;
-                        texture.wrapT = mat_settings.texture.wrapping.t;
-                        texture.minFilter = mat_settings.texture.filters.min;
-                        texture.magFilter = mat_settings.texture.filters.mag;
-                    }
-                    new_settings.map = texture;
-                }catch(e){
-                    console.log(e);
-                }
+            let texture = this.loader.load(mat_settings[mapName],texture=>{
+                resolve(texture);
+            },null,()=>{
+                resolve();
+            });
+            let textureSettings = mat_settings.texture;
+            if(mapName==="aoMap"||mapName==="aoMap"){
+                textureSettings = mat_settings.lightTexture;
             }
-            else{
-                resolve(new THREE[mat_settings.type](new_settings))
+            if(textureSettings&&textureSettings.offset){
+                texture.offset.set(textureSettings.offset.x||0,textureSettings.offset.y||0);
             }
-        })
+            if(textureSettings&&textureSettings.repeat) {
+                texture.repeat.set(textureSettings.repeat.x || 1, textureSettings.repeat.y || 1);
+            }
+            if(textureSettings.wrapping){
+                texture.wrapS = textureSettings.wrapping.s;
+                texture.wrapT = textureSettings.wrapping.t;
+            }
+            if(textureSettings.filters){
+                texture.minFilter = textureSettings.filters.min;
+                texture.magFilter = textureSettings.filters.mag;
+            }
+        });
     }
     phongSettingsWithDefaults(materialSettings,settings){
         // default phong settings - used for toon material too.
@@ -45,7 +65,7 @@ export class MaterialFactory{
             "MeshToonMaterial"
         ];
         if(mapCompatibles.indexOf(settings.type)>-1) {
-           //materialSettings.combine = settings.combine || THREE.Multiply;
+            //materialSettings.combine = settings.combine || THREE.Multiply;
             materialSettings.color = settings.color || "#ffffff";
             materialSettings.bumpMap = settings.bumpMap || "";
             materialSettings.bumpScale = settings.bumpScale || 1;
@@ -59,7 +79,7 @@ export class MaterialFactory{
             materialSettings.morphTargets = settings.morphTargets || false;
             materialSettings.normalMap = settings.normalMap || "";
             materialSettings.normalScale = settings.normalScale || new THREE.Vector2(1, 1);
-           // materialSettings.normalMapType = settings.normalMapType || 0;
+            // materialSettings.normalMapType = settings.normalMapType || 0;
             materialSettings.shininess = settings.shininess || 30;
             materialSettings.specular = settings.specular || '#111111';
             materialSettings.specularMap = settings.specularMap || "";
@@ -91,7 +111,7 @@ export class MaterialFactory{
             materialSettings.morphTargets = settings.morphTargets || false;
             materialSettings.normalMap = settings.normalMap || "";
             materialSettings.normalScale = settings.normalScale || new THREE.Vector2(1, 1);
-           // materialSettings.normalMapType = settings.normalMapType || 0;
+            // materialSettings.normalMapType = settings.normalMapType || 0;
             materialSettings.roughness = settings.roughness || 0.8;
             materialSettings.roughnessMap = settings.roughnessMap || "";
             materialSettings.refractionRatio = settings.reflectivity || 0.98;

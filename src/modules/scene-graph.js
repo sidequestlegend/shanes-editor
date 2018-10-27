@@ -193,13 +193,7 @@ export class SceneGraph{
         this.context.currentObject.object3D = null;
         this.context.currentObject = null;
     }
-    serialiseScene(object){
-        let behaviours = {};
-        let scene = this.serialiser.serialiseScene(this.context.currentObject,behaviours);
-        scene.version = "2.0";
-        scene.behaviours = behaviours;
-        return scene;
-    }
+
     async add(parent,settings){
         // Add an object to the scene.
         // If there is a camera dummy ( positioned 4m in front of the camera ) object

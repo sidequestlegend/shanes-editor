@@ -15,6 +15,7 @@ export class PreloadTemplates{
             'single-item-button',
             'double-item-button',
             'side-item-add',
+            'add-prefab-list',
             'radios',
             'switches',
             'color',

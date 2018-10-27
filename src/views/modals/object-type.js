@@ -53,7 +53,14 @@ export class ObjectTypeModal{
                                 })
                                     .then(child=>{
                                         this.context.displayBox.setObject(child.object3D);
-                                        setTimeout(()=>this.context.itemView.open(child),150);
+                                        setTimeout(()=>{
+                                            this.context.itemView.open(child);
+                                            this.context.sceneEl.emit('openAframe',{
+                                                name:this.context.currentObject.settings.name,
+                                                definition:this.context.currentObject.settings.aframeCode,
+                                                aframe_id:this.context.currentObject.settings.uuid
+                                            });
+                                        },100);
                                     });
                                 this.uiRenderer.modal.close();
                                 break;
@@ -66,9 +73,8 @@ export class ObjectTypeModal{
                             case "Group":
                                 this.context.sceneGraph.add(this.context.currentObject,{type:"Object3D"})
                                     .then(child=>{
-                                        this.context.showObject();
                                         this.context.displayBox.setObject(child.object3D);
-                                        setTimeout(()=>this.context.itemView.open(child),250);
+                                        setTimeout(()=>this.context.itemView.open(child),100);
                                     });
                                 this.uiRenderer.modal.close();
                                 break;

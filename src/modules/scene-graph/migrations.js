@@ -83,6 +83,7 @@ export class Migrations{
                 type:current.settings.object.type,
                 transform:current.settings.object.transform,
                 behaviours:behaviours,
+                shadow:{cast:false,receive:false},
                 hide_on_mobile:current.settings.object.hide_on_mobile||false,
                 hide_on_desktop:current.settings.object.show_only_on_mobile||false,
                 geometry:current.settings.geometry,

@@ -38,15 +38,22 @@ export class Serialiser{
         }
         return promises;
     }
-    serialiseScene(current,behaviours){
-        current = current||this.sceneGraph.currentScene;
-        let output = {settings:current.settings,children:[]};
-        current.children.forEach(child=>{
-            for(let i = 0; i < child.settings.behaviours.length; i++){
-                behaviours[child.settings.behaviours[i]] = this.sceneGraph.currentScene.behaviours[child.settings.behaviours[i]];
+    serialiseScene(current){
+        let behaviours = {};
+        let traverse = (current)=>{
+            current = current||this.sceneGraph.currentScene;
+            for(let i = 0; i < current.settings.behaviours.length; i++){
+                behaviours[current.settings.behaviours[i]] = this.sceneGraph.currentScene.behaviours[current.settings.behaviours[i]];
             }
-            output.children.push(this.serialiseScene(child,behaviours));
-        });
+            let newCurrent = {settings:current.settings,children:[]};
+            current.children.forEach(child=>{
+                newCurrent.children.push(traverse(child));
+            });
+            return newCurrent;
+        };
+        let output = traverse(current);
+        output.behaviours = behaviours;
+        output.version = "2.0";
         return output;
     }
 }

@@ -13,9 +13,9 @@ export class SavePrefabModal{
             .then(contents=>this.context.content.popup.setContent(contents[0]))
             .then(()=>this.uiRenderer.components['ui-renderer'].play())
             .then(()=>{
-                let name = currentPrefab.name,
-                    description = currentPrefab.description,
-                    image = currentPrefab.image,
+                let name = currentPrefab?currentPrefab.name:document.getElementById('prefabNameEdit').getValue(),
+                    description = currentPrefab?currentPrefab.description:'',
+                    image = currentPrefab?currentPrefab.image:document.getElementById('prefabImageEdit').getValue(),
                     is_public = false,
                     obfuscate = false;
                 let closeEle = currentPrefab?ele:document.querySelector('#savePrefab').querySelector('.singleButton');
@@ -36,7 +36,7 @@ export class SavePrefabModal{
                         if(currentPrefab){
                             this.context.sceneEl.emit('updatePrefab',{prefabs_id:currentPrefab.prefabs_id,description,image,is_public,obfuscate,name});
                         }else{
-                            let prefab = JSON.stringify(this.context.sceneGraph.serialiseScene(this.context.currentObject));
+                            let prefab = this.context.sceneGraph.serialiser.serialiseScene(this.context.currentObject);
                             this.context.sceneEl.emit('createPrefab',{prefab,description,image,is_public,obfuscate,name});
                         }
                         closeEle.close();

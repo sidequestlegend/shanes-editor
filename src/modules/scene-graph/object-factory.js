@@ -1,11 +1,13 @@
 import {MaterialFactory} from "./material-factory";
 import {GeometryFactory} from "./geometry-factory";
+import {LightFactory} from "./light-factory";
 
 export class ObjectFactory{
     constructor(sceneGraph){
         this.sceneGraph = sceneGraph;
         this.materialFactory = new MaterialFactory(sceneGraph);
         this.geometryFactory = new GeometryFactory(sceneGraph);
+        this.lightFactory = new LightFactory(sceneGraph);
     }
     changeGeometry(type){
         // Change the type of the geometry
@@ -73,6 +75,7 @@ export class ObjectFactory{
             name:(name||this.sceneGraph.context.namer.generateName()),
             uuid:uuid||THREE.Math.generateUUID(),
             type:type||"Object3D",
+            shadow:{cast:false,receive:false},
             transform:{
                 position:{
                     x:tra_settings&&tra_settings.position?tra_settings.position.x||0:0,
@@ -171,6 +174,8 @@ export class ObjectFactory{
                             object = new THREE.Mesh(geometry,material);
                             this.transform(object,child);
                             this.addStats(object,child);
+                            object.castShadow = settings.shadow.cast;
+                            object.receiveShadow = settings.shadow.receive;
                             resolve(object);
                         });
                     break;
@@ -183,8 +188,20 @@ export class ObjectFactory{
                             object = new THREE.Mesh(geometry,material);
                             this.transform(object,child);
                             this.addStats(object,child);
+                            object.castShadow = settings.shadow.cast;
+                            object.receiveShadow = settings.shadow.receive;
                             resolve(object);
                         });
+                    break;
+                case "Light":
+                    // Create a light
+                    object = this.lightFactory.makeLight(settings.light);
+                    object.position.set(
+                        child.settings.transform.position.x,
+                        child.settings.transform.position.y,
+                        child.settings.transform.position.z);
+                    object.userData.sceneObject.stats = {points:0,pixels:0};
+                    resolve(object);
                     break;
                 case "Object3D":
                     // Create a group
@@ -198,7 +215,10 @@ export class ObjectFactory{
                     object = new THREE.Object3D();
                     this.addAframeItem(child)
                         .then(aobject=>{
-                            this.scaleAndCenterObject(aobject);
+                            let box = new THREE.Box3().setFromObject( aobject );
+                            let offset = box.getCenter().clone().negate();
+                            object.position.copy(new THREE.Vector3(offset.x,offset.y,offset.z));
+                            //this.scaleAndCenterObject(aobject);
                             this.transform(object,child);
                             object.add(aobject);
                             return object;

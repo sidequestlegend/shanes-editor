@@ -38,11 +38,12 @@ import {DeleteSceneModal} from "./views/modals/delete-scene";
 import {BehaviourView} from "./views/behaviour-view";
 import {RemoveObjectModal} from "./views/modals/remove-object";
 import {ImportBehavioursModal} from "./views/modals/import-behaviours";
+import {AddPrefabList} from "./views/modals/add-prefab-list";
 
 export class Editor{
     constructor(context,rootUrl){
         this.context = context;
-       //this.isDev = !!localStorage.getItem('isDev');
+        //this.isDev = !!localStorage.getItem('isDev');
         this.rootUrl = rootUrl;//this.isDev?'http://localhost:47000/':'https://cdn.theexpanse.app/';
         //this.rootUrl = 'https://cdn.theexpanse.app/';
         //this.session = new Session(this);
@@ -64,34 +65,34 @@ export class Editor{
 
         this.showAlphaMap = new THREE.TextureLoader().load('https://cdn.theexpanse.app/images/nav-alpha.jpg');
         this.hideAlphaMap = new THREE.TextureLoader().load('https://cdn.theexpanse.app/images/nav-alpha-hide.jpg');
-            this.showMaterial = document.getElementById('uiPanel').getObject3D('mesh').material;
-            this.showMaterial.transparent = true;
-            this.showMaterial.alphaMap = this.hideAlphaMap;
-            this.displayBox = document.getElementById('displayBox').components['display-box'];
-            this.displayBox.hide();
-            this.sceneEl.addEventListener('transform-update',()=>{
-                if(this.transformUpdate)this.transformUpdate();
-            });
-            document.getElementById('topTitle').addEventListener('mousedown',()=>{
-                this.itemView.open();
-            });
-            this.precision = 1;
-            let precisionButton = document.getElementById('precisionButton');
-            precisionButton.addEventListener('mousedown',()=>{
-                this.precision/=10;
-                if(this.precision<0.001){
-                    this.precision = 100;
-                }
-                precisionButton.components["ui-toast"].data.toastEl.setAttribute('text-value','Precision: '+this.precision)
-            });
-            let popupPrecision = document.getElementById('popupPrecision');
-            popupPrecision.addEventListener('mousedown',()=>{
-                this.precision/=10;
-                if(this.precision<0.001){
-                    this.precision = 100;
-                }
-                popupPrecision.components["ui-toast"].data.toastEl.setAttribute('text-value','Precision: '+this.precision)
-            });
+        this.showMaterial = document.getElementById('uiPanel').getObject3D('mesh').material;
+        this.showMaterial.transparent = true;
+        this.showMaterial.alphaMap = this.hideAlphaMap;
+        this.displayBox = document.getElementById('displayBox').components['display-box'];
+        this.displayBox.hide();
+        this.sceneEl.addEventListener('transform-update',()=>{
+            if(this.transformUpdate)this.transformUpdate();
+        });
+        document.getElementById('topTitle').addEventListener('mousedown',()=>{
+            this.itemView.open();
+        });
+        this.precision = 1;
+        let precisionButton = document.getElementById('precisionButton');
+        precisionButton.addEventListener('mousedown',()=>{
+            this.precision/=10;
+            if(this.precision<0.001){
+                this.precision = 100;
+            }
+            precisionButton.components["ui-toast"].data.toastEl.setAttribute('text-value','Precision: '+this.precision)
+        });
+        let popupPrecision = document.getElementById('popupPrecision');
+        popupPrecision.addEventListener('mousedown',()=>{
+            this.precision/=10;
+            if(this.precision<0.001){
+                this.precision = 100;
+            }
+            popupPrecision.components["ui-toast"].data.toastEl.setAttribute('text-value','Precision: '+this.precision)
+        });
     }
     setupPopupNavigation(){
         document.getElementById('backButton').addEventListener('mousedown',()=>this.popupBack());
@@ -107,10 +108,10 @@ export class Editor{
             .easing(TWEEN.Easing.Exponential.Out).start();
     }
     showLoader(){
-        this.loader(1);
+         this.loader(1);
     }
     hideLoader(){
-        this.loader(0.00001);
+         this.loader(0.00001);
     }
     popupBack(){
         let back = this.popupBackStack.pop();
@@ -153,6 +154,7 @@ export class Editor{
         this.geometrySettingsModal = new GeometrySettingsModal(this);
 
         this.objectMaterial = new ObjectMaterial(this);
+        this.addPrefabList = new AddPrefabList(this);
 
         this.createSceneModal = new CreateSceneModal(this);
 

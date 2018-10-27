@@ -35,6 +35,10 @@ export class MaterialTypeModal{
                     let material = this.context.currentObject.settings.material;
                     matSettingsEl.querySelector('.titleContainer').setAttribute('value','Material Settings: '+material.type.substr(4,material.type.length-12));
                 });
+
+                this.context.content.popup.querySelector('.close-modal-type').addEventListener('mousedown',()=>{
+                    document.querySelector('#materialSettings').querySelector('.doubleButton1').close();
+                })
             });
     }
 }
