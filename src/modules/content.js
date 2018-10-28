@@ -1,9 +1,9 @@
-import ContentWorker from 'worker-loader?inline!./content-worker.js';
+import ContentWorker from 'worker-loader!./content-worker.js';
 
 export class Content{
     constructor(context){
         this.context = context;
-        this.content_worker = new ContentWorker();
+        this.content_worker = new Worker("content-worker.js");//new ContentWorker();
         this.popup = document.getElementById('popupContent');
         this.container = document.getElementById('mainContent');
         this.contentContainer = this.container.querySelector('.container');

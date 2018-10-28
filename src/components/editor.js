@@ -82,6 +82,7 @@ module.exports = AFRAME.registerComponent('editor', {
         let mainRenderer = document.createElement('a-ui-renderer');
         mainRenderer.id = 'mainRenderer';
         mainRenderer.setAttribute('ui-panel','#uiPanel');
+        mainRenderer.setAttribute('init-delay','15000');
 
         let mainEditor = document.createElement('a-entity');
         mainEditor.id = 'editor';
