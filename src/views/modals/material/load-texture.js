@@ -50,6 +50,7 @@ export class LoadTextureModal {
                     [{name:"128",friendly_name:'0.128K Image',image_url:'https://cdn.theexpanse.app/images/icons/128.jpg'}]:[
                 {name:"1024",friendly_name:'1K Image',image_url:'https://cdn.theexpanse.app/images/icons/1024.jpg'},
                 {name:"512",friendly_name:'0.5K Image',image_url:'https://cdn.theexpanse.app/images/icons/512.jpg'},
+                {name:"256",friendly_name:'0.25K Image',image_url:'https://cdn.theexpanse.app/images/icons/256.jpg'},
                 {name:"128",friendly_name:'0.128K Image',image_url:'https://cdn.theexpanse.app/images/icons/128.jpg'}
             ]}],true)
             .then(contents=>this.context.content.popup.setContent(contents[0]))
@@ -98,62 +99,13 @@ export class LoadTextureModal {
                 this.context.currentObject.object3D.material[type] = texture;
                 this.context.currentObject.object3D.material[type].needsUpdate = true;
                 this.context.currentObject.object3D.material.needsUpdate = true;
-
+                this.context.currentObject.settings.state.updated = true;
+                this.context.sceneGraph.sync();
             });
         }
     }
     setupTextures(){
         this.textures = {
-            // "3D Models-Assets": [
-            //     {
-            //         "name": "Arch",
-            //         "image": "Arch"
-            //     },
-            //     {
-            //         "name": "Bomb",
-            //         "image": "Bomb"
-            //     },
-            //     {
-            //         "name": "Experience.blend",
-            //         "image": "Experience.blend"
-            //     },
-            //     {
-            //         "name": "Fire Extinguisher",
-            //         "image": "Fire Extinguisher"
-            //     },
-            //     {
-            //         "name": "Handpainted_Mushroom",
-            //         "image": "Handpainted_Mushroom"
-            //     },
-            //     {
-            //         "name": "Hatchet",
-            //         "image": "Hatchet"
-            //     },
-            //     {
-            //         "name": "House 001 - low poly",
-            //         "image": "House 001 - low poly"
-            //     },
-            //     {
-            //         "name": "Pokeball",
-            //         "image": "Pokeball"
-            //     },
-            //     {
-            //         "name": "Rook",
-            //         "image": "Rook"
-            //     },
-            //     {
-            //         "name": "Shield_001",
-            //         "image": "Shield_001"
-            //     },
-            //     {
-            //         "name": "toaster",
-            //         "image": "toaster"
-            //     },
-            //     {
-            //         "name": "Wind Turbine",
-            //         "image": "Wind Turbine"
-            //     }
-            // ],
             "Abstract": [
                 {
                     "name": "Abstract_001",
@@ -944,12 +896,12 @@ export class LoadTextureModal {
                     "image": "Plaster_002_COLOR.jpg"
                 }
             ],
-            "Plastic": [
-                {
-                    "name": "Plastic_001_SD",
-                    "image": "Plastic_001_COLOR.jpg"
-                }
-            ],
+            // "Plastic": [
+            //     {
+            //         "name": "Plastic_001_SD",
+            //         "image": "Plastic_001_COLOR.jpg"
+            //     }
+            // ],
             "Roof Tiles": [
                 {
                     "name": "Wood Roof Tiles 001_SD",

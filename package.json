@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "aframe-material-collection": "^0.4.31",
+    "cannon": "^0.6.2",
     "handlebars": "^4.0.11",
     "inline-worker": "^1.1.0"
   }

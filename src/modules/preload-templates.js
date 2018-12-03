@@ -32,7 +32,10 @@ export class PreloadTemplates{
             'single-item-button',
             'three-number-inputs',
             'title-section',
-            'material-options'
+            'material-options',
+            '3d-model-settings',
+            'edit-model-settings',
+            'sprite-settings'
         ];
         let start = new Date().getTime();
         let promises = templates.map(t=>this.context.content.loadTemplates([t]));

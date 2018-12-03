@@ -35,13 +35,16 @@ export class Migrations{
             }
         }`;
     }
-    migrateImageToCdn(image){
+    migrateURLToCdn(image){
         // Correct relative paths to absolute urls.
         if(image === 'images/behaviour.png'){
             return 'https://cdn.theexpanse.app/images/icons/objects/behaviour.jpg'
-        }else if(image.substr(0,7)==="images/"){
-            console.log(this.context.context.rootUrl+image);
+        }else if(["images/","models/"].indexOf(image.substr(0,7))>-1){
             return 'https://cdn.theexpanse.app/'+image
+        }else if(["/images/","/models/"].indexOf(image.substr(0,8))>-1){
+            return 'https://cdn.theexpanse.app'+image
+        }else{
+            return image;
         }
     }
     migrateV2(current){
@@ -68,7 +71,7 @@ export class Migrations{
                     description:isAlt?"":behaviour.settings.description,
                     category: isAlt?'altspace':'misc',
                     behaviours_id:behaviourId,
-                    image:isAlt?'https://cdn.theexpanse.app/images/icons/objects/altvr.jpg':behaviour.settings.image?this.migrateImageToCdn(behaviour.settings.image):'https://cdn.theexpanse.app/images/icons/objects/behaviour.jpg',
+                    image:isAlt?'https://cdn.theexpanse.app/images/icons/objects/altvr.jpg':behaviour.settings.image?this.migrateURLToCdn(behaviour.settings.image):'https://cdn.theexpanse.app/images/icons/objects/behaviour.jpg',
                     is_public:false,
                     obfuscate:false,
                     definition:this.migrateBehaviourV2(behaviour),
@@ -83,18 +86,30 @@ export class Migrations{
                 type:current.settings.object.type,
                 transform:current.settings.object.transform,
                 behaviours:behaviours,
+                mouseOn:false,
+                physics:{
+                    enabled:false,
+                    walkOnEnabled:false,
+                    settings:{
+                        mass:0,
+                        friction:0,
+                        restitution:0
+                    },
+                    shapes:[]
+                },
                 shadow:{cast:false,receive:false},
                 hide_on_mobile:current.settings.object.hide_on_mobile||false,
                 hide_on_desktop:current.settings.object.show_only_on_mobile||false,
                 geometry:current.settings.geometry,
                 preserve_scale:false,
+                disable_animations:false,
                 material:this.context.objectFactory.materialFactory.materialSettingsWithDefaults({
                     type:'MeshBasicMaterial',
                     visible:current.settings.material.visible,
                     color:current.settings.material.color,
                     transparent:current.settings.material.transparent,
                     opacity:current.settings.material.opacity,
-                    map:this.migrateImageToCdn(current.settings.material.map),
+                    map:this.migrateURLToCdn(current.settings.material.map),
                     side:current.settings.material.side,
                     fog:false,
                     lights:false,
@@ -118,9 +133,19 @@ export class Migrations{
                     removed:false
                 }
             };
-            if(url){current.settings.url = url;}
-            if(mtl_url){current.settings.mtl_url = mtl_url;}
-            if(mtl_path){current.settings.mtl_path = mtl_path;}
+            console.log(current.settings.material.map);
+            if(current === this.context.currentScene){
+                current.settings.physics.gravity = {x:0,y:-9.82,z:0}
+            }
+            if(url){
+                current.settings.url = this.migrateURLToCdn(url);
+            }
+            if(mtl_url){
+                current.settings.mtl_url = this.migrateURLToCdn(mtl_url);
+            }
+            if(mtl_path){
+                current.settings.mtl_path = this.migrateURLToCdn(mtl_path);
+            }
         }
         current.children = current.children.filter(c=>c);
         for(let i = 0; i< current.children.length;i++){

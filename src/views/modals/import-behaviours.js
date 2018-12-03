@@ -12,15 +12,15 @@ export class ImportBehavioursModal{
             .then(contents=>this.context.content.popup.setContent(contents[0]))
             .then(()=>this.uiRenderer.components['ui-renderer'].play())
             .then(()=>{
-                document.querySelector('.cancelImportBehaviours').addEventListener('click',()=>{
+                document.querySelector('.cancelImportBehaviours').addEventListener('mousedown',()=>{
                     this.removeBehaviours(behaviours);
                     this.openCloseModal(true);
                 });
-                document.querySelector('.close-modal').addEventListener('click',()=>{
+                document.querySelector('.close-modal').addEventListener('mousedown',()=>{
                     this.removeBehaviours(behaviours);
                     this.openCloseModal(true);
                 });
-                document.querySelector('.importBehaviours').addEventListener('click',()=>{
+                document.querySelector('.importBehaviours').addEventListener('mousedown',()=>{
                     this.save(behaviours);
                     this.openCloseModal(true);
                 });

@@ -3,6 +3,7 @@ export class SceneListView{
         this.context = context;
     }
     open(scenes,page,search,type){
+        this.context.changeTopButtons();
         this.scenes = scenes;
         this.page = page||0;
         this.search = search||'';
@@ -45,7 +46,7 @@ export class SceneListView{
         let _this = this;
         for(let i = 0; i < sceneMenuButtons.length; i++){
             let sceneMenuButton = sceneMenuButtons[i];
-            sceneMenuButton.addEventListener('click',function(){
+            sceneMenuButton.addEventListener('mousedown',function(){
                 _this.context.showLoader();
                 let position = this.dataset.position_x;
                 let type = this.dataset.type;
@@ -103,13 +104,13 @@ export class SceneListView{
         let sceneNext = document.querySelector('.scene-next-button');
         let scenePrev = document.querySelector('.scene-prev-button');
         if(sceneNext){
-            sceneNext.addEventListener('click',()=>{
+            sceneNext.addEventListener('mousedown',()=>{
                 this.context.showLoader();
                 this.context.sceneEl.emit('scene-list',{page:++this.page,search:this.search,type:this.type})
             });
         }
         if(scenePrev){
-            scenePrev.addEventListener('click',()=>{
+            scenePrev.addEventListener('mousedown',()=>{
                 this.context.showLoader();
                 this.context.sceneEl.emit('scene-list',{page:--this.page,search:this.search,type:this.type})
             });

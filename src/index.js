@@ -32,7 +32,7 @@ class Main{
         this.sceneEl.addEventListener('scene-loading',e=>{
             loadingText.setAttribute('value',Math.round(e.detail*100)+'%');
             if(e.detail===1){
-                console.log('Scene loaded in: '+((new Date().getTime()-start)/1000)+"s");
+                console.log('Scene loaded in: '+((new Date().getTime()-start)/1000)+" seconds");
                 setTimeout(()=>{
                     loadingText.setAttribute('value','');
                     loadingTextBack.setAttribute('scale','0 0 0');

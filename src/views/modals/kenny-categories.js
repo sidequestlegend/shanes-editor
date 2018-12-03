@@ -7,24 +7,22 @@ export class KennyCategoriesModal{
         "space-kit-1.0":{name:'Space',mtl_path:'Models/',image: 'Preview.png'},
          */
         this.types = [
-            //{name:'3d-minigolf-pack',friendly_name:'3D Minigolf',image_url:'https://cdn.theexpanse.app/images/kenney/3d-minigolf-pack/Sample.png'},
-            {name:'3d-nature-pack',friendly_name:'3D Nature',image_url:'https://cdn.theexpanse.app/images/kenney/3d-nature-pack/Sample.png'},
-            {name:'3d-road-pack',friendly_name:'3D Roads',image_url:'https://cdn.theexpanse.app/images/kenney/3d-road-pack/Sample.png'},
-           // {name:'blockycharacters',friendly_name:'Avatars',image_url:'https://cdn.theexpanse.app/images/kenney/blockycharacters/Sample.png'},
-            {name:'castle-kit-1.0',friendly_name:'Castle Kit',image_url:'https://cdn.theexpanse.app/images/kenney/castle-kit-1.0/Sample.png'},
-            {name:'kenney_furniturepack',friendly_name:'Furniture',image_url:'https://cdn.theexpanse.app/images/kenney/kenney_furniturepack/Sample.png'},
-            {name:'kenney_holidaypack',friendly_name:'Holiday',image_url:'https://cdn.theexpanse.app/images/kenney/kenney_holidaypack/Sample.png'},
-            {name:'medieval-town-base',friendly_name:'Medieval',image_url:'https://cdn.theexpanse.app/images/kenney/medieval-town-base/Sample.png'},
-            {name:'modular-buildings-100-assets',friendly_name:'Buildings',image_url:'https://cdn.theexpanse.app/images/kenney/modular-buildings-100-assets/Sample.png'},
-            {name:'naturepack_extended',friendly_name:'Nature',image_url:'https://cdn.theexpanse.app/images/kenney/naturepack_extended/Sample.png'},
-            {name:'racing-kit-1.2',friendly_name:'Racing',image_url:'https://cdn.theexpanse.app/images/kenney/racing-kit-1.2/Sample.png'},
-            {name:'space-kit-1.0',friendly_name:'Space',image_url:'https://cdn.theexpanse.app/images/kenney/space-kit-1.0/Sample.png'},
-            {name:'watercraftpack_kenney',friendly_name:'Water Craft',image_url:'https://cdn.theexpanse.app/images/kenney/watercraftpack_kenney/Sample.png'},
-            {name:'weaponpack_assets',friendly_name:'Weapons',image_url:'https://cdn.theexpanse.app/images/kenney/weaponpack_assets/Sample.png'}
+            {name:'3d-nature-pack',friendly_name:'3D Nature',image_url:'#kenny_3d_nature_pack'},
+            {name:'3d-road-pack',friendly_name:'3D Roads',image_url:'#kenny_3d_road_pack'},
+            {name:'castle-kit-1.0',friendly_name:'Castle Kit',image_url:'#kenny_castle_kit'},
+            {name:'kenney_furniturepack',friendly_name:'Furniture',image_url:'#kenny_furniturepack'},
+            {name:'kenney_holidaypack',friendly_name:'Holiday',image_url:'#kenny_holidaypack'},
+            {name:'medieval-town-base',friendly_name:'Medieval',image_url:'#kenny_medieval_town_base'},
+            {name:'modular-buildings-100-assets',friendly_name:'Buildings',image_url:'#kenny_modular_buildings'},
+            {name:'naturepack_extended',friendly_name:'Nature',image_url:'#kenny_naturepack_extended'},
+            {name:'racing-kit-1.2',friendly_name:'Racing',image_url:'#kenny_racing_kit'},
+            {name:'space-kit-1.0',friendly_name:'Space',image_url:'#kenny_space_kit'},
+            {name:'watercraftpack_kenney',friendly_name:'Water Craft',image_url:'#kenny_watercraftpack'},
+            {name:'weaponpack_assets',friendly_name:'Weapons',image_url:'#kenny_weaponpack'}
         ];
     }
     open() {
-        this.context.content.compileTemplates('add-items',[{top_image_url:'https://cdn.theexpanse.app/images/kenney/kenny_banner.png',items:this.types}],true)
+        this.context.content.compileTemplates('add-items',[{top_image_url:'https://cdn.theexpanse.app/images/kenney/kenny_banner.png',items:this.types,hidePages:true}],true)
             .then(contents=>this.context.content.popup.setContent(contents[0]))
             .then(()=>{
                 let buttons = this.context.content.popup.querySelectorAll('.type-select');

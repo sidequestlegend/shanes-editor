@@ -12,7 +12,6 @@ export class BehaviourView {
     open(object,behaviour){
         this.object = object;
         this.behaviour = behaviour = behaviour || this.context.sceneGraph.behaviourFactory.makeBehaviour();
-        console.log(this.behaviour);
         let breadcrumbs = object?this.context.breadCrumbs.fromObject(object):[{name:'My Stuff',callback:()=>this.context.sceneEl.emit('scene-list',{page:0,search:'',type:'scene'}),isTop:true}];
         breadcrumbs.push({name:'Edit Behaviour',callback:()=>{},isTop:false});
         this.context.breadCrumbs.make(breadcrumbs);
@@ -35,8 +34,8 @@ export class BehaviourView {
             .then(()=>this.context.content.reloadContent())
             .then(()=>{
                 let saveButtons = document.querySelectorAll('.saveBehaviour');
-                saveButtons[0].addEventListener('click',()=>this.saveBehaviour());
-                saveButtons[1].addEventListener('click',()=>this.saveBehaviour());
+                saveButtons[0].addEventListener('mousedown',()=>this.saveBehaviour());
+                saveButtons[1].addEventListener('mousedown',()=>this.saveBehaviour());
                 let updateTrigger = selectedTrigger=>this.settings.trigger = selectedTrigger;
                 for(let i = 0; i < this.triggerElements.length; i++){
                     this.setupRadioInput('.'+this.triggerElements[i],updateTrigger);
@@ -50,7 +49,7 @@ export class BehaviourView {
     }
     setupEditButton(){
         this.context.content.container.querySelector('.editCodeButton')
-            .addEventListener('click',e=>{
+            .addEventListener('mousedown',e=>{
                 this.context.sceneEl.emit('openBehaviour',this.behaviour);
             })
     }

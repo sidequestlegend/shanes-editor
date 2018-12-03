@@ -4,7 +4,6 @@ export class MaterialTypeModal{
     }
     open() {
         let material = this.context.currentObject.settings.material;
-        console.log(material.type.substr(4,material.type.length-12));
         this.context.content.loadTemplates(['object-type'])
             .then(()=>this.context.content.compileTemplates('object-type',[{type:'material',selected:material.type.substr(4,material.type.length-12),options:[
                     {name:'Basic'},

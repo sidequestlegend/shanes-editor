@@ -19,13 +19,15 @@ export class RemoveObjectModal{
             .then(contents=>this.context.content.popup.setContent(contents[0]))
             .then(()=>{
                 let popupEl = document.querySelector('#removeObject').querySelector('.singleButton');
-                document.querySelector('.right-button').addEventListener('click',()=>{
+                document.querySelector('.right-button').addEventListener('mousedown',()=>{
                     popupEl.close();
                     let parent = this.context.currentObject.parent;
                     this.context.sceneGraph.removeObject();
-                    this.context.itemView.open(parent);
+                    this.context.currentObject.settings.state.removed = true;
+                    this.context.sceneGraph.sync();
+                    setTimeout(()=>this.context.itemView.open(parent),350);
                 });
-                document.querySelector('.left-button').addEventListener('click',()=>{
+                document.querySelector('.left-button').addEventListener('mousedown',()=>{
                     popupEl.close();
                 });
             });

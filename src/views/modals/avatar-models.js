@@ -24,9 +24,35 @@ export class AvatarModalsModal{
     open(category) {
         let namedItems = [];
         for(let i = 0; i < this.types[category].length; i++){
-            namedItems.push({name:this.types[category][i],friendly_name:this.types[category][i]});
+            namedItems.push({name:this.types[category][i],friendly_name:this.types[category][i],image_url:'#avatar_'+category.toLowerCase().replace('-','_')+"_"+this.types[category][i].toLowerCase().replace('-','_')});
         }
+        this.uiRenderer = document.getElementById('mainRenderer');
         this.context.content.compileTemplates('add-items',[{items:namedItems}],true)
-            .then(contents=>this.context.content.popup.setContent(contents[0]));
+            .then(contents=>this.context.content.popup.setContent(contents[0]))
+            .then(()=>{
+                let buttons = this.context.content.popup.querySelectorAll('.type-select');
+                for(let i = 0 ; i <  buttons.length; i++){
+                    let button = buttons[i];
+                    button.addEventListener('mousedown',()=>{
+                        this.context.popupBackStack.push(()=>this.open());
+                        document.getElementById('backButton').setAttribute('scale','1 1 1');
+                        let url = this.context.rootUrl+'models/avatars/'+category.replace('-','/')+'/'+button.dataset.key+"/scene.gltf";
+                        this.context.modelSettings.open({
+                            type:"Custom",
+                            sub_type:'GLTF2',
+                            url:url,
+                        },object=>this.context.sceneGraph.add(this.context.currentObject,object)
+                            .then(child=>{
+                                this.context.showObject();
+                                this.context.displayBox.setObject(child.object3D);
+                                setTimeout(()=>{
+                                    this.context.itemView.open(child);
+                                    this.context.sceneGraph.sync();
+                                },250);
+                                this.uiRenderer.modal.close();
+                            }));
+                    });
+                }
+            });
     }
 }

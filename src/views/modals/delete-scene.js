@@ -19,8 +19,8 @@ export class DeleteSceneModal{
             }],true))
             .then(contents=>this.context.content.popup.setContent(contents[0]))
             .then(()=> {
-                 document.querySelector('.left-button').addEventListener('click', () => ele.close());
-                 document.querySelector('.right-button').addEventListener('click', () => {
+                 document.querySelector('.left-button').addEventListener('mousedown', () => ele.close());
+                 document.querySelector('.right-button').addEventListener('mousedown', () => {
                      this.context.sceneEl.emit('delete-'+(type||'scene'),scenes_id);
                      ele.close()
                  });

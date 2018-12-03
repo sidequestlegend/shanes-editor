@@ -161,7 +161,7 @@ export class MaterialFactory{
             type:settings.type||'MeshStandardMaterial',
             visible:settings.visible===false?settings.visible:true,
             transparent:settings.transparent||false,
-            alphaTest:settings.alphaTest||0.5,
+            alphaTest:settings.alphaTest||0,
             opacity:settings.opacity||1,
             side:settings.side||THREE.FrontSide,
             texture:{

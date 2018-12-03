@@ -139,6 +139,7 @@ module.exports = AFRAME.registerComponent('gizmo', {
             this.data.displayEl.components["display-box"].setObject(this.el.sceneEl.context.currentObject.object3D);
             // All done. Delete the ref to the current dragging object.
             delete this.dragging;
+            this.el.emit('stop-gizmo');
         }
     },
     setSpinePosition(pos,spine){
@@ -297,6 +298,7 @@ module.exports = AFRAME.registerComponent('gizmo', {
     },
     onMouseDown(e){
         if([this.top_box,this.x_box,this.y_box,this.z_box].indexOf(e.target)===-1)return;
+        this.el.emit('start-gizmo');
         // Set the current dragging box
         this.dragging = e.target;
         // Add the intersect class to the backing element for capturing mouse moves.

@@ -14,13 +14,19 @@ export class TransformModal{
     open(){
         let object = this.context.currentObject;
         let rotation = object.settings.transform.rotation;
+        let transforms = [
+            {name:'Position',vector:object.settings.transform.position,className:'positionSettings'}
+        ];
+        if(object.settings.type==="Light"&&object.settings.geometry.type==="RectAreaLight"){
+            transforms.push({name:'Rotation',vector:{x:THREE.Math.radToDeg(rotation.x),y:THREE.Math.radToDeg(rotation.y),z:THREE.Math.radToDeg(rotation.z)},className:'rotationSettings'});
+        }else if(object.settings.type!=="Light"){
+            transforms.push({name:'Rotation',vector:{x:THREE.Math.radToDeg(rotation.x),y:THREE.Math.radToDeg(rotation.y),z:THREE.Math.radToDeg(rotation.z)},className:'rotationSettings'});
+        }
+        if(object.settings.type!=="Light"){
+            transforms.push({name:'Scale',vector:object.settings.transform.scale,className:'scaleSettings'});
+        }
 
-
-        this.context.content.compileTemplates('three-number-inputs',[
-            {name:'Position',vector:object.settings.transform.position,className:'positionSettings'},
-            {name:'Rotation',vector:{x:THREE.Math.radToDeg(rotation.x),y:THREE.Math.radToDeg(rotation.y),z:THREE.Math.radToDeg(rotation.z)},className:'rotationSettings'},
-            {name:'Scale',vector:object.settings.transform.scale,className:'scaleSettings'}
-        ])
+        this.context.content.compileTemplates('three-number-inputs',transforms)
             .then(contents=>{
                 this.context.content.popup.setContent(this.startSection+contents[0]+contents[1]+contents[2]+this.endSection);
                 this.setupTransformListeners();
@@ -28,13 +34,19 @@ export class TransformModal{
             })
     }
     setupTransformButtons(){
-
         let positionSettings = document.querySelector('.positionSettings');
-        let rotationSettings = document.querySelector('.rotationSettings');
-        let scaleSettings = document.querySelector('.scaleSettings');
         this.setupTransformButtonGroup(positionSettings,'position');
-        this.setupTransformButtonGroup(rotationSettings,'rotation');
-        this.setupTransformButtonGroup(scaleSettings,'scale');
+        if(this.context.currentObject.settings.type==="Light"&&this.context.currentObject.settings.geometry.type==="RectAreaLight") {
+            let rotationSettings = document.querySelector('.rotationSettings');
+            this.setupTransformButtonGroup(rotationSettings, 'rotation');
+        }else if(this.context.currentObject.settings.type!=="Light"){
+            let rotationSettings = document.querySelector('.rotationSettings');
+            this.setupTransformButtonGroup(rotationSettings, 'rotation');
+        }
+        if(this.context.currentObject.settings.type!=="Light") {
+            let scaleSettings = document.querySelector('.scaleSettings');
+            this.setupTransformButtonGroup(scaleSettings, 'scale');
+        }
     }
     setupTransformButtonGroup(parent,type){
         this.setupTransformButton(parent,'.xInputUp','x',1,type);
@@ -81,17 +93,30 @@ export class TransformModal{
             positionSettings.querySelector('.xInput').setAttribute('text','value:'+(position.x).toFixed(3)+extraTextSettings);
             positionSettings.querySelector('.yInput').setAttribute('text','value:'+(position.y).toFixed(3)+extraTextSettings);
             positionSettings.querySelector('.zInput').setAttribute('text','value:'+(position.z).toFixed(3)+extraTextSettings);
-            rotationSettings.querySelector('.xInput')
-                .setAttribute('text','value:'+(THREE.Math.radToDeg(rotation.x)).toFixed(3)+extraTextSettings);
-            rotationSettings.querySelector('.yInput')
-                .setAttribute('text','value:'+(THREE.Math.radToDeg(rotation.y)).toFixed(3)+extraTextSettings);
-            rotationSettings.querySelector('.zInput')
-                .setAttribute('text','value:'+(THREE.Math.radToDeg(rotation.z)).toFixed(3)+extraTextSettings);
 
+            let rot = ()=>{
 
-            scaleSettings.querySelector('.xInput').setAttribute('text','value:'+(scale.x).toFixed(3)+extraTextSettings);
-            scaleSettings.querySelector('.yInput').setAttribute('text','value:'+(scale.y).toFixed(3)+extraTextSettings);
-            scaleSettings.querySelector('.zInput').setAttribute('text','value:'+(scale.z).toFixed(3)+extraTextSettings);
+                rotationSettings.querySelector('.xInput')
+                    .setAttribute('text','value:'+(THREE.Math.radToDeg(rotation.x)).toFixed(3)+extraTextSettings);
+                rotationSettings.querySelector('.yInput')
+                    .setAttribute('text','value:'+(THREE.Math.radToDeg(rotation.y)).toFixed(3)+extraTextSettings);
+                rotationSettings.querySelector('.zInput')
+                    .setAttribute('text','value:'+(THREE.Math.radToDeg(rotation.z)).toFixed(3)+extraTextSettings);
+            };
+
+            if(this.context.currentObject.settings.type==="Light"&&this.context.currentObject.settings.geometry.type==="RectAreaLight") {
+                rot();
+            }else if(this.context.currentObject.settings.type!=="Light"){
+                rot();
+            }
+
+            if(this.context.currentObject.settings.type!=="Light") {
+                scaleSettings.querySelector('.xInput').setAttribute('text', 'value:' + (scale.x).toFixed(3) + extraTextSettings);
+                scaleSettings.querySelector('.yInput').setAttribute('text', 'value:' + (scale.y).toFixed(3) + extraTextSettings);
+                scaleSettings.querySelector('.zInput').setAttribute('text', 'value:' + (scale.z).toFixed(3) + extraTextSettings);
+            }
+            this.context.currentObject.settings.state.transform_updated = true;
+            this.context.sceneGraph.sync();
             UI.utils.stoppedChanging(this.context.currentObject.settings.uuid);
         };
     }

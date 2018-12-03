@@ -3,17 +3,19 @@ export class ObjectTypeModal{
         this.context = context;
         let icon_path = 'https://cdn.theexpanse.app/images/icons/objects/';
         this.types = [
-            {name:'Group',friendly_name:'Group',image_url:icon_path+'folder.jpg',extra_class:'close-modal'},
-            {name:'Primitive',friendly_name:'Simple',image_url:icon_path+'geometries/primitive/Box.jpg'},
-            {name:'Parametric',friendly_name:'Fancy',image_url:icon_path+'geometries/parametric/Apple.jpg'},
-            {name:'Prefab',friendly_name:'Prefab',image_url:icon_path+'prefab.jpg'},
-            {name:'Light',friendly_name:'Light',image_url:icon_path+'lights.jpg'},
-            {name:'Aframe',friendly_name:'Aframe',image_url:icon_path+'aframe.jpg'},
-            {name:'Poly',friendly_name:'Google Poly',image_url:icon_path+'poly.jpg'},
-            {name:'Sketchfab',friendly_name:'Sketchfab',image_url:icon_path+'sketchfab.jpg'},
-            {name:'Kenney',friendly_name:'Kenney\'s',image_url:icon_path+'kenny-logo.jpg'},
-            {name:'Avatar',friendly_name:'Avatar Models',image_url:icon_path+'custom.jpg'},
-            {name:'Custom',friendly_name:'Your Model',image_url:icon_path+'custom.jpg'}
+            {name:'Group',friendly_name:'Group',image_url:'#objects_folder',extra_class:'close-modal'},
+            {name:'Primitive',friendly_name:'Simple',image_url:'#geometry_box'},
+            {name:'Parametric',friendly_name:'Fancy',image_url:'#geometry_apple'},
+            {name:'Sprite',friendly_name:'Sprite',image_url:'#objects_sprite'},
+            {name:'Prefab',friendly_name:'Prefab',image_url:'#objects_prefab'},
+            {name:'Light',friendly_name:'Light',image_url:'#objects_lights'},
+            {name:'Portal',friendly_name:'Portal',image_url:'#objects_portal'},
+            {name:'Aframe',friendly_name:'Aframe',image_url:'#objects_aframe'},
+            {name:'Kenney',friendly_name:'Kenney\'s',image_url:'#objects_kenny'},
+            {name:'Poly',friendly_name:'Google Poly',image_url:'#objects_poly'},
+            {name:'Sketchfab',friendly_name:'Sketchfab',image_url:'#objects_sketchfab'},
+            {name:'Avatar',friendly_name:'Avatar Models',image_url:'#objects_avatar'},
+            {name:'Custom',friendly_name:'Your Model',image_url:'#objects_custom'}
         ]
     }
     open() {
@@ -21,7 +23,7 @@ export class ObjectTypeModal{
         this.uiRenderer = document.getElementById('mainRenderer');
         this.uiRenderer.components['ui-renderer'].pause();
         this.context.content.loadTemplates(['add-items'])
-            .then(()=>this.context.content.compileTemplates('add-items',[{items:this.types}],true))
+            .then(()=>this.context.content.compileTemplates('add-items',[{items:this.types,hidePages:true}],true))
             .then(contents=>{
                 this.context.content.popup.setContent(contents[0]);
             })
@@ -46,6 +48,9 @@ export class ObjectTypeModal{
                             case "Light":
                                 this.context.lightTypeModal.open();
                                 break;
+                            case "Portal":
+                                this.context.portalModal.open();
+                                break;
                             case "Aframe":
                                 this.context.sceneGraph.add(this.context.currentObject,{
                                     type:"Aframe",
@@ -60,12 +65,35 @@ export class ObjectTypeModal{
                                                 definition:this.context.currentObject.settings.aframeCode,
                                                 aframe_id:this.context.currentObject.settings.uuid
                                             });
+                                            this.context.sceneGraph.sync();
                                         },100);
+                                    });
+                                this.uiRenderer.modal.close();
+                                break;
+                            case "Sprite":
+                                this.context.sceneGraph.add(this.context.currentObject,{
+                                    type:"Sprite",
+                                    mat_settings:this.context.sceneGraph.objectFactory.spriteDefaults({})
+                                })
+                                    .then(child=>{
+                                        this.context.displayBox.setObject(child.object3D);
+                                        this.context.itemView.open(child);
+                                        this.context.showObject();
+                                        this.context.sceneGraph.sync();
                                     });
                                 this.uiRenderer.modal.close();
                                 break;
                             case "Kenney":
                                 this.context.kennyCategories.open();
+                                break;
+                            case "Sketchfab":
+                                this.context.sceneEl.emit('open-sketchfab');
+                                break;
+                            case "Poly":
+                                this.context.sceneEl.emit('open-poly');
+                                break;
+                            case "Custom":
+                                this.context.customModal.open('GLTF2');
                                 break;
                             case "Avatar":
                                 this.context.avatarCategories.open();
@@ -74,7 +102,10 @@ export class ObjectTypeModal{
                                 this.context.sceneGraph.add(this.context.currentObject,{type:"Object3D"})
                                     .then(child=>{
                                         this.context.displayBox.setObject(child.object3D);
-                                        setTimeout(()=>this.context.itemView.open(child),100);
+                                        setTimeout(()=>{
+                                            this.context.itemView.open(child);
+                                            this.context.sceneGraph.sync();
+                                        },250);
                                     });
                                 this.uiRenderer.modal.close();
                                 break;

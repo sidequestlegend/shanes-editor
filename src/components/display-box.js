@@ -55,9 +55,6 @@ module.exports = AFRAME.registerComponent('display-box', {
                 })
                 .easing(TWEEN.Easing.Exponential.Out).start();
         }
-        // Show the transform button to swap between gizmos
-        // TODO:  move this out of this component
-        this.el.sceneEl.context.viewUtils.showTransformOptions();
         // Get box fromt he selected object.
         this.boundingBox = new THREE.Box3().setFromObject(object);
         this.boundingBoxSize = this.boundingBox.getSize();

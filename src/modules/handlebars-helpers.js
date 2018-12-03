@@ -11,7 +11,7 @@ Handlebars.registerHelper('ternary', function(test, yes, no) {
     return test ? yes : no;
 });
 Handlebars.registerHelper('remove-spaces', function(string) {
-    return string.split(' ').join('').toLowerCase();
+    return string.split(' ').join('').replace('&','').toLowerCase();
 });
 Handlebars.registerHelper('upper-first', function(string) {
     return string.charAt(0).toUpperCase() + string.substr(1);

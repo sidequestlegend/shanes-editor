@@ -18,42 +18,104 @@ export class KennyModalsModal{
             "weaponpack_assets":["ammo_machinegun.obj","ammo_machinegunLauncher.obj","ammo_pistol.obj","ammo_rocket.obj","ammo_rocketModern.obj","ammo_shotgun.obj","ammo_sniper.obj","ammo_uzi.obj","flamethrower.obj","flamethrowerHandle.obj","grenade.obj","grenadeFlash.obj","grenadeSmoke.obj","grenade_vintage.obj","knifeRound_sharp.obj","knifeRound_smooth.obj","knife_sharp.obj","knife_smooth.obj","machinegun.obj","machinegunLauncher.obj","pistol.obj","pistolSilencer.obj","rocketlauncher.obj","rocketlauncherModern.obj","rocketlauncherModernRotating.obj","rocketlauncherSide.obj","shotgun.obj","shotgunShort.obj","sniper.obj","sniperCamo.obj","uzi.obj","uziGold.obj","uziGoldLong.obj","uziGoldLongSilencer.obj","uziGoldSilencer.obj","uziLong.obj","uziLongSilencer.obj","uziSilencer.obj"],
         };
     }
-    open(category) {
+    open(category,page) {
+        page = page || 0;
         let namedItems = [];
         this.uiRenderer = document.getElementById('mainRenderer');
-        for(let i = 0; i < this.types[category].length; i++){
+        let start = page*12;
+        let end  = start+12;
+        for(let i = start; i < end; i++){
             let name = this.types[category][i].substr(0,this.types[category][i].length-4);
             namedItems.push({name:this.types[category][i],friendly_name:name,image_url:'https://cdn.theexpanse.app/images/kenney/'+category+'/'+name+'.jpg'});
         }
-        this.context.content.compileTemplates('add-items',[{top_image_url:'https://cdn.theexpanse.app/images/kenney/'+category+'/Preview.png',items:namedItems}],true)
+        let top_image_url;
+        switch(category){
+            case "3d-nature-pack":
+                top_image_url = "#kenny_preview_3d_nature_pack";
+                break;
+            case "3d-road-pack":
+                top_image_url = "#kenny_preview_3d_road_pack";
+                break;
+            case "castle-kit-1.0":
+                top_image_url = "#kenny_preview_castle_kit";
+                break;
+            case "kenney_furniturepack":
+                top_image_url = "#kenny_preview_furniturepack";
+                break;
+            case "kenney_holidaypack":
+                top_image_url = "#kenny_preview_holidaypack";
+                break;
+            case "medieval-town-base":
+                top_image_url = "#kenny_preview_medieval_town_base";
+                break;
+            case "modular-buildings-100-assets":
+                top_image_url = "#kenny_preview_modular_buildings";
+                break;
+            case "naturepack_extended":
+                top_image_url = "#kenny_preview_naturepack_extended";
+                break;
+            case "racing-kit-1.2":
+                top_image_url = "#kenny_preview_racing_kit";
+                break;
+            case "space-kit-1.0":
+                top_image_url = "#kenny_preview_space_kit";
+                break;
+            case "watercraftpack_kenney":
+                top_image_url = "#kenny_preview_watercraftpack";
+                break;
+            case "weaponpack_assets":
+                top_image_url = "#kenny_preview_weaponpack";
+                break;
+        }
+        this.context.content.compileTemplates('add-items',[{top_image_url:top_image_url,items:namedItems,page}],true)
             .then(contents=>this.context.content.popup.setContent(contents[0]))
             .then(()=>{
+                this.setupNextPrev(category,page);
                 let buttons = this.context.content.popup.querySelectorAll('.type-select');
                 for(let i = 0 ; i <  buttons.length; i++){
                     let button = buttons[i];
                     button.addEventListener('mousedown',()=>{
                         this.context.popupBackStack.push(()=>this.open());
                         document.getElementById('backButton').setAttribute('scale','1 1 1');
-                        let url = 'models/prefabs/'+category+'/Models/'+button.dataset.key;
+                        console.log(this.context.rootUrl+'models/prefabs/'+category+'/Models/'+button.dataset.key);
+                        let url = this.context.rootUrl+'models/prefabs/'+category+'/Models/'+button.dataset.key;
                         let mtl_url = url.substr(0,url.length-3)+'mtl';
                         let mtl_path = url.split('/');
                         mtl_path.pop();
                         mtl_path = mtl_path.join('/')+'/';
-                        this.context.sceneGraph.add(this.context.currentObject,{
+
+                        this.context.modelSettings.open({
                             type:"Custom",
                             sub_type:'OBJ',
                             url:url,
                             mtl_url:mtl_url,
                             mtl_path:mtl_path
-                        })
+                        },object=>this.context.sceneGraph.add(this.context.currentObject,object)
                             .then(child=>{
                                 this.context.showObject();
                                 this.context.displayBox.setObject(child.object3D);
-                                setTimeout(()=>this.context.itemView.open(child),250);
-                            });
-                        this.uiRenderer.modal.close();
+                                setTimeout(()=>{
+                                    this.context.itemView.open(child);
+                                    this.context.sceneGraph.sync();
+                                },250);
+                                this.uiRenderer.modal.close();
+                            }));
                     });
                 }
             });
+    }
+    setupNextPrev(category,page){
+        let prev = document.querySelector('.prev-item-button');
+        if(prev){
+            prev.addEventListener('mousedown',()=>{
+                this.open(category,--page);
+            });
+        }
+        let next = document.querySelector('.next-item-button');
+        if(next){
+            next.addEventListener('mousedown',()=>{
+                this.open(category,++page);
+            });
+        }
     }
 }

@@ -4,6 +4,7 @@ export class AddPrefabList{
     }
     open(page){
         page = page || 0;
+        this.uiRenderer = document.getElementById('mainRenderer');
         return new Promise(resolve=>this.context.sceneEl.emit('list-add-prefab',{page,resolve}))
             .then(prefabs=>{
                 this.prefabs = prefabs;
@@ -14,20 +15,20 @@ export class AddPrefabList{
                 let buttons = this.context.content.popup.querySelectorAll('.loadPrefab');
                 for(let i = 0 ; i <  buttons.length; i++) {
                     let button = buttons[i];
-                    button.addEventListener('click',()=>{
+                    button.addEventListener('mousedown',()=>{
                         for(let i = 0; i < this.prefabs.length; i++){
                             if(this.prefabs[i].prefabs_id === Number(button.dataset.prefab)){
                                 let prefab = this.prefabs[i];
-                                fetch(this.context.rootUrl+prefab.url)
-                                    .then(response=>response.json())
-                                    .then(_prefab=>{
-                                        console.log(_prefab);
-                                        if(Object.keys(_prefab.behaviours).length){
-
-                                        }else{
-
-                                        }
+                                this.context.sceneGraph.add(this.context.currentObject,{
+                                    type:"Prefab",
+                                    prefab
+                                })
+                                    .then(child=>{
+                                        this.context.showObject();
+                                        this.context.displayBox.setObject(child.object3D);
+                                        setTimeout(()=>this.context.itemView.open(child),250);
                                     });
+                                this.uiRenderer.modal.close();
                             }
                         }
                     });

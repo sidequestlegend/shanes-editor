@@ -16,19 +16,19 @@ export class BehavioursModal{
             .then(contents=>this.context.content.popup.setContent(contents[0]))
             .then(()=>{
                 this.closeElement = document.querySelector('#behavioursContainer').querySelector('.singleButton');
-                document.querySelector('.cancelAddBehaviour').addEventListener('click',()=>this.closeElement.close());
+                document.querySelector('.cancelAddBehaviour').addEventListener('mousedown',()=>this.closeElement.close());
                 let updateBehaviour = selectedBehaviour=>this.currentBehaviour = selectedBehaviour;
                 for(let i = 0; i < child.settings.behaviours.length; i++){
                     this.context.viewUtils.setupRadioInput('.radio-'+child.settings.behaviours[i],updateBehaviour);
                 }
-                document.querySelector('.editBehaviour').addEventListener('click',()=>{
+                document.querySelector('.editBehaviour').addEventListener('mousedown',()=>{
                     if(child.settings.behaviours.length){
                         this.context.behaviourView.open(child,
                             this.context.sceneGraph.currentScene.behaviours[this.currentBehaviour]);
                         this.closeElement.close();
                     }
                 });
-                document.querySelector('.addBehaviour').addEventListener('click',()=>this.openAdd(child,'new',0));
+                document.querySelector('.addBehaviour').addEventListener('mousedown',()=>this.openAdd(child,'new',0));
             });
     }
     openAdd(child,type,page){
@@ -46,7 +46,7 @@ export class BehavioursModal{
                             .then(()=>this.context.content.reloadPopup())
                             .then(()=>{
                                 document.querySelector('.addNewBehaviour')
-                                    .addEventListener('click',()=>{
+                                    .addEventListener('mousedown',()=>{
                                         this.context.behaviourView.open(child);
                                         this.closeElement.close();
                                     });
@@ -73,7 +73,6 @@ export class BehavioursModal{
                         let myBehaviours = [];
                         return new Promise(resolve=>this.context.sceneEl.emit('list-add-behaviour',{page,resolve}))
                             .then(behaviours=>{
-                                console.log(behaviours);
                                 myBehaviours = behaviours;
                                 return behaviours;
                             })
@@ -112,13 +111,13 @@ export class BehavioursModal{
     setupNextPrev(child,type,page){
         let prev = document.querySelector('.prev-behaviour-button');
         if(prev){
-            prev.addEventListener('click',()=>{
+            prev.addEventListener('mousedown',()=>{
                 this.openAdd(child,type,--page);
             });
         }
         let next = document.querySelector('.next-behaviour-button');
         if(next){
-            next.addEventListener('click',()=>{
+            next.addEventListener('mousedown',()=>{
                 this.openAdd(child,type,++page);
             });
         }
@@ -129,7 +128,7 @@ export class BehavioursModal{
         let _this = this;
         for(let i = 0; i < sceneMenuButtons.length; i++){
             let sceneMenuButton = sceneMenuButtons[i];
-            sceneMenuButton.addEventListener('click',function(){
+            sceneMenuButton.addEventListener('mousedown',function(){
                 let position = this.dataset.position_x;
                 let type = this.dataset.type;
                 sceneMenuUnderline.setAttribute('width',this.dataset.line_width);

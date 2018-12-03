@@ -68,17 +68,16 @@ export class BehaviourFactory{
                 delete sceneBehaviours[existing[i].old_id];
             }
         }
-        this.scene_graph.currentScene.object3D.traverse(child=>{
-            if(child.userData.sceneObject){
-                for(let i = 0; i < child.userData.sceneObject.settings.behaviours.length; i++){
-                    let behaviour = child.userData.sceneObject.settings.behaviours[i];
-                    let index = existingIds.indexOf(behaviour);
-                    if(index!==-1){
-                        if(isRemove) {
-                            child.userData.sceneObject.settings.behaviours.splice(i,1);
-                        }else{
-                            child.userData.sceneObject.settings.behaviours[i] = existing[index].new_id;
-                        }
+
+        this.scene_graph.traverse(this.scene_graph.currentScene,child=>{
+            for(let i = 0; i < child.settings.behaviours.length; i++){
+                let behaviour = child.settings.behaviours[i];
+                let index = existingIds.indexOf(behaviour);
+                if(index!==-1){
+                    if(isRemove) {
+                        child.settings.behaviours.splice(i,1);
+                    }else{
+                        child.settings.behaviours[i] = existing[index].new_id;
                     }
                 }
             }
@@ -97,24 +96,26 @@ export class BehaviourFactory{
 
     getBehaviourIds(){
         let behaviourIds = [];
-        this.scene_graph.currentScene.object3D.traverse(child=>{
-            if(child.userData.sceneObject){
-                let behaviours = child.userData.sceneObject.settings.behaviours;
-                for(let i = 0; i < behaviours.length; i++){
-                    if(!~behaviourIds.indexOf(behaviours[i])){
-                        behaviourIds.push(behaviours[i]);
-                    }
+        this.scene_graph.traverse(this.scene_graph.currentScene,child=>{
+            let behaviours = child.settings.behaviours;
+            for(let i = 0; i < behaviours.length; i++){
+                if(!~behaviourIds.indexOf(behaviours[i])){
+                    behaviourIds.push(behaviours[i]);
                 }
             }
         });
         return behaviourIds;
     }
 
+    awakePrefabBehaviours(prefabObject){
+        this.scene_graph.traverse(prefabObject,child=>{
+            this.addBehaviours(child,child.object3D,prefabObject);
+        });
+    }
+
     awakeBehaviours(){
-        this.scene_graph.currentScene.object3D.traverse(child=>{
-            if(child.userData.sceneObject){
-                this.scene_graph.behaviourFactory.addBehaviours(child.userData.sceneObject,child);
-            }
+        this.scene_graph.traverse(this.scene_graph.currentScene,child=>{
+            this.addBehaviours(child,child.object3D);
         });
     }
 
@@ -149,9 +150,9 @@ export class BehaviourFactory{
         }
     }
 
-    resetBehaviour(behaviours_id){
+    resetBehaviour(behaviours_id,prefabObject){
 
-        let behaviourToUpdate = this.scene_graph.currentScene.behaviours[behaviours_id];
+        let behaviourToUpdate = (prefabObject?prefabObject:this.scene_graph.currentScene).behaviours[behaviours_id];
         this.scene_graph.currentScene.object3D.traverse(child=>{
             if(child.userData.sceneObject&&child.__behaviourList){
                 for(let i = 0; i < child.__behaviourList.length; i++){
@@ -185,9 +186,9 @@ export class BehaviourFactory{
         }
     }
 
-    addBehaviours(child,object){
+    addBehaviours(child,object,prefabObject){
         for(let i = 0; i < child.settings.behaviours.length; i++){
-            let behaviour = this.scene_graph.currentScene.behaviours[child.settings.behaviours[i]];
+            let behaviour = (prefabObject?prefabObject:this.scene_graph.currentScene).behaviours[child.settings.behaviours[i]];
             this.addBehaviour(behaviour,object);
         }
     }

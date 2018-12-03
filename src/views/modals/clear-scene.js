@@ -19,12 +19,12 @@ export class ClearSceneModal{
             .then(contents=>this.context.content.popup.setContent(contents[0]))
             .then(()=>{
                 let popupEl = document.querySelector('#clearScene').querySelector('.singleButton');
-                document.querySelector('.right-button').addEventListener('click',()=>{
+                document.querySelector('.right-button').addEventListener('mousedown',()=>{
                     popupEl.close();
                     this.context.sceneGraph.clearScene();
                     this.context.itemView.open();
                 });
-                document.querySelector('.left-button').addEventListener('click',()=>{
+                document.querySelector('.left-button').addEventListener('mousedown',()=>{
                     popupEl.close();
                 });
             });

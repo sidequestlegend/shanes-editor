@@ -5,7 +5,9 @@ import {SceneListView} from "./views/scene-list-view";
 import {ItemView} from "./views/item-view";
 import './components/gizmo';
 import './components/display-box';
+import './components/expanse-portal';
 import './components/editor';
+import './modules/fbx-loader';
 import {PopupView} from "./views/popup-view";
 import {Namer} from "./modules/namer";
 import {FriendlyNames} from "./modules/friendly-names";
@@ -39,29 +41,40 @@ import {BehaviourView} from "./views/behaviour-view";
 import {RemoveObjectModal} from "./views/modals/remove-object";
 import {ImportBehavioursModal} from "./views/modals/import-behaviours";
 import {AddPrefabList} from "./views/modals/add-prefab-list";
+import {LightSettingsAmbient} from "./views/modals/light-settings-ambient";
+import {LightSettingsPoint} from "./views/modals/light-settings-point";
+import {LightSettingsDirectional} from "./views/modals/light-settings-directional";
+import {LightSettingsHemisphere} from "./views/modals/light-settings-hemisphere";
+import {LightSettingsRectArea} from "./views/modals/light-settings-rectarea";
+import {LightSettingsSpot} from "./views/modals/light-settings-spot";
+import {CustomModal} from "./views/modals/custom-model";
+import {PhysicsThree} from "./modules/scene-graph/physics-three";
+import {PhysicsView} from "./views/physics-view";
+import {PhysicsShapeTypeModal} from "./views/modals/physics-shape";
+import {PhysicsShapeSettingsModal} from "./views/modals/physics-shape-settings";
+import {Models} from "./modules/models";
+import {ModelSettings} from "./views/modals/3d-model-settings";
+import {EditModelSettings} from "./views/modals/edit-model-settings";
+import {SpriteModalSettings} from "./views/modals/sprite-modal";
+import {PortalModal} from "./views/modals/portal-modal";
 
 export class Editor{
     constructor(context,rootUrl){
         this.context = context;
-        //this.isDev = !!localStorage.getItem('isDev');
-        this.rootUrl = rootUrl;//this.isDev?'http://localhost:47000/':'https://cdn.theexpanse.app/';
-        //this.rootUrl = 'https://cdn.theexpanse.app/';
-        //this.session = new Session(this);
+        this.rootUrl = rootUrl;
+        this.setupSceneEl();
         this.content = new Content(this);
         this.friendly_names = new FriendlyNames();
         this.namer = new Namer();
+        this.physics = new PhysicsThree(this);
         this.sceneGraph = new SceneGraph(this);
         this.breadCrumbs = new BreadCrumbs(this);
+        this.models = new Models(this);
         this.setupViews();
         this.setupModals();
-        this.sceneEl = document.querySelector('a-scene');
-        this.sceneEl.addEventListener('modal-closed',()=>{
-            this.content.popup.components['ui-scroll-pane'].setContent('');
-        });
-        new PreloadTemplates(this).preload();
-        this.sceneEl.context = this;
         this.setupPopupNavigation();
         this.setupTransformOptions();
+        new PreloadTemplates(this).preload();
 
         this.showAlphaMap = new THREE.TextureLoader().load('https://cdn.theexpanse.app/images/nav-alpha.jpg');
         this.hideAlphaMap = new THREE.TextureLoader().load('https://cdn.theexpanse.app/images/nav-alpha-hide.jpg');
@@ -71,9 +84,19 @@ export class Editor{
         this.displayBox = document.getElementById('displayBox').components['display-box'];
         this.displayBox.hide();
         this.sceneEl.addEventListener('transform-update',()=>{
-            if(this.transformUpdate)this.transformUpdate();
+            if(this.transformUpdate){
+                this.transformUpdate();
+            }
         });
-        document.getElementById('topTitle').addEventListener('mousedown',()=>{
+        let saveScene = document.getElementById('saveScene');
+        saveScene.setAttribute('ui-modal','modal:#modalRenderer;main:#mainRenderer');
+        saveScene.addEventListener('mousedown',()=>{
+            this.createSceneModal.open(this.sceneGraph.currentScene.metadata.scenes_id,this.sceneGraph.currentScene.metadata.name);
+        });
+        document.getElementById('backToScenes').addEventListener('mousedown',()=>{
+            this.sceneList.open(this.sceneList.scenes);
+        });
+        document.getElementById('currentScene').addEventListener('mousedown',()=>{
             this.itemView.open();
         });
         this.precision = 1;
@@ -93,6 +116,29 @@ export class Editor{
             }
             popupPrecision.components["ui-toast"].data.toastEl.setAttribute('text-value','Precision: '+this.precision)
         });
+        this.gizmoEl = document.getElementById('gizmos');
+        this.gizmoEl.addEventListener('stop-gizmo',()=>{
+            this.currentObject.settings.state.transform_updated = true;
+            this.sceneGraph.sync();
+        });
+    }
+    changeTopButtons(inScene){
+        if(inScene){
+            document.getElementById('currentScene').setAttribute('scale','0.00001 0.00001 0.00001');
+            document.getElementById('backToScenes').setAttribute('scale','1 1 1');
+            document.getElementById('saveScene').setAttribute('scale','1 1 1');
+        }else{
+            if(this.sceneGraph.hasScene){
+                document.getElementById('currentScene').setAttribute('scale','1 1 1');
+            }
+            document.getElementById('backToScenes').setAttribute('scale','0.00001 0.00001 0.00001');
+            document.getElementById('saveScene').setAttribute('scale','0.00001 0.00001 0.00001');
+        }
+    }
+    setupSceneEl(){
+        this.sceneEl = document.querySelector('a-scene');
+        this.sceneEl.renderer.shadowMap.enabled = true;
+        this.sceneEl.context = this;
     }
     setupPopupNavigation(){
         document.getElementById('backButton').addEventListener('mousedown',()=>this.popupBack());
@@ -120,6 +166,7 @@ export class Editor{
     setupViews(){
         this.sceneList = new SceneListView(this);
         this.itemView = new ItemView(this);
+        this.physicsView = new PhysicsView(this);
         this.behaviourView = new BehaviourView(this);
         this.popupView = new PopupView(this);
         this.viewUtils = new ViewUtils(this);
@@ -140,6 +187,7 @@ export class Editor{
         this.behavioursModal = new BehavioursModal(this);
         this.removeObjectModal = new RemoveObjectModal(this);
         this.importBehavioursModal = new ImportBehavioursModal(this);
+        this.customModal = new CustomModal(this);
 
         this.transformModal = new TransformModal(this);
 
@@ -147,7 +195,7 @@ export class Editor{
         this.materialSettingsModal = new MaterialSettingsModal(this);
         this.mapSettingsModal = new MapSettingsModal(this);
         this.repeatSettingsModal = new RepeatSettingsModal(this);
-
+        this.portalModal = new PortalModal(this);
         this.loadTextureModal = new LoadTextureModal(this);
 
         this.geometryTypeModal = new GeometryTypeModal(this);
@@ -157,9 +205,22 @@ export class Editor{
         this.addPrefabList = new AddPrefabList(this);
 
         this.createSceneModal = new CreateSceneModal(this);
+        this.modelSettings = new ModelSettings(this);
+        this.editModelSettings = new EditModelSettings(this);
+        this.spriteModalSettings = new SpriteModalSettings(this);
+        this.lightSettingsAmbient = new LightSettingsAmbient(this);
+        this.lightSettingsPoint = new LightSettingsPoint(this);
+        this.lightSettingsDirectional = new LightSettingsDirectional(this);
+        this.lightSettingsHemisphere = new LightSettingsHemisphere(this);
+        this.lightSettingsRectArea = new LightSettingsRectArea(this);
+        this.lightSettingsSpot = new LightSettingsSpot(this);
+        this.physicsShapeTypeModal = new PhysicsShapeTypeModal(this);
+        this.physicsShapeSettingsModal = new PhysicsShapeSettingsModal(this);
 
+        this.sceneEl.addEventListener('modal-closed',()=>{
+            this.content.popup.components['ui-scroll-pane'].setContent('');
+        });
     }
-
     setupTransformOptions(){
         let gizmos = document.getElementById('gizmos');
         document.getElementById('positionButton').addEventListener('mousedown',()=>{

@@ -12,10 +12,9 @@ export class ObjectFactory{
     changeGeometry(type){
         // Change the type of the geometry
         let isPrimitive = this.sceneGraph.context.currentObject.settings.type==="Primitive";
-        let newGeometry = this.geometryFactory[isPrimitive?"geometrySettingsWithDefaults":"parametricSettingsWithDefaults"]
-        (isPrimitive?{type:type}:{sub_type:type});
-        this.sceneGraph.context.currentObject.settings.geometry = newGeometry;
-            ;
+        this.sceneGraph.context.currentObject.settings.geometry =
+            this.geometryFactory[isPrimitive?"geometrySettingsWithDefaults":"parametricSettingsWithDefaults"]
+                (isPrimitive?{type:type}:{sub_type:type});
         if(isPrimitive){
             this.sceneGraph.context.currentObject.settings.geometry.type = type;
         }else{
@@ -53,14 +52,24 @@ export class ObjectFactory{
                 settings.tra_settings||{},
                 settings.name
             );
+        if(settings.type==="Sprite"){
+            userData.material.rotation = settings.mat_settings.rotation;
+            userData.material.fog = settings.mat_settings.fog;
+            userData.material.lights = settings.mat_settings.lights;
+        }
+        if(settings.portal){
+            userData.portal = settings.portal;
+        }
+        userData.disable_animations = settings.disable_animations||false;
+        userData.preserve_scale = settings.preserve_scale||false;
+        if(settings.prefab)userData.prefab = settings.prefab;
         if(settings.url)userData.url = settings.url;
         if(settings.mtl_url){
             userData.mtl_url = settings.mtl_url;
             userData.mtl_path = settings.mtl_path;
         }
-        if(settings.aframeCode){
-            userData.aframeCode = settings.aframeCode;
-        }
+        if(settings.aframeCode)userData.aframeCode = settings.aframeCode;
+        if(settings.type==="Light")userData.light = settings.settings;
         // Set the added flag to propagate this change to the sync system
         userData.state.added = true;
         return userData;
@@ -93,12 +102,25 @@ export class ObjectFactory{
                     z:tra_settings&&tra_settings.scale?tra_settings.scale.z||1:1
                 }
             },
+            mouseOn:false,
             behaviours:[],
+            physics:{
+                enabled:false,
+                walkOnEnabled:false,
+                settings:{
+                    mass:0,
+                    friction:0,
+                    restitution:0
+                },
+                shapes:[]
+            },
             hide_on_mobile:false,
             hide_on_desktop:false,
             preserve_scale:false,
+            disable_animations:false,
             geometry:geo_settings||{},
             material:this.materialFactory.materialSettingsWithDefaults(mat_settings||{}),
+            light:{},
             state:{
                 added:false,
                 updated:false,
@@ -126,7 +148,6 @@ export class ObjectFactory{
         });
         return totals;
     }
-
     addStats(object,child){
         // Add total stats to an object if not already set.
         if(!child.settings.stats)
@@ -151,12 +172,33 @@ export class ObjectFactory{
             );
         }
     }
+    spriteDefaults(settings){
+        return {
+            color:settings.color||'#ffffff',
+            fog:settings.fog||false,
+            lights:settings.lights||false,
+            rotation:settings.rotation||0,
+            map:settings.map||""
+        }
+    }
+    portalDefaults(settings){
+        return {
+            image:settings.image||'https://cdn.theexpanse.app/images/portal-default.jpg',
+            spaces_id:settings.spaces_id||1,
+        }
+    }
+
+    makePortal(settings){
+        let portalDefaults = this.portalDefaults(settings.portal);
+        //#4db6ac
+        settings.aframeCode = '<a-entity expanse-portal="image:'+portalDefaults.image+';title:'+settings.name+';backgroundColor:#000000;spaces_id:'+portalDefaults.spaces_id+'"></a-entity>';
+    }
     resolveObject(object,scene,child,resolve){
         // Resolve a newly created object - used to calculate the loading percentage and
         // some common processing tasks.
         this.transform(object,child);
         // TODO: hook into preserve_scale property to decide if this object should be centered and scaled to fit inside 1,1,1
-        this.scaleAndCenterObject(scene);
+        if(!child.settings.preserve_scale)this.scaleAndCenterObject(scene);
         object.add( scene );
         this.addStats(object,child);
         setTimeout(()=>resolve(object),50);
@@ -172,6 +214,7 @@ export class ObjectFactory{
                     this.materialFactory.makeMaterial(settings.material)
                         .then(material=>{
                             object = new THREE.Mesh(geometry,material);
+                            object.name = "Primitive";
                             this.transform(object,child);
                             this.addStats(object,child);
                             object.castShadow = settings.shadow.cast;
@@ -186,6 +229,7 @@ export class ObjectFactory{
                     this.materialFactory.makeMaterial(settings.material)
                         .then(material=>{
                             object = new THREE.Mesh(geometry,material);
+                            object.name = "Parametric";
                             this.transform(object,child);
                             this.addStats(object,child);
                             object.castShadow = settings.shadow.cast;
@@ -200,18 +244,33 @@ export class ObjectFactory{
                         child.settings.transform.position.x,
                         child.settings.transform.position.y,
                         child.settings.transform.position.z);
+                    object.userData.sceneObject = child;
                     object.userData.sceneObject.stats = {points:0,pixels:0};
                     resolve(object);
                     break;
                 case "Object3D":
-                    // Create a group
                     object = new THREE.Object3D();
                     object.name = 'Group';
                     this.transform(object,child);
                     object.userData.sceneObject.stats = {points:0,pixels:0};
                     resolve(object);
                     break;
+                case "Sprite":
+                    let defaults = this.spriteDefaults(settings.material);
+                    if(defaults.map){
+                        defaults.map = new THREE.TextureLoader().load(defaults.map);
+                    }else{
+                        delete defaults.map;
+                    }
+                    object = new THREE.Sprite(new THREE.SpriteMaterial(defaults));
+                    this.transform(object,child);
+                    resolve(object);
+                    break;
+                case "Portal":
                 case "Aframe":
+                    if(settings.type==="Portal"){
+                        this.makePortal(child.settings);
+                    }
                     object = new THREE.Object3D();
                     this.addAframeItem(child)
                         .then(aobject=>{
@@ -225,34 +284,53 @@ export class ObjectFactory{
                         })
                         .then(resolve);
                     break;
+                case "Prefab":
+                    object = new THREE.Object3D();
+                    fetch(this.sceneGraph.context.rootUrl+settings.prefab.url)
+                        .then(response=>response.json())
+                        .then(_prefab=>{
+                            let promises = this.sceneGraph.serialiser.deSerialiseScene(_prefab,object);
+                            this.sceneGraph.behaviourFactory.awakePrefabBehaviours(_prefab);
+                            this.transform(object,child);
+                            Promise.all(promises)
+                                .then(()=>resolve(object));
+                        });
+                    break;
+                case "Avatar":
+                case "Kenney":
+                case "Sketchfab":
                 case "Poly":
                 case "Custom":
                     // Load a 3d model from any source.
                     object = new THREE.Object3D();
+                    child.object3D = object;
+                    let loader;
                     object.name = settings.type;
                     switch(settings.geometry.type){
                         case "GLTF2":
-                            promise = Promise.resolve(settings.url);
-                            // google poly changed the models cdn breaking all old linsk. this is probably not needed any more
-                            // but leaving here as a reference when i get to loading google poly models again.
-                            // if(settings.type==="Poly"){
-                            //     promise = new Promise(function(r){
-                            //         new THREE.FileLoader().load('poly-proxy/'+encodeURIComponent(settings.url),function(url) {
-                            //             r(url);
-                            //         });
-                            //     })
-                            // }
-                            promise.then((url)=>{
-                                let loader = new THREE.GLTFLoader();
-                                loader.setCrossOrigin( true );
-                                loader.load( url, ( response )=> this.resolveObject(object,response.scene,child,resolve));
+                            loader = new THREE.GLTFLoader();
+                            loader.setCrossOrigin( true );
+                            loader.load( settings.url, ( response )=>{
+                                if(!settings.disable_animations)this.startAnimations(response,response.scene,object);
+                                this.resolveObject(object,response.scene,child,resolve)
                             });
                             break;
                         case "DAE":
                             let url = settings.url;
                             loader = new THREE.ColladaLoader();
                             loader.setCrossOrigin( true );
-                            loader.load(url, response=> this.resolveObject(object,response.scene,child,resolve));
+                            loader.load(url, response=> {
+                                if(!settings.disable_animations)this.startAnimations(response,response.scene,object);
+                                this.resolveObject(object,response.scene,child,resolve)
+                            });
+                            break;
+                        case "FBX":
+                            loader = new THREE.FBXLoader();
+                            loader.setCrossOrigin( true );
+                            loader.load( settings.url, ( response )=>{
+                                if(!settings.disable_animations)this.startAnimations(response,response,object);
+                                this.resolveObject(object,response,child,resolve)
+                            });
                             break;
                         case "GLTF":
                             loader = new THREE.LegacyGLTFLoader();
@@ -260,31 +338,27 @@ export class ObjectFactory{
                             loader.load( settings.url, ( response )=>this.resolveObject(object,response.scene,child,resolve));
                             break;
                         case "OBJ":
-                            if(settings.url.substr(0,7)==="models/"){
-                                settings.url = this.sceneGraph.context.rootUrl+settings.url;
-                                settings.mtl_url = this.sceneGraph.context.rootUrl+settings.mtl_url;
-                                settings.mtl_path = this.sceneGraph.context.rootUrl+settings.mtl_path;
-                            }
-                            promise = Promise.resolve({obj:settings.url,mtl:settings.mtl_url,mtl_path:settings.mtl_path});
-                            if(settings.type==="Poly"){
-                                promise = Promise.all([new Promise(function(r){
-                                    new THREE.FileLoader().load('poly-proxy/'+encodeURIComponent(settings.url),function(url) {
-                                        r(url);
-                                    });
-                                }),
-                                    new Promise(function(r){
-                                        new THREE.FileLoader().load('poly-proxy/'+encodeURIComponent(settings.mtl_url),function(url) {
-                                            r(url);
-                                        });
-                                    })])
-                                    .then(function(urls){
-                                        let relative_path = settings.url.replace(settings.mtl_path,"");
-                                        return {obj:urls[0],mtl:urls[1],mtl_path:urls[0].slice( 0, urls[0].indexOf( relative_path ) )}
-                                    });
-                            }
+                            // promise = Promise.resolve({obj:settings.url,mtl:settings.mtl_url,mtl_path:settings.mtl_path});
+                            // if(settings.type==="Poly"){
+                            //     promise = Promise.all([new Promise(function(r){
+                            //         new THREE.FileLoader().load('poly-proxy/'+encodeURIComponent(settings.url),function(url) {
+                            //             r(url);
+                            //         });
+                            //     }),
+                            //         new Promise(function(r){
+                            //             new THREE.FileLoader().load('poly-proxy/'+encodeURIComponent(settings.mtl_url),function(url) {
+                            //                 r(url);
+                            //             });
+                            //         })])
+                            //         .then(function(urls){
+                            //             let relative_path = settings.url.replace(settings.mtl_path,"");
+                            //             return {obj:urls[0],mtl:urls[1],mtl_path:urls[0].slice( 0, urls[0].indexOf( relative_path ) )}
+                            //         });
+                            // }
+                            let urls = {obj:settings.url,mtl:settings.mtl_url,mtl_path:settings.mtl_path};
                             loader = new THREE.MTLLoader();
                             loader.setCrossOrigin( true );
-                            promise.then(urls=>{
+                            //promise.then(urls=>{
                                 loader.setTexturePath( urls.mtl_path );
                                 loader.load( urls.mtl,  materials => {
                                     materials.preload();
@@ -292,12 +366,21 @@ export class ObjectFactory{
                                     loader.setMaterials(materials);
                                     loader.load(urls.obj, obj=>this.resolveObject(object,obj,child,resolve));
                                 });
-                            });
+                            //});
                             break;
                     }
                     break;
             }
         });
+    }
+    startAnimations(response,scene,object){
+        if(response.animations&&response.animations.length){
+            object.mixer = new THREE.AnimationMixer( scene );
+            this.sceneGraph.mixers.push( object.mixer );
+
+            let action = object.mixer.clipAction( response.animations[ 0 ] );
+            action.play();
+        }
     }
     getScaledVector(sizeH){
         if(sizeH.x>=sizeH.y&&sizeH.x>=sizeH.z){
@@ -324,9 +407,13 @@ export class ObjectFactory{
         let box = new THREE.Box3().setFromObject( object );
         // get the size of the bounding box of the house
         let sizeH = box.getSize();
+        if(isNaN(sizeH.x)){
+            sizeH = new THREE.Vector3(1,1,1);
+        }
         // get the size of the bounding box of the obj
         let sizeO = this.getScaledVector(sizeH);
         let ratio = sizeH.divide( sizeO );
+
         object.scale.set( 1/ratio.x, 1/ratio.y, 1/ratio.z );
         let offset = box.getCenter().clone().negate();
         object.position.copy(new THREE.Vector3(offset.x/ratio.x,offset.y/ratio.y,offset.z/ratio.z));
@@ -351,9 +438,10 @@ export class ObjectFactory{
 
     resetAframeContainerItem(uuid,aframeItem){
         let object;
-        this.sceneGraph.container.traverse(child=>{
-            if(child.userData.sceneObject&&child.userData.sceneObject.settings.uuid === uuid){
-                object = child.userData.sceneObject;
+
+        this.sceneGraph.traverse(this.sceneGraph.currentScene,child=>{
+            if(child.settings.uuid === uuid){
+                object = child;
             }
         });
         if(object){
@@ -371,6 +459,7 @@ export class ObjectFactory{
                 .then(aobject=>{
                     this.scaleAndCenterObject(aobject);
                     this.transform(object.object3D,object);
+                    console.log(aobject);
                     object.object3D.add(aobject);
                     this.sceneGraph.context.displayBox.setObject(object.object3D);
                 });
@@ -384,7 +473,6 @@ export class ObjectFactory{
                 UI.utils.clearObject(child.object3D);
             }
             this.sceneGraph.aframeContainer.removeChild(child);
-            this.sceneGraph.aframeContainer.firstChild = null;
         }
     }
 }

@@ -11,6 +11,7 @@ export class Serialiser{
         promises = promises || [];
         if(!scene_current.settings.uuid)scene_current.settings.uuid = THREE.Math.generateUUID();
         scene_current.object3D = current;
+        this.setupEmitOnSceneObject(scene_current);
         current.userData.sceneObject = scene_current;
         for(let i = 0; i< scene_current.children.length;i++){
             promises.push(Promise.resolve().then(()=>{
@@ -55,5 +56,32 @@ export class Serialiser{
         output.behaviours = behaviours;
         output.version = "2.0";
         return output;
+    }
+    setupEmitOnSceneObject(scene){
+        scene.eventListeners = {};
+        scene.addEventListener = (event,callback)=>{
+            if(typeof callback === "function"){
+                scene.eventListeners[event] = scene.eventListeners[event]||[];
+                scene.eventListeners[event].push(callback);
+            }
+        };
+        scene.removeEventListener = (event,callback)=>{
+            if(scene.eventListeners[event]){
+                let index = scene.eventListeners[event].indexOf(callback);
+                if(index>-1){
+                    scene.eventListeners[event].splice(index,1);
+                }
+            }
+        };
+        scene.removeAllEventListeners = (event)=>{
+            delete scene.eventListeners[event];
+        };
+        scene.emit = (event,data)=>{
+            if(scene.eventListeners[event]){
+                for(let i = 0; i < scene.eventListeners[event].length; i ++){
+                    scene.eventListeners[event][i](data);
+                }
+            }
+        }
     }
 }

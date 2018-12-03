@@ -47,7 +47,10 @@ export class ObjectMaterial {
                             this.uiRenderer.modal.close();
                             this.context.showObject();
                             this.context.displayBox.setObject(child.object3D);
-                            setTimeout(()=>this.context.itemView.open(child),250);
+                            setTimeout(()=>{
+                                this.context.itemView.open(child);
+                                this.context.sceneGraph.sync();
+                            },250);
                         });
                 });
             });

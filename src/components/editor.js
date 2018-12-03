@@ -82,7 +82,7 @@ module.exports = AFRAME.registerComponent('editor', {
         let mainRenderer = document.createElement('a-ui-renderer');
         mainRenderer.id = 'mainRenderer';
         mainRenderer.setAttribute('ui-panel','#uiPanel');
-        mainRenderer.setAttribute('init-delay','15000');
+        mainRenderer.setAttribute('init-delay',5000);
 
         let mainEditor = document.createElement('a-entity');
         mainEditor.id = 'editor';
@@ -121,12 +121,19 @@ module.exports = AFRAME.registerComponent('editor', {
         let topMenu = document.createElement('a-entity');
         topMenu.id = 'topMenu';
 
-        topMenu.appendChild(this.makeIcon('backToScenes','0.535 0.885 0.0001','intersectable','#iconBack',false,false,true));
-        topMenu.appendChild(this.makeIcon('saveScene','0.76 0.885 0.0001','intersectable','#iconSave',false,false,true));
-        topMenu.appendChild(this.makeIcon('precisionButton','0.985 0.885 0.0001','intersectable','#precisionIcon','toastEl:#toastMessage;message:here!',false,true));
-        topMenu.appendChild(this.makeIcon('userManagement','1.21 0.885 0.0001','intersectable','#usersIcon','toastEl:#toastMessage;message:Coming soon!',false,true));
-        topMenu.appendChild(this.makeIcon('marketSection','1.435 0.885 0.0001','intersectable','#marketIcon','toastEl:#toastMessage;message:Coming soon!',false,true));
-        topMenu.appendChild(this.makeIcon('helpSection','1.66 0.885 0.0001','intersectable','#helpIcon','toastEl:#toastMessage;message:Coming soon!',false,true));
+        // topMenu.appendChild(this.makeIcon('backToScenes','0.535 0.885 0.0001','intersectable','#iconBack',false,true,true));
+        // topMenu.appendChild(this.makeIcon('currentScene','0.76 0.885 0.0001','intersectable','#iconEdit',false,true,true));
+        // topMenu.appendChild(this.makeIcon('saveScene','0.76 0.885 0.0001','intersectable','#iconSave',false,true,true));
+        // topMenu.appendChild(this.makeIcon('userManagement','0.985 0.885 0.0001','intersectable','#usersIcon','toastEl:#toastMessage;message:Coming soon!',false,true));
+        // topMenu.appendChild(this.makeIcon('precisionButton','1.21 0.885 0.0001','intersectable','#precisionIcon','toastEl:#toastMessage;message:here!',false,true));
+        // topMenu.appendChild(this.makeIcon('marketSection','1.435 0.885 0.0001','intersectable','#marketIcon','toastEl:#toastMessage;message:Coming soon!',false,true));
+        // topMenu.appendChild(this.makeIcon('helpSection','1.66 0.885 0.0001','intersectable','#helpIcon','toastEl:#toastMessage;message:Coming soon!',false,true));
+        // topMenu.appendChild(this.makeIcon('hideEditor','1.885 0.885 0.0001','intersectable','#swapVirtIcon',false,false,true));
+
+        topMenu.appendChild(this.makeIcon('backToScenes','1.21 0.885 0.0001','intersectable','#iconBack',false,true,true));
+        topMenu.appendChild(this.makeIcon('currentScene','1.435 0.885 0.0001','intersectable','#iconEdit',false,true,true));
+        topMenu.appendChild(this.makeIcon('saveScene','1.435 0.885 0.0001','intersectable','#iconSave',false,true,true));
+        topMenu.appendChild(this.makeIcon('precisionButton','1.66 0.885 0.0001','intersectable','#precisionIcon','toastEl:#toastMessage;message:here!',false,true));
         topMenu.appendChild(this.makeIcon('hideEditor','1.885 0.885 0.0001','intersectable','#swapVirtIcon',false,false,true));
 
         mainEditor.appendChild(topMenu);
@@ -164,9 +171,11 @@ module.exports = AFRAME.registerComponent('editor', {
         let modalRenderer = document.createElement('a-ui-renderer');
         modalRenderer.id = 'modalRenderer';
         modalRenderer.setAttribute('ui-panel','#modalPanel');
+        modalRenderer.setAttribute('init-delay',5000);
         this.el.appendChild(modalRenderer);
 
         let modalRenderBacking = document.createElement('a-entity');
+        modalRenderBacking.id = 'modalRenderBacking';
         modalRenderBacking.setAttribute('geometry','primitive:plane;width:4;height:1.9');
         modalRenderBacking.setAttribute('material','side:double;shader:flat;color:#efefef');
         modalRenderBacking.setAttribute('position','0 0 -0.695');

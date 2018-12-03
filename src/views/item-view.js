@@ -3,23 +3,35 @@ export class ItemView {
         this.context = context;
     }
     open(object,page) {
+        this.context.changeTopButtons(true);
         this.context.showLoader();
         this.page = page||0;
         object = object || this.context.sceneGraph.currentScene;
         this.isTop = object === this.context.sceneGraph.currentScene;
+        let editor = document.getElementById('editor');
+        editor.setAttribute('material','color:#ffffff');
+        editor.removeAttribute('physics-helper-update');
+        this.context.physicsView.hideShapeHelpers();
         this.context.breadCrumbs.make(this.context.breadCrumbs.fromObject(object));
-        if(this.isTop){
-            this.context.displayBox.hide();
-        }
         this.isGroup = object.settings.type==="Object3D";
         this.is3dModel = object.settings.type==="Poly"||object.settings.type==="Custom";
         this.isAframe = object.settings.type==="Aframe";
+        this.isLight = object.settings.type==="Light";
+        this.isSprite = object.settings.type==="Sprite";
+        this.isPortal = object.settings.type==="Portal";
+        if(this.isTop){
+            this.context.displayBox.hide();
+            this.context.viewUtils.hideTransformOptions();
+        }else{
+            this.context.viewUtils.showTransformOptions(true,!(this.isLight&&object.settings.geometry.type==="RectAreaLight"),!this.isLight);
+        }
+        if(!this.isLight)this.context.sceneGraph.hideLightHelper();
         this.context.currentObject = object;
         this.uiRenderer = document.getElementById('mainRenderer');
         this.uiRenderer.components['ui-renderer'].pause();
         this.context.content.loadScreen('item-view',[
             'title-section',
-            'light-settings',
+            'shadow-settings',
             'three-number-inputs',
             'object-stats',
             'mobile-response',
@@ -29,7 +41,7 @@ export class ItemView {
         ],true)
             .then(()=>this.hideNotNeeded())
             .then(()=>this.showTransformSettings(object))
-            .then(()=>this.context.viewUtils.title(this.isTop?object.metadata.name:object.settings.name,object.settings.uuid))
+            .then(()=>this.context.viewUtils.title(this.isTop?object.metadata.name:object.settings.name,object))
             .then(()=>this.context.viewUtils.stats(object))
             .then(()=>this.showMaterialAndGeometrySettings())
             .then(()=>this.setupSavePrefab())
@@ -49,8 +61,12 @@ export class ItemView {
             .then(()=>this.setupRemoveObject())
             .then(()=>this.show3dModelSettings())
             .then(()=>this.showAframeSettings())
+            .then(()=>this.showSpriteSettings())
+            .then(()=>this.setupPortalSettings())
             .then(()=>this.setupClearScene())
+            .then(()=>this.setupPhysics())
             .then(()=>this.setupMobileResponse())
+            .then(()=>this.setupShadowSettings())
             .then(()=>this.setupLightSettings())
             .then(()=>{
                 let start = this.page*10;
@@ -98,7 +114,7 @@ export class ItemView {
             editItemTitle.setAttribute('scale',hideScale+' '+hideScale+' '+hideScale);
             saveItemTitle.setAttribute('scale',showScale+' '+showScale+' '+showScale);
         };
-        document.getElementById('editItemTitle').addEventListener('click',()=>{
+        document.getElementById('editItemTitle').addEventListener('mousedown',()=>{
             showHide(1,0.00001);
             itemTitleEdit.value(this.isTop?this.context.currentObject.metadata.name:this.context.currentObject.settings.name);
             let component = itemTitleEdit.components["ui-input-text"];
@@ -106,19 +122,26 @@ export class ItemView {
             setTimeout(()=>itemTitleEdit.focus(),100);
             document.getElementById('rig').components['smooth-wasd-controls'].pause();
         });
-        cancelEditItemTitle.addEventListener('click',()=>showHide(0.00001,1));
-        saveItemTitle.addEventListener('click',()=>{
+        cancelEditItemTitle.addEventListener('mousedown',()=>showHide(0.00001,1));
+        saveItemTitle.addEventListener('mousedown',()=>{
             let value = itemTitleEdit.getValue();
             if(this.isTop){
                 this.context.currentObject.metadata.name = value;
             }else{
                 this.context.currentObject.settings.name = value;
             }
+            if(this.isPortal){
+                this.context.sceneGraph.objectFactory.makePortal(this.context.currentObject.settings);
+                this.context.sceneGraph.objectFactory.resetAframeContainerItem(
+                    this.context.currentObject.settings.uuid,
+                    this.context.currentObject.settings.aframeCode
+                );
+            }
             itemTitle.setAttribute('value',value);
             showHide(0.00001,1);
         });
         document.getElementById('copyUuid')
-            .addEventListener('click',()=>{
+            .addEventListener('mousedown',()=>{
                 UI.utils.copyToClipboard(this.context.currentObject.settings.uuid);
             });
     }
@@ -126,7 +149,7 @@ export class ItemView {
         if(this.isTop)return;
         return this.context.content.compileTemplates('single-item-button',[{
             title:'Remove',
-            description:'remove this object from the scene.',
+            description:'Remove this object from the scene.',
             buttonText:'REMOVE OBJECT',
             buttonColor:'#e57373',
             buttonFontColor:'white',
@@ -141,7 +164,7 @@ export class ItemView {
 
     }
     showMaterialAndGeometrySettings(){
-        if(this.isTop||this.isGroup||this.is3dModel||this.isAframe)return;
+        if(this.isTop||this.isGroup||this.is3dModel||this.isAframe||this.isLight||this.isSprite||this.isPortal)return;
         let isPrimitive = this.context.currentObject.settings.type==="Primitive";
         let material = this.context.currentObject.settings.material;
         let geometry = this.context.currentObject.settings.geometry;
@@ -190,11 +213,46 @@ export class ItemView {
             })
     }
     setupLightSettings(){
-        if(this.isTop||this.isGroup||this.isAframe)return;
-        return this.context.content.compileTemplates('light-settings',[{
-            shadow:this.context.currentObject.shadow
+        if(!this.isLight)return;
+        this.context.sceneGraph.showLightHelper();
+        return this.context.content.compileTemplates('single-item-button',[{
+            title:'Light Settings',
+            description:'Change setting associated with this light.',
+            buttonText:'LIGHT SETTINGS',
+            descriptionHeight:0.21,
         }])
             .then(contents=>this.context.content.addTemplateItem('#lightSettings',contents[0]))
+            .then(()=>{
+                document.querySelector('#lightSettings').querySelector('.singleButton').addEventListener('mousedown',()=>{
+                    switch(this.context.currentObject.settings.geometry.type){
+                        case "AmbientLight":
+                            this.context.lightSettingsAmbient.open(this.context.currentObject.settings.light);
+                            break;
+                        case "PointLight":
+                            this.context.lightSettingsPoint.open(this.context.currentObject.settings.light);
+                            break;
+                        case "HemisphereLight":
+                            this.context.lightSettingsHemisphere.open(this.context.currentObject.settings.light);
+                            break;
+                        case "DirectionalLight":
+                            this.context.lightSettingsDirectional.open(this.context.currentObject.settings.light);
+                            break;
+                        case "RectAreaLight":
+                            this.context.lightSettingsRectArea.open(this.context.currentObject.settings.light);
+                            break;
+                        case "SpotLight":
+                            this.context.lightSettingsSpot.open(this.context.currentObject.settings.light);
+                            break;
+                    }
+                });
+            });
+    }
+    setupShadowSettings(){
+        if(this.isTop||this.isGroup||this.isAframe||this.isLight||this.isSprite||this.isPortal)return;
+        return this.context.content.compileTemplates('shadow-settings',[{
+            shadow:this.context.currentObject.shadow
+        }])
+            .then(contents=>this.context.content.addTemplateItem('#shadowSettings',contents[0]))
             .then(()=>{
                 let shadowCast = document.querySelector('.shadowCast');
                 let shadowReceive = document.querySelector('.shadowReceive');
@@ -219,15 +277,44 @@ export class ItemView {
                 let hideOnMobile = document.querySelector('.hideOnMobile');
                 let hideOnDesktop = document.querySelector('.hideOnDesktop');
                 hideOnMobile.addEventListener('mousedown',()=>{
-                    console.log('ui-switch-change',hideOnMobile.getValue());
                     this.context.currentObject.settings.hide_on_mobile = hideOnMobile.getValue();
                 });
                 hideOnDesktop.addEventListener('mousedown',()=>{
-                    console.log('ui-switch-change',hideOnDesktop.getValue());
                     this.context.currentObject.settings.hide_on_desktop = hideOnDesktop.getValue();
                 });
 
             });
+    }
+    setupPhysics(){
+        return this.context.content.compileTemplates('single-item-button', [{
+            title: 'Physics Settings',
+            description: 'Change physics settings and reate physics shapes on this object.',
+            buttonText: 'PHYSICS SETTINGS',
+            descriptionHeight: 0.21,
+        }])
+            .then(contents => this.context.content.addTemplateItem('#physicsSettings', contents[0]))
+            .then(()=>{
+                let modalButton = document.querySelector('#physicsSettings').querySelector('.singleButton');
+                modalButton.removeAttribute('ui-modal');
+                modalButton.addEventListener('mousedown',()=>{
+                    this.context.physicsView.open();
+                });
+            })
+    }
+    setupPortalSettings(){
+        if(!this.isPortal) return;
+        return this.context.content.compileTemplates('single-item-button', [{
+            title: 'Portal Settings',
+            description: 'Change the image and space for this portal.',
+            buttonText: 'EDIT PORTAL',
+            descriptionHeight: 0.21,
+        }])
+            .then(contents => this.context.content.addTemplateItem('#portalSettings', contents[0]))
+            .then(()=>{
+                document.querySelector('#portalSettings').querySelector('.singleButton').addEventListener('mousedown',()=>{
+                    this.context.portalModal.open(this.context.currentObject.settings.portal,true);
+                });
+            })
     }
     setupClearScene(){
         if(!this.isTop) return;
@@ -261,6 +348,21 @@ export class ItemView {
                 });
             });
     }
+    showSpriteSettings(){
+        if(!this.isSprite) return;
+        return this.context.content.compileTemplates('single-item-button', [{
+            title: 'Sprite Settings',
+            description: 'Adjust the material settings for this sprite.',
+            buttonText: 'SPRITE SETTINGS',
+            descriptionHeight: 0.21,
+        }])
+            .then(contents => this.context.content.addTemplateItem('#spriteSettings', contents[0]))
+            .then(()=>{
+                document.querySelector('#spriteSettings')
+                    .querySelector('.singleButton')
+                    .addEventListener('mousedown',()=>this.context.spriteModalSettings.open());
+            });
+    }
     show3dModelSettings(){
         if(!this.is3dModel) return;
         return this.context.content.compileTemplates('single-item-button', [{
@@ -269,7 +371,12 @@ export class ItemView {
             buttonText: 'MODEL SETTINGS',
             descriptionHeight: 0.21,
         }])
-            .then(contents => this.context.content.addTemplateItem('#modelSettings', contents[0]));
+            .then(contents => this.context.content.addTemplateItem('#modelSettings', contents[0]))
+            .then(()=>{
+                document.querySelector('#modelSettings')
+                    .querySelector('.singleButton')
+                    .addEventListener('mousedown',()=>this.context.editModelSettings.open());
+            });
     }
     showAframeSettings(){
         if(!this.isAframe) return;
@@ -301,13 +408,13 @@ export class ItemView {
     setupChildren(){
         let prev = document.querySelector('.prev-button-children');
         if(prev){
-            prev.addEventListener('click',()=>{
+            prev.addEventListener('mousedown',()=>{
                 this.open(this.context.currentObject,--this.page);
             });
         }
         let next = document.querySelector('.next-button-children')
         if(next){
-            next.addEventListener('click',()=>{
+            next.addEventListener('mousedown',()=>{
                 this.open(this.context.currentObject,++this.page);
             });
         }
@@ -323,7 +430,13 @@ export class ItemView {
                     }
                 }
                 if(child){
-                    this.context.displayBox.setObject(child.object3D);
+                    if(child.settings.type==="Light"){
+                        if(~["DirectionalLight","SpotLight","RectAreaLight","PointLight"].indexOf(this.context.currentObject.settings.geometry.type)){
+                            this.context.displayBox.setObject(child.object3D);
+                        }
+                    }else{
+                        this.context.displayBox.setObject(child.object3D);
+                    }
                     this.context.itemView.open(child);
                 }
             })
@@ -331,70 +444,88 @@ export class ItemView {
     }
     hideNotNeeded(){
         if(this.isTop){
-            let transformSection = document.getElementById('transformSettings');
-            transformSection.parentElement.removeChild(transformSection);
-            let geometrySettings = document.getElementById('geometrySettings');
-            geometrySettings.parentElement.removeChild(geometrySettings);
-            let materialSettings = document.getElementById('materialSettings');
-            materialSettings.parentElement.removeChild(materialSettings);
-            let mobileSettings = document.getElementById('mobileSettings');
-            mobileSettings.parentElement.removeChild(mobileSettings);
-            let modelSettings = document.getElementById('modelSettings');
-            modelSettings.parentElement.removeChild(modelSettings);
-            let sceneSettings = document.getElementById('sceneSettings');
-            sceneSettings.parentElement.removeChild(sceneSettings);
-            let aframeSettings = document.getElementById('aframeSettings');
-            aframeSettings.parentElement.removeChild(aframeSettings);
-            let lightSettings = document.getElementById('lightSettings');
-            lightSettings.parentElement.removeChild(lightSettings);
+            this.removeSection('transformSettings');
+            this.removeSection('sceneSettings');
+            this.removeSection('geometrySettings');
+            this.removeSection('materialSettings');
+            this.removeSection('mobileSettings');
+            this.removeSection('modelSettings');
+            this.removeSection('aframeSettings');
+            this.removeSection('lightSettings');
+            this.removeSection('shadowSettings');
+            this.removeSection('spriteSettings');
+            this.removeSection('portalSettings');
         }else if(this.isGroup){
-            let clearScene = document.getElementById('clearScene');
-            clearScene.parentElement.removeChild(clearScene);
-            let transformSection = document.getElementById('sceneSettings');
-            transformSection.parentElement.removeChild(transformSection);
-            let geometrySettings = document.getElementById('geometrySettings');
-            geometrySettings.parentElement.removeChild(geometrySettings);
-            let materialSettings = document.getElementById('materialSettings');
-            materialSettings.parentElement.removeChild(materialSettings);
-            let modelSettings = document.getElementById('modelSettings');
-            modelSettings.parentElement.removeChild(modelSettings);
-            let aframeSettings = document.getElementById('aframeSettings');
-            aframeSettings.parentElement.removeChild(aframeSettings);
-            let lightSettings = document.getElementById('lightSettings');
-            lightSettings.parentElement.removeChild(lightSettings);
+            this.removeSection('clearScene');
+            this.removeSection('sceneSettings');
+            this.removeSection('geometrySettings');
+            this.removeSection('materialSettings');
+            this.removeSection('modelSettings');
+            this.removeSection('aframeSettings');
+            this.removeSection('lightSettings');
+            this.removeSection('shadowSettings');
+            this.removeSection('spriteSettings');
+            this.removeSection('portalSettings');
         }else if(this.isAframe){
-            let clearScene = document.getElementById('clearScene');
-            clearScene.parentElement.removeChild(clearScene);
-            let transformSection = document.getElementById('sceneSettings');
-            transformSection.parentElement.removeChild(transformSection);
-            let geometrySettings = document.getElementById('geometrySettings');
-            geometrySettings.parentElement.removeChild(geometrySettings);
-            let materialSettings = document.getElementById('materialSettings');
-            materialSettings.parentElement.removeChild(materialSettings);
-            let modelSettings = document.getElementById('modelSettings');
-            modelSettings.parentElement.removeChild(modelSettings);
-            let lightSettings = document.getElementById('lightSettings');
-            lightSettings.parentElement.removeChild(lightSettings);
+            this.removeSection('clearScene');
+            this.removeSection('sceneSettings');
+            this.removeSection('geometrySettings');
+            this.removeSection('materialSettings');
+            this.removeSection('modelSettings');
+            this.removeSection('shadowSettings');
+            this.removeSection('spriteSettings');
+            this.removeSection('portalSettings');
+        }else if(this.isLight){
+            this.removeSection('clearScene');
+            this.removeSection('sceneSettings');
+            this.removeSection('geometrySettings');
+            this.removeSection('materialSettings');
+            this.removeSection('modelSettings');
+            this.removeSection('aframeSettings');
+            this.removeSection('shadowSettings');
+            this.removeSection('spriteSettings');
+            this.removeSection('portalSettings');
         }else if(this.is3dModel){
-            let clearScene = document.getElementById('clearScene');
-            clearScene.parentElement.removeChild(clearScene);
-            let transformSection = document.getElementById('sceneSettings');
-            transformSection.parentElement.removeChild(transformSection);
-            let geometrySettings = document.getElementById('geometrySettings');
-            geometrySettings.parentElement.removeChild(geometrySettings);
-            let materialSettings = document.getElementById('materialSettings');
-            materialSettings.parentElement.removeChild(materialSettings);
-            let aframeSettings = document.getElementById('aframeSettings');
-            aframeSettings.parentElement.removeChild(aframeSettings);
+            this.removeSection('clearScene');
+            this.removeSection('sceneSettings');
+            this.removeSection('geometrySettings');
+            this.removeSection('materialSettings');
+            this.removeSection('aframeSettings');
+            this.removeSection('lightSettings');
+            this.removeSection('spriteSettings');
+            this.removeSection('portalSettings');
+        }else if(this.isSprite){
+            this.removeSection('clearScene');
+            this.removeSection('sceneSettings');
+            this.removeSection('geometrySettings');
+            this.removeSection('materialSettings');
+            this.removeSection('modelSettings');
+            this.removeSection('aframeSettings');
+            this.removeSection('shadowSettings');
+            this.removeSection('lightSettings');
+            this.removeSection('portalSettings');
+        }else if(this.isPortal){
+            this.removeSection('clearScene');
+            this.removeSection('sceneSettings');
+            this.removeSection('geometrySettings');
+            this.removeSection('materialSettings');
+            this.removeSection('modelSettings');
+            this.removeSection('aframeSettings');
+            this.removeSection('shadowSettings');
+            this.removeSection('lightSettings');
+            this.removeSection('spriteSettings');
         }else{
-            let clearScene = document.getElementById('clearScene');
-            clearScene.parentElement.removeChild(clearScene);
-            let transformSection = document.getElementById('sceneSettings');
-            transformSection.parentElement.removeChild(transformSection);
-            let modelSettings = document.getElementById('modelSettings');
-            modelSettings.parentElement.removeChild(modelSettings);
-            let aframeSettings = document.getElementById('aframeSettings');
-            aframeSettings.parentElement.removeChild(aframeSettings);
+            this.removeSection('clearScene');
+            this.removeSection('sceneSettings');
+            this.removeSection('modelSettings');
+            this.removeSection('aframeSettings');
+            this.removeSection('lightSettings');
+            this.removeSection('spriteSettings');
+            this.removeSection('portalSettings');
         }
+    }
+    removeSection(id){
+        let item = document.getElementById(id);
+        item.parentElement.removeChild(item);
     }
 }
