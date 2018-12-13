@@ -9,6 +9,7 @@ export class ObjectTypeModal{
             {name:'Sprite',friendly_name:'Sprite',image_url:'#objects_sprite'},
             {name:'Prefab',friendly_name:'Prefab',image_url:'#objects_prefab'},
             {name:'Light',friendly_name:'Light',image_url:'#objects_lights'},
+            {name:'Effect',friendly_name:'Effect',image_url:'#objects_effects'},
             {name:'Portal',friendly_name:'Portal',image_url:'#objects_portal'},
             {name:'Aframe',friendly_name:'Aframe',image_url:'#objects_aframe'},
             {name:'Kenney',friendly_name:'Kenney\'s',image_url:'#objects_kenny'},
@@ -51,11 +52,14 @@ export class ObjectTypeModal{
                             case "Portal":
                                 this.context.portalModal.open();
                                 break;
+                            case "Effect":
+                                this.context.effectModal.open();
+                                break;
                             case "Aframe":
-                                this.context.sceneGraph.add(this.context.currentObject,{
+                                this.context.modelSettings.open({
                                     type:"Aframe",
                                     aframeCode:'<a-entity></a-entity>'
-                                })
+                                },object=>this.context.sceneGraph.add(this.context.currentObject,object)
                                     .then(child=>{
                                         this.context.displayBox.setObject(child.object3D);
                                         setTimeout(()=>{
@@ -67,8 +71,8 @@ export class ObjectTypeModal{
                                             });
                                             this.context.sceneGraph.sync();
                                         },100);
-                                    });
-                                this.uiRenderer.modal.close();
+                                        this.uiRenderer.modal.close();
+                                    }));
                                 break;
                             case "Sprite":
                                 this.context.sceneGraph.add(this.context.currentObject,{

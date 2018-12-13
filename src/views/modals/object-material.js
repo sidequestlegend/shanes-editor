@@ -26,14 +26,14 @@ export class ObjectMaterial {
                 let updateType = type=>{
                     this.type = 'Mesh'+type.charAt(0).toUpperCase() + type.substr(1)+'Material';
                 };
-                this.context.viewUtils.setupRadioInput('.radio-basic',updateType);
-                this.context.viewUtils.setupRadioInput('.radio-standard',updateType);
-                this.context.viewUtils.setupRadioInput('.radio-lambert',updateType);
-                this.context.viewUtils.setupRadioInput('.radio-phong',updateType);
-                this.context.viewUtils.setupRadioInput('.radio-depth',updateType);
-                this.context.viewUtils.setupRadioInput('.radio-physical',updateType);
-                this.context.viewUtils.setupRadioInput('.radio-toon',updateType);
-
+                 this.context.viewUtils.setupRadioInput('.radio-basic',updateType,true);
+                this.context.viewUtils.setupRadioInput('.radio-standard',updateType,true);
+                this.context.viewUtils.setupRadioInput('.radio-lambert',updateType,true);
+                this.context.viewUtils.setupRadioInput('.radio-phong',updateType,true);
+                this.context.viewUtils.setupRadioInput('.radio-depth',updateType,true);
+                this.context.viewUtils.setupRadioInput('.radio-physical',updateType,true);
+                this.context.viewUtils.setupRadioInput('.radio-toon',updateType,true);
+                //
                 this.setupColorUpdate('.colorInputField');
 
                 this.context.content.popup.querySelector('.left-button').addEventListener('mousedown',()=>{
@@ -48,8 +48,8 @@ export class ObjectMaterial {
                             this.context.showObject();
                             this.context.displayBox.setObject(child.object3D);
                             setTimeout(()=>{
+                                this.context.sceneGraph.sync(child);
                                 this.context.itemView.open(child);
-                                this.context.sceneGraph.sync();
                             },250);
                         });
                 });

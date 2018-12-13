@@ -3,7 +3,7 @@ export class Serialiser{
         this.sceneGraph = sceneGraph;
         this.isMobile = AFRAME.utils.device.isGearVR()
             ||AFRAME.utils.device.isMobile()
-        ||/Pacific Build.+OculusBrowser.+SamsungBrowser.+Mobile VR/i.test(window.navigator.userAgent);
+            ||/Pacific Build.+OculusBrowser.+SamsungBrowser.+Mobile VR/i.test(window.navigator.userAgent);
     }
     deSerialiseScene(scene_current,current,promises){
         if(!scene_current||!scene_current.settings)return;
@@ -14,28 +14,31 @@ export class Serialiser{
         this.setupEmitOnSceneObject(scene_current);
         current.userData.sceneObject = scene_current;
         for(let i = 0; i< scene_current.children.length;i++){
-            promises.push(Promise.resolve().then(()=>{
-                let child = scene_current.children[i];
-                let should_show = true;
-                if(!child){
-                    return;
-                }
-                if(this.sceneGraph.context.is_renderer&&!this.isMobile&&child.settings.hide_on_desktop){
-                    should_show = false;
-                }else if(this.sceneGraph.context.is_renderer&&this.isMobile&&child.settings.object.hide_on_mobile){
-                    should_show = false;
-                }
-                if(should_show){
-                    return this.sceneGraph.objectFactory.make(child).then(object=>{
+            let child = scene_current.children[i];
+            let should_show = true;
+            if(!child){
+                return;
+            }
+            if(this.sceneGraph.context.is_renderer&&!this.isMobile&&child.settings.hide_on_desktop){
+                should_show = false;
+            }else if(this.sceneGraph.context.is_renderer&&this.isMobile&&child.settings.object.hide_on_mobile){
+                should_show = false;
+            }
+            if(should_show){
+                let childObject = this.sceneGraph.objectFactory.make(child);
+                promises.push(Promise.resolve().then(()=>{
+                    return childObject.promise.then(object=>{
                         if(object){
-                            current.add(object);
+                            current.add(childObject.object);
                             child.parent = scene_current;
-                            this.deSerialiseScene(child,object,promises);
-                            return {object:object,child:child};
+                            child.emit('object-loaded');
+                            child.objectLoaded = true;
+                            return {object:childObject.object,child:child};
                         }
                     });
-                }
-            }));
+                }));
+                promises = this.deSerialiseScene(child,childObject.object,promises);
+            }
         }
         return promises;
     }

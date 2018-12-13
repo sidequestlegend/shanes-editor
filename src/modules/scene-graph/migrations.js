@@ -19,6 +19,7 @@ export class Migrations{
     migrateBehaviourV2(behaviour){
         let isAlt = behaviour.type !== "Custom Behaviour";
         let altSchema = JSON.stringify(behaviour.settings,null,4);
+        console.log(altSchema);
         behaviour.settings.code = behaviour.settings.code||{awake:"",update:"",dispose:""};
         return `return {
             schema(){
@@ -80,6 +81,7 @@ export class Migrations{
                 };
                 behaviours.push(behaviourId);
             });
+            console.log(THREE.ClampToEdgeWrapping,THREE.RepeatWrapping)
             current.settings = {
                 name:current.settings.object.name,
                 uuid:current.settings.object.uuid,
@@ -114,7 +116,7 @@ export class Migrations{
                     fog:false,
                     lights:false,
                     texture:{
-                        wrapping:{s:current.settings.wrapping?current.settings.wrapping.s:THREE.RepeatWrapping,t:current.settings.wrapping?current.settings.wrapping.t:THREE.RepeatWrapping},
+                        wrapping:{s:current.settings.wrapping?current.settings.wrapping.s:THREE.ClampToEdgeWrapping,t:current.settings.wrapping?current.settings.wrapping.t:THREE.ClampToEdgeWrapping},
                         repeat:{x:current.settings.material.repeatX?current.settings.material.repeatX:1,y:current.settings.material.repeatY?current.settings.material.repeatY:1},
                         offset:{x:current.settings.material.offsetX?current.settings.material.offsetX:0,y:current.settings.material.offsetY?current.settings.material.offsetY:0},
                         filters:{mag:current.settings.filters?current.settings.filters.mag:THREE.LinearFilter,min:current.settings.filters?current.settings.filters.min:THREE.LinearMipMapLinearFilter},
@@ -133,7 +135,6 @@ export class Migrations{
                     removed:false
                 }
             };
-            console.log(current.settings.material.map);
             if(current === this.context.currentScene){
                 current.settings.physics.gravity = {x:0,y:-9.82,z:0}
             }

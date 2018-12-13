@@ -28,9 +28,10 @@ export class BehaviourView {
         this.uiRenderer.components['ui-renderer'].pause();
         this.context.content.loadScreen('behaviour-view',['behaviour-details','behaviour-trigger-sync'],true)
             .then(()=>this.context.content.compileTemplates('behaviour-details',[{behaviour:this.settings}]))
-            .then(contents=>this.context.content.addTemplateItem('#behaviourDetails',contents[0]))
+            .then(contents=>this.context.content.addTemplateItem('#behaviourDetails',contents[0],true))
             .then(()=>this.context.content.compileTemplates('behaviour-trigger-sync',[{behaviour:this.settings}]))
-            .then(contents=>this.context.content.addTemplateItem('#behaviourTrigger',contents[0]))
+            .then(contents=>this.context.content.addTemplateItem('#behaviourTrigger',contents[0],true))
+            .then(()=>this.uiRenderer.components['ui-renderer'].play())
             .then(()=>this.context.content.reloadContent())
             .then(()=>{
                 let saveButtons = document.querySelectorAll('.saveBehaviour');
@@ -44,14 +45,17 @@ export class BehaviourView {
                 this.setupSwitchInput('#isPublic',this.settings,'is_public');
                 this.setupSwitchInput('#isObfuscated',this.settings,'obfuscate');
                 this.setupEditButton();
-            })
-            .then(()=>this.uiRenderer.components['ui-renderer'].play());
+            });
     }
     setupEditButton(){
-        this.context.content.container.querySelector('.editCodeButton')
-            .addEventListener('mousedown',e=>{
-                this.context.sceneEl.emit('openBehaviour',this.behaviour);
-            })
+        if(this.behaviour.behaviours_id){
+            this.context.content.container.querySelector('.editCodeButton')
+                .addEventListener('mousedown',e=>{
+                    this.context.sceneEl.emit('openBehaviour',this.behaviour);
+                })
+        }else{
+            this.context.content.container.querySelector('.editCodeButton').setAttribute('scale','0.00001 0.00001 0.00001');
+        }
     }
     setupRadioInput(cssClass,callback){
         this.context.content.container.querySelector(cssClass)

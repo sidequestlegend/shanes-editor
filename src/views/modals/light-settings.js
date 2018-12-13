@@ -38,7 +38,7 @@ export class LightSettings{
         this.context.content.popup.querySelector('.switch-castshadow')
             .addEventListener('ui-switch-changed',e=>{
                 this.context.currentObject.settings.light.castShadow=e.detail;
-                this.context.currentObject.object3D.light.castShadow=
+                this.context.currentObject.object3D.castShadow=
                     this.context.currentObject.settings.light.castShadow;
             });
         this.context.viewUtils.setupNumberUpdate('light','.mapwidth','mapSize.width');

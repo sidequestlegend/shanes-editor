@@ -16,7 +16,7 @@ export class MaterialFactory{
         ];
         this.loader = new THREE.TextureLoader();
     }
-    async makeMaterial(mat_settings){
+    makeMaterial(mat_settings){
         let new_settings = {};
         // Filter out all properties not to be applied or to be processed before being applied.
         for(let i = 0; i < this.safeSettings.length; i++){
@@ -26,17 +26,17 @@ export class MaterialFactory{
         }
         for(let i = 0; i < this.mapOptions.length; i++){
             if(mat_settings.hasOwnProperty(this.mapOptions[i])&&mat_settings[this.mapOptions[i]]){
-                new_settings[this.mapOptions[i]] = await this.makeTexture(mat_settings,this.mapOptions[i]);
+                new_settings[this.mapOptions[i]] = this.makeTexture(mat_settings,this.mapOptions[i]);
             }
         }
         return new THREE[mat_settings.type](new_settings);
     }
     makeTexture(mat_settings,mapName){
-        return new Promise(resolve=>{
+        //return new Promise(resolve=>{
             let texture = this.loader.load(mat_settings[mapName],texture=>{
-                resolve(texture);
+               // resolve(texture);
             },null,()=>{
-                resolve();
+               // resolve();
             });
             let textureSettings = mat_settings.texture;
             if(mapName==="aoMap"||mapName==="aoMap"){
@@ -56,7 +56,9 @@ export class MaterialFactory{
                 texture.minFilter = textureSettings.filters.min;
                 texture.magFilter = textureSettings.filters.mag;
             }
-        });
+            //resolve(texture);
+        return texture;
+        //});
     }
     phongSettingsWithDefaults(materialSettings,settings){
         // default phong settings - used for toon material too.
@@ -78,7 +80,7 @@ export class MaterialFactory{
             materialSettings.morphNormals = settings.morphNormals || false;
             materialSettings.morphTargets = settings.morphTargets || false;
             materialSettings.normalMap = settings.normalMap || "";
-            materialSettings.normalScale = settings.normalScale || new THREE.Vector2(1, 1);
+            materialSettings.normalScale = settings.normalScale || {x:1,y:1};
             // materialSettings.normalMapType = settings.normalMapType || 0;
             materialSettings.shininess = settings.shininess || 30;
             materialSettings.specular = settings.specular || '#111111';

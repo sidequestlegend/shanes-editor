@@ -78,7 +78,10 @@ export class MapSettingsModal {
             },
             {name:'Roughness Map',url:this.material.roughnessMap,hasNumber:true,number:this.material.roughness,numberName:'Roughness'},
             {name:'Metalness Map',url:this.material.metalnessMap,hasNumber:true,number:this.material.metalness,numberName:'Metalness'},
-            {name:'Normal Map',url:this.material.normalMap,hasNumber:true,number:this.material.normalScale,numberName:'Normal Scale'},
+            {name:'Normal Map',url:this.material.normalMap
+                ,hasNumber:true,number:this.material.normalScale.x,numberName:'Normal Scale X'
+                ,hasNumber2:true,number2:this.material.normalScale.y,numberName2:'Normal Scale Y'
+            },
             {name:'Light Map',url:this.material.lightMap,hasNumber:true,number:this.material.lightMapIntensity,numberName:'Intensity'},
             {name:'Ambient Occlusion Map',url:this.material.aoMap,hasNumber:true,number:this.material.aoMapIntensity,numberName:'Intensity'},
         ],true)
@@ -115,10 +118,16 @@ export class MapSettingsModal {
                 this.context.viewUtils.setupNumberUpdate('material','.bumpmapNumber1','bumpScale');
                 this.context.viewUtils.setupNumberUpdate('material','.displacementmapNumber1','displacementScale');
                 this.context.viewUtils.setupNumberUpdate('material','.displacementmapNumber2','displacementBias');
+
+
+
                 this.context.viewUtils.setupNumberUpdate('material','.bumpmapNumber1','bumpScale');
 
                 this.context.viewUtils.setupColorUpdate('.emissivemapColorInputField','emissive');
 
+                this.context.viewUtils.setupNumberUpdate('material','.normalmapNumber1','normalScale.x');
+                this.context.viewUtils.setupNumberUpdate('material','.normalmapNumber2','normalScale.y');
+                this.context.viewUtils.setupSaveMap('.normalmapSave','.normalmapInput','normalMap');
                 this.context.viewUtils.setupSaveMap('.basemapSave','.basemapInput','map');
                 this.context.viewUtils.setupSaveMap('.roughnessmapSave','.roughnessmapInput','roughnessMap');
                 this.context.viewUtils.setupSaveMap('.metalnessmapSave','.metalnessmapInput','metalnessMap');
@@ -259,7 +268,10 @@ export class MapSettingsModal {
                 color:this.material.specular,
                 colorName:'Specular Color'
             },
-            {name:'Normal Map',url:this.material.normalMap,hasNumber:true,number:this.material.normalScale,numberName:'Normal Scale'},
+            {name:'Normal Map',url:this.material.normalMap
+                ,hasNumber:true,number:this.material.normalScale.x,numberName:'Normal Scale X'
+                ,hasNumber2:true,number2:this.material.normalScale.y,numberName2:'Normal Scale Y'
+            },
             {name:'Light Map',url:this.material.lightMap,hasNumber:true,number:this.material.lightMapIntensity,numberName:'Intensity'},
             {name:'Ambient Occlusion Map',url:this.material.aoMap,hasNumber:true,number:this.material.aoMapIntensity,numberName:'Intensity'},
         ],true)
@@ -293,6 +305,11 @@ export class MapSettingsModal {
 
                 this.context.viewUtils.setupColorUpdate('.emissivemapColorInputField','emissive');
                 this.context.viewUtils.setupColorUpdate('.specularmapColorInputField','specular');
+
+
+                this.context.viewUtils.setupNumberUpdate('material','.normalmapNumber1','normalScale.x');
+                this.context.viewUtils.setupNumberUpdate('material','.normalmapNumber2','normalScale.y');
+                this.context.viewUtils.setupSaveMap('.normalmapSave','.normalmapInput','normalMap');
 
                 this.context.viewUtils.setupSaveMap('.basemapSave','.basemapInput','map');
                 this.context.viewUtils.setupSaveMap('.emissivemapSave','.emissivemapInput','emissiveMap');

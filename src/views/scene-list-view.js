@@ -61,8 +61,8 @@ export class SceneListView{
         }
     }
     setUnderline(){
-        let position = '2.3 -0.18 0.001';
-        let width = '0.35';
+        let position = '2.2 -0.18 0.001';
+        let width = '0.4';
         switch(this.type) {
             case "prefab":
                 position = '2.8 -0.18 0.001';
@@ -79,14 +79,14 @@ export class SceneListView{
     }
     setTitle(){
         let title = document.getElementById('sceneListTitle');
-        let value = 'My '+this.type.charAt(0).toUpperCase() + this.type.substr(1)+'s';
+        let value = this.type==="scene"?'Space Versions':'My '+this.type.charAt(0).toUpperCase() + this.type.substr(1)+'s';
         title.setAttribute('value',value);
     }
     setupCreate(){
         let createScene = document.querySelector('.createScene');
         switch(this.type){
             case "scene":
-                createScene.setAttribute('text-value','CREATE SCENE');
+                createScene.setAttribute('text-value','NEW VERSION');
                 createScene.setAttribute('ui-modal','modal:#modalRenderer;main:#mainRenderer');
                 createScene.addEventListener('mousedown',()=>this.context.createSceneModal.open());
                 break;

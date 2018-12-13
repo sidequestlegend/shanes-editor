@@ -23,8 +23,10 @@ export class BehavioursModal{
                 }
                 document.querySelector('.editBehaviour').addEventListener('mousedown',()=>{
                     if(child.settings.behaviours.length){
-                        this.context.behaviourView.open(child,
-                            this.context.sceneGraph.currentScene.behaviours[this.currentBehaviour]);
+                        setTimeout(()=>{
+                            this.context.behaviourView.open(child,
+                                this.context.sceneGraph.currentScene.behaviours[this.currentBehaviour]);
+                        },250);
                         this.closeElement.close();
                     }
                 });

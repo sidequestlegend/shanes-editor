@@ -30,19 +30,19 @@ export class BehaviourFactory{
             is_public:false,
             obfuscate:false,
             definition:`return {
-                schema(){
-                    
-                },
-                awake(globals,object3d,behaviour_config,user_config){
-                    
-                },
-                update(globals,object3d,behaviour_config,user_config,delta,serverTime){
-                    
-                },
-                dispose(object3d){
-                    
-                }
-            }`,
+    schema(){
+        
+    },
+    awake(globals,object3d,behaviour_config,user_config){
+        
+    },
+    update(globals,object3d,behaviour_config,user_config,delta,serverTime){
+        
+    },
+    dispose(object3d){
+        
+    }
+}`,
             trigger:'auto-trigger',
             sync:false,
             //"toggle-trigger","mod-toggle-trigger","no-mod-toggle-trigger","click-trigger","mod-click-trigger","no-mod-click-trigger"
@@ -139,14 +139,13 @@ export class BehaviourFactory{
     updateBehaviour(behaviour,object,delta){
         try{
             if(behaviour){
-                behaviour.update.call(behaviour,this.getGlobals(),object,behaviour,behaviour.schema(),delta,this.getServerTime())
+                if(behaviour.update)behaviour.update.call(behaviour,this.getGlobals(),object,behaviour,behaviour.schema(),delta,this.getServerTime())
             }
         }catch(error){
-            console.group();
-            (console.error || console.log).call(console, error.stack || error);
-            console.log('Behavior',behaviour);
-            console.log('Object3D',object);
-            console.groupEnd();
+            console.log.call(console, error.stack || error);
+            console.log(behaviour.definition);
+            console.log('Update Behavior:', behaviour.name,', SceneObject: ',object.userData.sceneObject?object.userData.sceneObject.settings.name:'Unknown: '+object.uuid);
+
         }
     }
 
@@ -169,20 +168,21 @@ export class BehaviourFactory{
         try{
             if(behaviour){
                 let proto = new Function(behaviour.definition)();
-                behaviour.schema = proto.schema;
-                behaviour.awake = proto.awake;
-                behaviour.update = proto.update;
-                behaviour.dispose = proto.dispose;
+                for(let key in proto){
+                    if(proto.hasOwnProperty(key)){
+                        behaviour[key] = proto[key];
+                    }
+                }
                 object.__behaviourList = object.__behaviourList || [];
                 object.__behaviourList.push(behaviour);
-                behaviour.awake.call(behaviour,this.getGlobals(),object,behaviour,behaviour.schema())
+                console.log('Adding Behaviour',behaviour.name);
+                if(behaviour.awake)behaviour.awake.call(behaviour,this.getGlobals(),object,behaviour,behaviour.schema())
             }
         }catch(error){
-            console.group();
-            (console.error || console.log).call(console, error.stack || error);
-            console.log('Behavior',behaviour);
-            console.log('Object3D',object);
-            console.groupEnd();
+            console.log.call(console, error.stack || error);
+            console.log(behaviour.definition);
+            console.log('Add Behavior:', behaviour.name,', SceneObject: ',object.userData.sceneObject?object.userData.sceneObject.settings.name:'Unknown: '+object.uuid);
+
         }
     }
 
@@ -193,23 +193,23 @@ export class BehaviourFactory{
         }
     }
 
+    disposeBehaviour(behaviour,object){
+        try {
+            if (behaviour.dispose) behaviour.dispose.call(behaviour,object,behaviour,behaviour.schema());
+        } catch (error) {
+            console.log.call(console, error.stack || error);
+            console.log(behaviour.definition);
+            console.log('Dispose Behavior:', behaviour.name,', SceneObject: ',object.userData.sceneObject?object.userData.sceneObject.settings.name:'Unknown: '+object.uuid);
+        }
+    }
+
     removeBehavior(behaviour,object){
         if (!object.__behaviourList || object.__behaviourList.length === 0) return null;
 
         let i = object.__behaviourList.indexOf(behaviour);
         if (i !== -1) {
             object.__behaviourList.splice(i, 1);
-            try {
-                if (behaviour.dispose) behaviour.dispose.call(behaviour,this.getGlobals(),object,behaviour,behaviour.schema());
-            } catch (error) {
-
-                console.group();
-                (console.error || console.log).call(console, error.stack || error);
-                console.log('Behaviour',behaviour);
-                console.log('Object3D',object);
-                console.groupEnd();
-
-            }
+            this.disposeBehaviour(behaviour,object);
         }
     }
 

@@ -16,6 +16,7 @@ export class CreateSceneModal{
                     let name = document.querySelector('.sceneName').getValue();
                     let scene = scenes_id?this.context.sceneGraph.serialiser.serialiseScene():this.context.sceneGraph.createNew();
                     scene.settings.name = name;
+                    scene.behaviours = {};
                     this.context.sceneEl.emit(scenes_id?'saveScene':'createScene',scenes_id?{scene,name,scenes_id}:{scene,name});
                     this.uiRenderer.modal.close();
                 });
@@ -25,6 +26,7 @@ export class CreateSceneModal{
                         let name = document.querySelector('.sceneName').getValue();
                         let scene = this.context.sceneGraph.serialiser.serialiseScene();
                         scene.settings.name = name;
+                        scene.behaviours = {};
                         this.context.sceneEl.emit('createScene',{scene,name});
                         this.uiRenderer.modal.close();
                     })

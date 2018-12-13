@@ -102,7 +102,7 @@ module.exports.Component = AFRAME.registerComponent('expanse-portal', {
         semiSphereEl = this.semiSphereEl = this.semiSphereEl || document.createElement('a-entity');
 
         // Set portal.
-        el.setAttribute('geometry', {primitive: 'circle', radius: 2.0, segments: 32});
+        el.setAttribute('geometry', {primitive: 'circle', radius: 2.0, segments: 6});
         el.setAttribute('material', {shader: 'expanse-portal', pano: this.data.image, side: 'double'});
 
         // Set text that displays the link title and URL.
@@ -122,8 +122,8 @@ module.exports.Component = AFRAME.registerComponent('expanse-portal', {
             primitive: 'sphere',
             radius: 1.0,
             phiStart: 0,
-            segmentsWidth: 64,
-            segmentsHeight: 64,
+            segmentsWidth: 16,
+            segmentsHeight: 16,
             phiLength: 180,
             thetaStart: 0,
             thetaLength: 360
@@ -143,8 +143,8 @@ module.exports.Component = AFRAME.registerComponent('expanse-portal', {
         sphereEl.setAttribute('geometry', {
             primitive: 'sphere',
             radius: 10,
-            segmentsWidth: 64,
-            segmentsHeight: 64
+            segmentsWidth: 16,
+            segmentsHeight: 16
         });
         sphereEl.setAttribute('material', {
             shader: 'expanse-portal',
@@ -203,10 +203,10 @@ module.exports.Component = AFRAME.registerComponent('expanse-portal', {
             //     object3D.lookAt(cameraWorldPosition);
             // } else {
                 // When portal is close to the user/camera.
-            if ( distance < 3 && !this.triggered ) {
+            if ( distance < 1 && !this.triggered ) {
                 this.triggered = true;
                 this.el.sceneEl.emit('teleport',this.data.spaces_id);
-            }else if(distance > 3 && this.triggered){
+            }else if(distance > 1 && this.triggered){
                 this.triggered = false;
             }
 

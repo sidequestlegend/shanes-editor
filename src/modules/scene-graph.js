@@ -31,6 +31,10 @@ export class SceneGraph{
 
     async load(scene,isEditing){
         this.isEditing = isEditing;
+        // Close the existing scene if open.
+        if(this.hasScene){
+            this.close()
+        }
         // Get the current scene json definition
         return fetch(this.context.rootUrl+scene.url)
             .then(response=>response.json())
@@ -194,6 +198,17 @@ export class SceneGraph{
         return Promise.all(promises);
     }
 
+    close(){
+        console.log('Closing Scene...');
+        this.traverse(this.currentScene,child=>{
+            if(child.object3D&&child.object3D.__behaviourList){
+                for(let i = 0; i < child.object3D.__behaviourList.length; i++){
+                    this.behaviourFactory.removeBehavior(child.object3D.__behaviourList[i],child.object3D);
+                }
+            }
+        });
+    }
+
     updatePhysicsChildren(){
         this.physicsChildren.length = 0;
         this.physicsWalkOnChildren.length = 0;
@@ -215,9 +230,7 @@ export class SceneGraph{
         // Register component to kick things off in aframe.
         AFRAME.registerComponent(this.containerComponentName, {
             init(){
-                this.fireLight = document.getElementById('firelight');
                 this.el.setObject3D('mesh',_this.container);
-                this.flick();
                 this.el.sceneEl.sceneGraph = _this;
                 this.preventClickTime = 0;
                 this.throttledMouseEvents = AFRAME.utils.throttle(_this.emitMouseEvents, 60, _this);
@@ -234,12 +247,6 @@ export class SceneGraph{
                     }
                 }),1000);
             },
-            flick(){
-                setTimeout(() =>{
-                    this.fireLight.setAttribute('light',{intensity:8+(Math.random()*5)});
-                    this.flick();
-                }, 50+(Math.random()*50));
-            },
             tick(time,delta){
                 if(_this.lightHelper){
                     _this.lightHelper.update();
@@ -255,6 +262,7 @@ export class SceneGraph{
                 }
                 _this.behaviourFactory.updateBehaviours(delta);
                 this.throttledMouseEvents();
+                //TWEEN.update()
             }
         });
         // Create and attach the aframe entity container to the scene
@@ -269,7 +277,14 @@ export class SceneGraph{
     }
 
     emitMouseEvents(){
-        let raycaster = this.context.sceneEl&&this.context.sceneEl.raycaster?this.context.sceneEl.raycaster.raycaster:new THREE.Raycaster();
+        let raycaster;
+        if(this.context.sceneEl.renderer.vr.enabled&&this.context.sceneEl.handRaycaster){
+            raycaster = this.context.sceneEl.handRaycaster.raycaster;
+        }else if(!this.context.sceneEl.renderer.vr.enabled&&this.context.sceneEl.raycaster){
+            raycaster = this.context.sceneEl.raycaster.raycaster;
+        }
+        if(!raycaster)return;
+        //let raycaster = this.context.sceneEl&&this.context.sceneEl.raycaster?this.context.sceneEl.raycaster.raycaster:new THREE.Raycaster();
         if(!this.raycastObjectsInitialised){
             this.raycastObjectsInitialised = true;
             this.raycastObjects.length = 0;
@@ -447,25 +462,24 @@ export class SceneGraph{
 
     async addToScene(parent,objectData){
         // Seed child object
-        let child = {settings:objectData,children:[]};
+        let child = {settings:objectData,children:[],parent:parent};
         // Create the object3D
-        return this.objectFactory.make(child)
-            .then(object=>{
+        let childObject = this.objectFactory.make(child);
+
+        return childObject.promise.then(()=>{
                 // Attach the child to the object3D as a reference.
-                object.userData.sceneObject = child;
+                childObject.object.userData.sceneObject = child;
                 // Attach the object3D to the child as a reference.
-                child.object3D = object;
-                // Set the childs parent property for traversing up the tree.
-                child.parent = parent;
+                child.object3D = childObject.object;
                 // Add the object3D to the scene.
-                parent.object3D.add(object);
+                parent.object3D.add(childObject.object);
                 // Add the child to the parent int he scene graph
                 parent.children.push(child);
                 // Setup physics on object
                 this.context.physics.addCurrent(child);
                 // Return the newly created child.
                 return child;
-            })
+            });
     }
 
     showLightHelper(){

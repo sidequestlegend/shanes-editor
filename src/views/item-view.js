@@ -19,6 +19,7 @@ export class ItemView {
         this.isLight = object.settings.type==="Light";
         this.isSprite = object.settings.type==="Sprite";
         this.isPortal = object.settings.type==="Portal";
+        this.isEffect = object.settings.type==="Effect";
         if(this.isTop){
             this.context.displayBox.hide();
             this.context.viewUtils.hideTransformOptions();
@@ -164,7 +165,7 @@ export class ItemView {
 
     }
     showMaterialAndGeometrySettings(){
-        if(this.isTop||this.isGroup||this.is3dModel||this.isAframe||this.isLight||this.isSprite||this.isPortal)return;
+        if(this.isTop||this.isGroup||this.is3dModel||this.isAframe||this.isLight||this.isSprite||this.isPortal||this.isEffect)return;
         let isPrimitive = this.context.currentObject.settings.type==="Primitive";
         let material = this.context.currentObject.settings.material;
         let geometry = this.context.currentObject.settings.geometry;
@@ -248,7 +249,7 @@ export class ItemView {
             });
     }
     setupShadowSettings(){
-        if(this.isTop||this.isGroup||this.isAframe||this.isLight||this.isSprite||this.isPortal)return;
+        if(this.isTop||this.isGroup||this.isAframe||this.isLight||this.isSprite||this.isPortal||this.isEffect)return;
         return this.context.content.compileTemplates('shadow-settings',[{
             shadow:this.context.currentObject.shadow
         }])
@@ -504,7 +505,7 @@ export class ItemView {
             this.removeSection('shadowSettings');
             this.removeSection('lightSettings');
             this.removeSection('portalSettings');
-        }else if(this.isPortal){
+        }else if(this.isPortal||this.isEffect){
             this.removeSection('clearScene');
             this.removeSection('sceneSettings');
             this.removeSection('geometrySettings');

@@ -37,10 +37,8 @@ export class ObjectFactory{
         let settings = this.sceneGraph.context.currentObject.settings;
         settings.material.type = type;
         this.sceneGraph.context.currentObject.settings.material = this.materialFactory.materialSettingsWithDefaults(settings.material)
-        this.materialFactory.makeMaterial(this.sceneGraph.context.currentObject.settings.material)
-            .then(material=>{
-                this.sceneGraph.context.currentObject.object3D.material = material
-            });
+        let material = this.materialFactory.makeMaterial(this.sceneGraph.context.currentObject.settings.material);
+        this.sceneGraph.context.currentObject.object3D.material = material;
     }
     generateUserData(settings){
         // Generate default settings for a new object created - wraps the defaultUserData method basically.
@@ -181,6 +179,7 @@ export class ObjectFactory{
             map:settings.map||""
         }
     }
+
     portalDefaults(settings){
         return {
             image:settings.image||'https://cdn.theexpanse.app/images/portal-default.jpg',
@@ -193,6 +192,58 @@ export class ObjectFactory{
         //#4db6ac
         settings.aframeCode = '<a-entity expanse-portal="image:'+portalDefaults.image+';title:'+settings.name+';backgroundColor:#000000;spaces_id:'+portalDefaults.spaces_id+'"></a-entity>';
     }
+
+
+    makeEffect(settings){
+        switch(settings.geometry.type){
+            case "Fire":
+                settings.aframeCode = `<a-entity spe-particles__sparks="texture: https://harlyq.github.io/aframe-spe-particles-component/assets/square.png; color: yellow, red; particle-count: 10; max-age: 0.5; max-age-spread: 0.4; velocity: 0 5 0; velocity-spread: 0 3 0; wiggle: 1 0 1; wiggle-spread: 5 0 5; emitter-scale: 50; size-spread: .5; randomize-velocity: true"
+ spe-particles__smoke="texture: https://harlyq.github.io/aframe-spe-particles-component/assets/fog.png; velocity: .4 2 0; velocity-spread: 1.4 0 1.4; particle-count: 10; max-age: 4; size: 8,16; opacity: 0,0.5,0; color: #666,#222"
+ spe-particles__fire="texture:https://harlyq.github.io/aframe-spe-particles-component/assets/explosion_sheet.png; texture-frames: 5 5; velocity: .4 .1 0; acceleration: 0 2 0; acceleration-spread: 0 2 0; velocity-spread: .4 0 .4; particle-count: 15; max-age: 1; size: 7.5,15; size-spread: 5; opacity: 1,0; wiggle: 0 1 0; blending: additive"></a-entity>`;
+                break;
+            case "Explosion":
+                settings.aframeCode = `<a-entity spe-particles="texture: https://harlyq.github.io/aframe-spe-particles-component/assets/explosion_sheet.png; texture-frames: 5 5; distribution: sphere; radius: .1; particle-count: 20; max-age: 1; size: 16; active-multiplier: .5">
+                </a-entity>`;
+                break;
+            case "RingOfFire":
+                settings.aframeCode = `<a-entity spe-particles="texture: https://harlyq.github.io/aframe-spe-particles-component/assets/blob.png; particle-count: 300; maxAge: 1; distribution: disc; acceleration-distribution: box; acceleration: 0 2 0; color: orange">
+                </a-entity>`;
+                break;
+            case "Fireworks":
+                settings.aframeCode = `<a-entity spe-particles="texture: https://harlyq.github.io/aframe-spe-particles-component/assets/fireworks_sheet.png; texture-frames: 5 5; particle-count: 2; max-age: 2; size: 15">
+                </a-entity>`;
+                break;
+            case "Smoke":
+                settings.aframeCode = `<a-entity spe-particles="texture: https://harlyq.github.io/aframe-spe-particles-component/assets/fog.png; velocity: .2 1 0; velocity-spread: .2 0 .2; particle-count: 50; max-age: 4; size: 3,8; opacity: 0,1,0; color: #aaa,#222">
+                </a-entity>`;
+                break;
+            case "Fog":
+                settings.aframeCode = `<a-entity spe-particles="texture: https://harlyq.github.io/aframe-spe-particles-component/assets/fog.png; position-spread: 2 0 2; velocity-spread: .1 .05 .1; particle-count: 50; max-age: 10; size: 6,10; opacity: 0,1,0; randomize-position: true">
+                </a-entity>`;
+                break;
+            case "Steam":
+                settings.aframeCode = `<a-entity spe-particles="texture: https://harlyq.github.io/aframe-spe-particles-component/assets/fog.png; velocity: .2 1 0; velocity-spread: .2 0 .2; particle-count: 50; max-age: 4; size: 3,8; opacity: 0,1,0; color: #eee,#fff">
+                </a-entity>`;
+                break;
+            case "Fountain":
+                settings.aframeCode = `<a-entity spe-particles="texture: https://harlyq.github.io/aframe-spe-particles-component/assets/blob.png; color: blue; velocity: 0 10 0; velocity-spread: 2 0 2; acceleration: 0 -10 0">
+                </a-entity>`;
+                break;
+            case "Rain":
+                settings.aframeCode = `<a-entity spe-particles="texture: https://harlyq.github.io/aframe-spe-particles-component/assets/assets/blob.png; color: blue; position-spread: 2 0 2; radius: 0; randomize-position: true; particle-count: 50; velocity: 0 -10 0; max-age: .25">
+                </a-entity>`;
+                break;
+            case "Snow":
+                settings.aframeCode = `<a-entity spe-particles="texture: https://harlyq.github.io/aframe-spe-particles-component/assets/assets/blob.png; color: #ccc; blending: normal; position-spread: 2 0 2; radius: 0; randomize-position: true; particle-count: 50; velocity: 0 -.5 0; velocity-spread: .1 .2 .1; wiggle-spread: 1 0 1; maxAge: 6; emitter-scale: 100">
+                </a-entity>`;
+                break;
+            case "Sparkler":
+                settings.aframeCode = `<a-entity spe-particles="texture: https://harlyq.github.io/aframe-spe-particles-component/assets/blob.png; particle-count: 50; max-age: .5; distribution: sphere; radius: .01; velocity: 1; acceleration: 1">
+                </a-entity>`;
+                break;
+        }
+    }
+
     resolveObject(object,scene,child,resolve){
         // Resolve a newly created object - used to calculate the loading percentage and
         // some common processing tasks.
@@ -205,22 +256,23 @@ export class ObjectFactory{
     }
     make(child){
         let settings = child.settings;
-        return new Promise(resolve=>{
-            let object, geometry, promise, loader;
+        let object,promise;
+        promise = new Promise(resolve=>{
+            let geometry, loader;
             switch(settings.type){
                 case "Primitive":
                     // Create a primitive geometry
                     geometry = this.geometryFactory.makeGeometry(settings.geometry);
-                    this.materialFactory.makeMaterial(settings.material)
-                        .then(material=>{
-                            object = new THREE.Mesh(geometry,material);
-                            object.name = "Primitive";
-                            this.transform(object,child);
-                            this.addStats(object,child);
-                            object.castShadow = settings.shadow.cast;
-                            object.receiveShadow = settings.shadow.receive;
-                            resolve(object);
-                        });
+                    let material = this.materialFactory.makeMaterial(settings.material)
+                     //   .then(material=>{
+                    object = new THREE.Mesh(geometry,material);
+                    object.name = "Primitive";
+                    this.transform(object,child);
+                    this.addStats(object,child);
+                    object.castShadow = settings.shadow.cast;
+                    object.receiveShadow = settings.shadow.receive;
+                    resolve(object);
+                    //    });
                     break;
                 case "Parametric":
                     // Create a parametric geometry
@@ -266,18 +318,20 @@ export class ObjectFactory{
                     this.transform(object,child);
                     resolve(object);
                     break;
+                case "Effect":
                 case "Portal":
                 case "Aframe":
                     if(settings.type==="Portal"){
                         this.makePortal(child.settings);
+                    }else if(settings.type==="Effect"){
+                        this.makeEffect(child.settings);
                     }
                     object = new THREE.Object3D();
                     this.addAframeItem(child)
                         .then(aobject=>{
-                            let box = new THREE.Box3().setFromObject( aobject );
-                            let offset = box.getCenter().clone().negate();
-                            object.position.copy(new THREE.Vector3(offset.x,offset.y,offset.z));
-                            //this.scaleAndCenterObject(aobject);
+                            if(settings.type==="Aframe"&&!child.settings.preserve_scale){
+                                this.scaleAndCenterObject(aobject);
+                            }
                             this.transform(object,child);
                             object.add(aobject);
                             return object;
@@ -338,40 +392,22 @@ export class ObjectFactory{
                             loader.load( settings.url, ( response )=>this.resolveObject(object,response.scene,child,resolve));
                             break;
                         case "OBJ":
-                            // promise = Promise.resolve({obj:settings.url,mtl:settings.mtl_url,mtl_path:settings.mtl_path});
-                            // if(settings.type==="Poly"){
-                            //     promise = Promise.all([new Promise(function(r){
-                            //         new THREE.FileLoader().load('poly-proxy/'+encodeURIComponent(settings.url),function(url) {
-                            //             r(url);
-                            //         });
-                            //     }),
-                            //         new Promise(function(r){
-                            //             new THREE.FileLoader().load('poly-proxy/'+encodeURIComponent(settings.mtl_url),function(url) {
-                            //                 r(url);
-                            //             });
-                            //         })])
-                            //         .then(function(urls){
-                            //             let relative_path = settings.url.replace(settings.mtl_path,"");
-                            //             return {obj:urls[0],mtl:urls[1],mtl_path:urls[0].slice( 0, urls[0].indexOf( relative_path ) )}
-                            //         });
-                            // }
                             let urls = {obj:settings.url,mtl:settings.mtl_url,mtl_path:settings.mtl_path};
                             loader = new THREE.MTLLoader();
                             loader.setCrossOrigin( true );
-                            //promise.then(urls=>{
-                                loader.setTexturePath( urls.mtl_path );
-                                loader.load( urls.mtl,  materials => {
-                                    materials.preload();
-                                    loader = new THREE.OBJLoader();
-                                    loader.setMaterials(materials);
-                                    loader.load(urls.obj, obj=>this.resolveObject(object,obj,child,resolve));
-                                });
-                            //});
+                            loader.setTexturePath( urls.mtl_path );
+                            loader.load( urls.mtl,  materials => {
+                                materials.preload();
+                                loader = new THREE.OBJLoader();
+                                loader.setMaterials(materials);
+                                loader.load(urls.obj, obj=>this.resolveObject(object,obj,child,resolve));
+                            });
                             break;
                     }
                     break;
             }
         });
+        return {object,promise}
     }
     startAnimations(response,scene,object){
         if(response.animations&&response.animations.length){
@@ -396,7 +432,8 @@ export class ObjectFactory{
     scaleAndCenterGeometry(geometry){
         geometry.computeBoundingBox();
         // get the size of the bounding box of the house
-        let sizeH = geometry.boundingBox.getSize();
+        let sizeH = new THREE.Vector3();
+        geometry.boundingBox.getSize(sizeH);
         // get the size of the bounding box of the obj
         let sizeO = this.getScaledVector(sizeH);
         let ratio = sizeH.divide( sizeO );
@@ -406,7 +443,9 @@ export class ObjectFactory{
     scaleAndCenterObject(object){
         let box = new THREE.Box3().setFromObject( object );
         // get the size of the bounding box of the house
-        let sizeH = box.getSize();
+
+        let sizeH = new THREE.Vector3();
+        box.getSize(sizeH);
         if(isNaN(sizeH.x)){
             sizeH = new THREE.Vector3(1,1,1);
         }
@@ -415,7 +454,9 @@ export class ObjectFactory{
         let ratio = sizeH.divide( sizeO );
 
         object.scale.set( 1/ratio.x, 1/ratio.y, 1/ratio.z );
-        let offset = box.getCenter().clone().negate();
+        let offset = new THREE.Vector3();
+        box.getCenter(offset);
+        offset.negate();
         object.position.copy(new THREE.Vector3(offset.x/ratio.x,offset.y/ratio.y,offset.z/ratio.z));
     }
 
@@ -457,9 +498,10 @@ export class ObjectFactory{
             object.settings.aframeCode = aframeItem;
             this.addAframeItem(object)
                 .then(aobject=>{
-                    this.scaleAndCenterObject(aobject);
+                    if(object.settings.type==="Aframe"&&!object.settings.preserve_scale){
+                        this.scaleAndCenterObject(aobject);
+                    }
                     this.transform(object.object3D,object);
-                    console.log(aobject);
                     object.object3D.add(aobject);
                     this.sceneGraph.context.displayBox.setObject(object.object3D);
                 });

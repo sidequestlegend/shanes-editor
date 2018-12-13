@@ -57,6 +57,7 @@ import {ModelSettings} from "./views/modals/3d-model-settings";
 import {EditModelSettings} from "./views/modals/edit-model-settings";
 import {SpriteModalSettings} from "./views/modals/sprite-modal";
 import {PortalModal} from "./views/modals/portal-modal";
+import {EffectModal} from "./views/modals/effect-modal";
 
 export class Editor{
     constructor(context,rootUrl){
@@ -216,6 +217,7 @@ export class Editor{
         this.lightSettingsSpot = new LightSettingsSpot(this);
         this.physicsShapeTypeModal = new PhysicsShapeTypeModal(this);
         this.physicsShapeSettingsModal = new PhysicsShapeSettingsModal(this);
+        this.effectModal = new EffectModal(this);
 
         this.sceneEl.addEventListener('modal-closed',()=>{
             this.content.popup.components['ui-scroll-pane'].setContent('');

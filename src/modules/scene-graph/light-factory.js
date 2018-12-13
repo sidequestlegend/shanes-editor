@@ -3,7 +3,15 @@ export class LightFactory{
         this.sceneGraph = sceneGraph;
     }
     makeLight(light_settings){
-        let light = new THREE[light_settings.type](light_settings);
+        let notAllowed = ['castShadow','mapSize','camera','target','type','power'];
+        let parameters = [null,];
+        for(let key in light_settings){
+            if( light_settings.hasOwnProperty(key) && notAllowed.indexOf(key)===-1 ){
+                parameters.push(light_settings[key]);
+            }
+        }
+        let outputFunc = Function.prototype.bind.apply(THREE[light_settings.type],parameters);
+        let light = new outputFunc();
         if(light.shadow){
             light.castShadow = light_settings.castShadow;
             light.shadow.mapSize.width = light_settings.mapSize.width;
@@ -24,6 +32,7 @@ export class LightFactory{
         lightSettings.camera = settings.camera||{near:0.5,far:500,fov:50};
     }
     lightDefaults(settings){
+        console.log("intensity",settings.intensity);
         let lightSettings = {
             color:settings.color||"#ffffff",
             intensity:settings.intensity||1,

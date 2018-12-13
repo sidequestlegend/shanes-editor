@@ -62,6 +62,8 @@ export class ViewUtils{
             _child.image_url = "#objects_lights";
         }else if(child.settings.type==='Portal'){
             _child.image_url = "#objects_portal";
+        }else if(child.settings.type==='Effect'){
+            _child.image_url = "#objects_effects";
         }else if(child.settings.type==='Aframe'){
             _child.image_url = "#objects_aframe";
         }else if(child.settings.type==='Avatar'){
@@ -77,7 +79,7 @@ export class ViewUtils{
         }else if(child.settings.type==='Sketchfab'){
             _child.image_url = "#objects_sketchfab";
         }else if(child.settings.type==='Primitive'||child.settings.type==='Parametric'){
-            _child.image_url = "#geometry_"+child.settings.geometry.sub_type
+            _child.image_url = "#geometry_"+(child.settings.type==='Primitive'?child.settings.geometry.type:child.settings.geometry.sub_type)
                 .replace('Geometry','')
                 .replace('Buffer','')
                 .replace('Inverted','')
@@ -154,11 +156,21 @@ export class ViewUtils{
                     text.setAttribute('text','value:'+(this.context.currentObject.settings[object][field]).toFixed(3));
                 }
             }else{
-                this.context.currentObject.settings[object][field]+=this.context.precision*modifier;
-                this.context.currentObject.object3D[object][field]=isDegrees?
-                    THREE.Math.degToRad(this.context.currentObject.settings[object][field]):
-                    this.context.currentObject.settings[object][field];
-                text.setAttribute('text','value:'+(this.context.currentObject.settings[object][field]).toFixed(3));
+                if(~field.indexOf('.')){
+                    let parts = field.split('.');
+                    this.context.currentObject.settings[object][parts[0]][parts[1]]+=this.context.precision*modifier;
+                    this.context.currentObject.object3D[object][parts[0]][parts[1]]=isDegrees?
+                        THREE.Math.degToRad(this.context.currentObject.settings[object][parts[0]][parts[1]]):
+                        this.context.currentObject.settings[object][parts[0]][parts[1]];
+                    // this.context.currentObject.object3D.shadow[parts[0]][parts[1]]=this.context.currentObject.settings[object][parts[0]][parts[1]];
+                    text.setAttribute('text','value:'+(this.context.currentObject.settings[object][parts[0]][parts[1]]).toFixed(3));
+                }else{
+                    this.context.currentObject.settings[object][field]+=this.context.precision*modifier;
+                    this.context.currentObject.object3D[object][field]=isDegrees?
+                        THREE.Math.degToRad(this.context.currentObject.settings[object][field]):
+                        this.context.currentObject.settings[object][field];
+                    text.setAttribute('text','value:'+(this.context.currentObject.settings[object][field]).toFixed(3));
+                }
             }
             if(object==="material")material.needsUpdate = true;
         };
@@ -179,13 +191,15 @@ export class ViewUtils{
         downButton.addEventListener('mousedown',()=>changeValue(-1));
     }
 
-    setupRadioInput(cssClass,callback){
+    setupRadioInput(cssClass,callback,shouldNotSync){
 
         this.context.content.popup.querySelector(cssClass)
             .addEventListener('ui-radio-changed',e=>{
                 callback(e.detail);
-                this.context.currentObject.settings.state.updated = true;
-                this.context.sceneGraph.sync();
+                if(!shouldNotSync){
+                    this.context.currentObject.settings.state.updated = true;
+                    this.context.sceneGraph.sync();
+                }
             })
     }
 
