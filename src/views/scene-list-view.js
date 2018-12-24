@@ -4,6 +4,7 @@ export class SceneListView{
     }
     open(scenes,page,search,type){
         this.context.changeTopButtons();
+        this.context.content.container.setAttribute('visible',false);
         this.scenes = scenes;
         this.page = page||0;
         this.search = search||'';
@@ -38,7 +39,8 @@ export class SceneListView{
             .then(()=>this.setUnderline())
             .then(()=>this.setupEditPrefabButtons())
             .then(()=>this.setupEditBehaviourButtons())
-            .then(()=>this.uiRenderer.components['ui-renderer'].play());
+            .then(()=>this.uiRenderer.components['ui-renderer'].play())
+            .then(()=>this.context.content.container.setAttribute('visible',true));
     }
     setupSceneMenu(){
         let sceneMenuButtons = document.querySelectorAll('.scene-menu-button');

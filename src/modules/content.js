@@ -19,13 +19,17 @@ export class Content{
             delete this.resolveCache[event.data.reqId];
         }
     }
-    reloadContent(){
+    async reloadContent(){
         // Trigger the ui scroll pane to update its layout.
-        this.container.updateContent();
+        this.container.setAttribute('visible',false);
+        await this.container.updateContent()
+            .then(()=>this.container.setAttribute('visible',true));
     }
-    reloadPopup(){
+    async reloadPopup(){
         // Trigger the popup ui scroll pane to update its layout.
-        this.popup.updateContent();
+        this.container.setAttribute('visible',false);
+        await this.popup.updateContent()
+            .then(()=>this.container.setAttribute('visible',true));
     }
     async addTemplateItem(parentSelector,item,shouldWait){
         // Add a html block to the content container and optionally resolve when it is loaded.
@@ -58,7 +62,7 @@ export class Content{
         await this.loadTemplates(templates)
             .then(()=>fetch('html/views/'+name+'.html'))
             .then(page=>page.text())
-            .then(body=>this.container.setContent(body,noAutoReload));
+            .then(body=>this.container.setContent(body,noAutoReload))
     }
     async loadTemplates(templates){
         // Preload a template or list of templates into the cache.

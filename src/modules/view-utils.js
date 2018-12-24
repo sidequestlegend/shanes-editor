@@ -29,6 +29,7 @@ export class ViewUtils{
             .easing(TWEEN.Easing.Exponential.Out).start();
     }
     showTransformOptions(shouldHide,hideRotation,hideScale){
+        console.log('show transform',shouldHide);
         let scale = shouldHide?0.00001:1;
         this.scaleGizmoMenuButton('positionButton',scale);
         if(!hideRotation)this.scaleGizmoMenuButton('rotationButton',scale);

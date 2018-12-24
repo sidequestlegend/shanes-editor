@@ -70,8 +70,10 @@ export class PhysicsThree{
     }
     setCurrentPosition(object) {
         object = object || this.context.currentObject;
-        let quaternion = object.object3D.getWorldQuaternion();
-        let position = object.object3D.getWorldPosition();
+        let quaternion = new THREE.Quaternion();
+        object.object3D.getWorldQuaternion(quaternion);
+        let position = new THREE.Vector3();
+        object.object3D.getWorldPosition(position);
         return this.context.physics.send('setData',{
             objectId:object.settings.uuid,
             position:position,
@@ -124,8 +126,10 @@ export class PhysicsThree{
             }
 
 
-            let quaternion = object.object3D.getWorldQuaternion();
-            let position = object.object3D.getWorldPosition();
+            let quaternion = new THREE.Quaternion();
+            object.object3D.getWorldQuaternion(quaternion);
+            let position = new THREE.Vector3();
+            object.object3D.getWorldPosition(position);
             let bodySett = object.settings.physics.settings;
             this.send('add', i===0?{
                 id:shape.id,
@@ -171,8 +175,10 @@ export class PhysicsThree{
                     shapes:{},
                     disabled:[]
                 };
-                let quaternion = this.context.currentObject.object3D.getWorldQuaternion();
-                let position = this.context.currentObject.object3D.getWorldPosition();
+                let quaternion = new THREE.Quaternion();
+                this.context.currentObject.object3D.getWorldQuaternion(quaternion);
+                let position = new THREE.Vector3();
+                this.context.currentObject.object3D.getWorldPosition(position);
                 bodySettings = {
                     mass: bodySett.mass,
                     position: position,
@@ -203,13 +209,19 @@ export class PhysicsThree{
         let box;
         if(object){
             box = new THREE.Box3().setFromObject(object);
-            settings.offset = box.getCenter().sub(this.context.currentObject.object3D.getWorldPosition());
+            let pos = new THREE.Vector3();
+            this.context.currentObject.object3D.getWorldPosition(pos);
+            settings.offset = new THREE.Vector3();
+            box.getCenter(settings.offset);
+            settings.offset = settings.offset.sub(pos);
         }else{
             box = new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(),new THREE.Vector3(1,1,1));
-            settings.offset = box.getCenter();
+            settings.offset = new THREE.Vector3();
+            box.getCenter(settings.offset);
         }
         settings.rotationOffset = {x:0,y:0,z:0};
-        settings.size = box.getSize();
+        settings.size = new THREE.Vector3();
+        box.getSize(settings.size);
         switch(shape){
             case "Plane":
                 settings.width = settings.size.x;
@@ -285,7 +297,8 @@ export class PhysicsThree{
         size.sizeZ = Math.round(size.sizeZ);
         let min = box.min;
         let max = box.min;
-        let center = box.getCenter();
+        let center = new THREE.Vector3();
+        box.getCenter(center);
         let elementSize = totx/size.sizeX;
         let raycaster = new THREE.Raycaster();
         let planeGeometry = new THREE.PlaneGeometry(size.sizeX*elementSize,size.sizeZ*elementSize,size.sizeX,size.sizeZ);

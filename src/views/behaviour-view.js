@@ -12,6 +12,7 @@ export class BehaviourView {
     open(object,behaviour){
         this.object = object;
         this.behaviour = behaviour = behaviour || this.context.sceneGraph.behaviourFactory.makeBehaviour();
+        this.context.content.container.setAttribute('visible',false);
         let breadcrumbs = object?this.context.breadCrumbs.fromObject(object):[{name:'My Stuff',callback:()=>this.context.sceneEl.emit('scene-list',{page:0,search:'',type:'scene'}),isTop:true}];
         breadcrumbs.push({name:'Edit Behaviour',callback:()=>{},isTop:false});
         this.context.breadCrumbs.make(breadcrumbs);
@@ -45,7 +46,8 @@ export class BehaviourView {
                 this.setupSwitchInput('#isPublic',this.settings,'is_public');
                 this.setupSwitchInput('#isObfuscated',this.settings,'obfuscate');
                 this.setupEditButton();
-            });
+            })
+            .then(()=>this.context.content.container.setAttribute('visible',true));
     }
     setupEditButton(){
         if(this.behaviour.behaviours_id){

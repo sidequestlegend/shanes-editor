@@ -15,6 +15,7 @@ export class PhysicsView {
     open(page,child) {
         this.context.showLoader();
         this.page = page || 0;
+        this.context.content.container.setAttribute('visible',false);
         this.isTop = this.context.currentObject === this.context.sceneGraph.currentScene;
         this.isShape = !!child;
         let type = "Physics Shape"+(this.isShape?'':' List');
@@ -74,7 +75,8 @@ export class PhysicsView {
             .then(() => this.setupOffsetListeners())
             .then(() => this.uiRenderer.components['ui-renderer'].play())
             .then(() => this.context.content.reloadContent())
-            .then(() => this.context.hideLoader());
+            .then(() => this.context.hideLoader())
+            .then(()=>this.context.content.container.setAttribute('visible',true));
     }
     hideNotNeeded(){
         // if(this.isShape){
@@ -225,8 +227,12 @@ export class PhysicsView {
             this.context.currentObject.settings.transform.rotation.z,
         );
         if(this.displayShapes[this.context.currentObject.settings.uuid]) {
-            this.displayShapes[this.context.currentObject.settings.uuid].mesh.position.copy(this.context.currentObject.object3D.getWorldPosition());
-            this.displayShapes[this.context.currentObject.settings.uuid].mesh.quaternion.copy(this.context.currentObject.object3D.getWorldQuaternion());
+            let pos = new THREE.Vector3();
+            this.context.currentObject.object3D.getWorldPosition(pos);
+            let quat = new THREE.Quaternion();
+            this.context.currentObject.object3D.getWorldQuaternion(quat);
+            this.displayShapes[this.context.currentObject.settings.uuid].mesh.position.copy(pos);
+            this.displayShapes[this.context.currentObject.settings.uuid].mesh.quaternion.copy(quat);
         }
         this.context.physics.setCurrentPosition()
             .then(()=>{
@@ -587,8 +593,12 @@ export class PhysicsView {
                 let shape = shapes[i];
                 if (!this.displayShapes[shape.objectId]) {
                     this.displayShapes[shape.objectId] = {mesh: new THREE.Object3D(), shapes: {}};
-                    this.displayShapes[shape.objectId].mesh.position.copy(this.context.sceneGraph.physicsShapeObjects[j].object3D.getWorldPosition());
-                    this.displayShapes[shape.objectId].mesh.quaternion.copy(this.context.sceneGraph.physicsShapeObjects[j].object3D.getWorldQuaternion());
+                    let pos = new THREE.Vector3();
+                    this.context.sceneGraph.physicsShapeObjects[j].object3D.getWorldPosition(pos);
+                    let quat = new THREE.Quaternion();
+                    this.context.sceneGraph.physicsShapeObjects[j].object3D.getWorldQuaternion(quat);
+                    this.displayShapes[shape.objectId].mesh.position.copy(pos);
+                    this.displayShapes[shape.objectId].mesh.quaternion.copy(quat);
                     this.context.sceneEl.object3D.add(this.displayShapes[shape.objectId].mesh);
                 }
                 this.setupShapeHelper(shape);

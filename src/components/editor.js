@@ -36,7 +36,7 @@ module.exports = AFRAME.registerComponent('editor', {
         uiPanel.setAttribute('ui-curved-plane','');
         uiPanel.setAttribute('width',6);
         uiPanel.setAttribute('height',3);
-        uiPanel.setAttribute('position','0 0 -2');
+        uiPanel.setAttribute('position','0 0 0');
         uiPanel.setAttribute('side','double');
         uiPanel.setAttribute('shader','flat');
         uiPanel.setAttribute('scale','0.0001 0.0001 0.0001');
@@ -162,7 +162,7 @@ module.exports = AFRAME.registerComponent('editor', {
         modalPanel.setAttribute('width',4.222);
         modalPanel.setAttribute('height',2);
         modalPanel.setAttribute('scale','0.0001 0.0001 0.0001');
-        modalPanel.setAttribute('position','0 0 -1.7');
+        modalPanel.setAttribute('position','0 0 0.3');
         modalPanel.setAttribute('side','double');
         modalPanel.setAttribute('shader','flat');
         modalPanel.setAttribute('class','intersect');

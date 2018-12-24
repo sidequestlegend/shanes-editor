@@ -3,6 +3,8 @@ export class ItemView {
         this.context = context;
     }
     open(object,page) {
+        this.uiRenderer = document.getElementById('mainRenderer');
+        this.uiRenderer.components['ui-renderer'].pause();
         this.context.changeTopButtons(true);
         this.context.showLoader();
         this.page = page||0;
@@ -24,12 +26,10 @@ export class ItemView {
             this.context.displayBox.hide();
             this.context.viewUtils.hideTransformOptions();
         }else{
-            this.context.viewUtils.showTransformOptions(true,!(this.isLight&&object.settings.geometry.type==="RectAreaLight"),!this.isLight);
+            this.context.viewUtils.showTransformOptions(false,(this.isLight&&object.settings.geometry.type==="RectAreaLight"),this.isLight);
         }
         if(!this.isLight)this.context.sceneGraph.hideLightHelper();
         this.context.currentObject = object;
-        this.uiRenderer = document.getElementById('mainRenderer');
-        this.uiRenderer.components['ui-renderer'].pause();
         this.context.content.loadScreen('item-view',[
             'title-section',
             'shadow-settings',
@@ -73,7 +73,6 @@ export class ItemView {
                 let start = this.page*10;
                 let end  = start+10;
                 let children = this.context.currentObject.children.slice(start,end);
-
                 return this.context.content.compileTemplates('side-item-add',[{
                     title:'Objects',
                     buttonText:'ADD OBJECT',
@@ -84,9 +83,10 @@ export class ItemView {
             .then(contents=>this.context.content.addTemplateItem('#childObjectsContainer',contents[0],true))
             .then(()=>this.setupChildren())
             .then(()=>this.setupAddItem())
-            .then(()=>this.uiRenderer.components['ui-renderer'].play())
             .then(()=>this.context.content.reloadContent())
-            .then(()=>this.context.hideLoader());
+            .then(()=>this.context.hideLoader())
+            .then(()=>this.uiRenderer.components['ui-renderer'].play())
+            .then(()=>this.context.content.container.setAttribute('visible',true));
     }
     setupSavePrefab(){
         return this.context.content.compileTemplates('single-item-button',[{

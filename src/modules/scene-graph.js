@@ -36,7 +36,7 @@ export class SceneGraph{
             this.close()
         }
         // Get the current scene json definition
-        return fetch(this.context.rootUrl+scene.url)
+        return fetch(this.context.rootUrl+scene.url+'?'+(new Date().getTime()))
             .then(response=>response.json())
             .then(_scene=>{
                 // Clear anything out of the scene first.
@@ -235,6 +235,7 @@ export class SceneGraph{
                 this.preventClickTime = 0;
                 this.throttledMouseEvents = AFRAME.utils.throttle(_this.emitMouseEvents, 60, _this);
                 setTimeout(()=>this.el.sceneEl.canvas.addEventListener('mousedown', e=>{
+                    if( e instanceof MouseEvent && e.button !== 0 ) return;
                     if(_this.prevIntersectionEl){
                         let now = new Date().getTime();
                         if(now-this.preventClickTime<200)return;
@@ -284,7 +285,7 @@ export class SceneGraph{
             raycaster = this.context.sceneEl.raycaster.raycaster;
         }
         if(!raycaster)return;
-        //let raycaster = this.context.sceneEl&&this.context.sceneEl.raycaster?this.context.sceneEl.raycaster.raycaster:new THREE.Raycaster();
+        // let raycaster = this.context.sceneEl&&this.context.sceneEl.raycaster?this.context.sceneEl.raycaster.raycaster:new THREE.Raycaster();
         if(!this.raycastObjectsInitialised){
             this.raycastObjectsInitialised = true;
             this.raycastObjects.length = 0;
@@ -305,9 +306,9 @@ export class SceneGraph{
         }
         // this.helper.setDirection(this.raycaster.ray.direction);
         let intersections = raycaster.intersectObjects( this.raycastObjects, true );
+        //console.log(intersections.length,this.raycastObjects.length);
         this.prevIntersectionEls = this.prevIntersectionEls||[];
         let type = 'mouse-move';
-        let defaultPrevented = false;
         let closestDistance = Number.POSITIVE_INFINITY;
         let closestIntersection;
         for(let i = 0;i < intersections.length; i++) {

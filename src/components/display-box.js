@@ -45,7 +45,6 @@ module.exports = AFRAME.registerComponent('display-box', {
             if(this.data.gizmoEl.components['gizmo']){
                 this.data.gizmoEl.components['gizmo'].setObject()
             }
-            this.el.sceneEl.context.viewUtils.hideTransformOptions();
             return new TWEEN.Tween(this.display_box.getAttribute('scale'))
                 .to(new THREE.Vector3(0.00001,0.00001,0.00001), 250)
                 .onComplete(()=>{
@@ -57,7 +56,8 @@ module.exports = AFRAME.registerComponent('display-box', {
         }
         // Get box fromt he selected object.
         this.boundingBox = new THREE.Box3().setFromObject(object);
-        this.boundingBoxSize = this.boundingBox.getSize();
+        this.boundingBoxSize = new THREE.Vector3();
+        this.boundingBox.getSize(this.boundingBoxSize);
         // Animate the display box to the new object position and scale.
         new TWEEN.Tween(this.el.getAttribute('scale'))
             .to(new THREE.Vector3(1,1,1), 250)
@@ -65,8 +65,10 @@ module.exports = AFRAME.registerComponent('display-box', {
         new TWEEN.Tween(this.display_box.getAttribute('scale'))
             .to(new THREE.Vector3(this.boundingBoxSize.x+0.1,this.boundingBoxSize.y+0.1,this.boundingBoxSize.z+0.1), 250)
             .easing(TWEEN.Easing.Exponential.Out).start();
+        let boundingBoxCenter = new THREE.Vector3();
+        this.boundingBox.getCenter(boundingBoxCenter);
         new TWEEN.Tween(this.display_box.getAttribute('position'))
-            .to(this.boundingBox.getCenter(), 250)
+            .to(boundingBoxCenter, 250)
             .easing(TWEEN.Easing.Exponential.Out).start();
         // Animate the corner container scale
         this.cornerContainer.setAttribute('scale','0.000001 0.000001 0.000001');

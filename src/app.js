@@ -227,19 +227,24 @@ export class Editor{
         let gizmos = document.getElementById('gizmos');
         document.getElementById('positionButton').addEventListener('mousedown',()=>{
             gizmos.setAttribute('gizmo','mode:position');
+            gizmos.switchMode();
         });
         document.getElementById('rotationButton').addEventListener('mousedown',()=>{
             gizmos.setAttribute('gizmo','mode:rotation');
+            gizmos.switchMode();
         });
         document.getElementById('scaleButton').addEventListener('mousedown',()=>{
             gizmos.setAttribute('gizmo','mode:scale');
+            gizmos.switchMode();
         });
     }
     showObject(){
         this.showMaterial.alphaMap = this.showAlphaMap;
+        this.showMaterial.transparent = true;
         this.showMaterial.alphaMap.needsUpdate = true;
         setTimeout(()=>{
             this.showMaterial.alphaMap = this.hideAlphaMap;
+            this.showMaterial.transparent = false;
             this.showMaterial.alphaMap.needsUpdate = true;
         },2500);
     }

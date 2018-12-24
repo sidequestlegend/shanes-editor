@@ -12,7 +12,7 @@ export class BreadCrumbs{
         this.isOverloaded = items.length >= 7;
         if(!this.isOverloaded){
             for(let i = 0; i < items.length; i ++){
-                this.breadcrumbsContainer.appendChild(this.makeBreadCrumb(items[i],i));
+                this.makeBreadCrumb(items[i],i,this.breadcrumbsContainer);
                 this.breadcrumbsContainer.appendChild(this.makeDivider(i));
             }
         }else{
@@ -20,11 +20,11 @@ export class BreadCrumbs{
             this.breadcrumbsContainer.appendChild(this.makeDivider(0,true));
             for(let i = 0; i < items.length; i ++){
                 if(items[i].isTop&&i===0){
-                    this.breadcrumbsContainer.appendChild(this.makeBreadCrumb(items[i],i));
+                    this.makeBreadCrumb(items[i],i,this.breadcrumbsContainer);
                     this.breadcrumbsContainer.appendChild(this.makeDivider(i));
                 }
                 if(i>ingoreBelow){
-                    this.breadcrumbsContainer.appendChild(this.makeBreadCrumb(items[i],i-ingoreBelow));
+                    this.makeBreadCrumb(items[i],i-ingoreBelow,this.breadcrumbsContainer);
                     this.breadcrumbsContainer.appendChild(this.makeDivider(i-ingoreBelow));
                 }
             }
@@ -43,28 +43,39 @@ export class BreadCrumbs{
         });
         return items;
     }
-    makeBreadCrumb(item,index){
+    makeBreadCrumb(item,index,parent){
         // Make breadcrumb button entity
-        let button = document.createElement('a-ui-button');
-        button.setAttribute('width',0.45);
-        button.setAttribute('height',0.13);
-        button.setAttribute('ripple-size','0.5 0.19');
-        button.setAttribute('position',(this.isOverloaded&&index>0?((index*0.52)+0.2):(index*0.52))+' 0 0');
-        button.setAttribute('wrap-count',15);
-        button.setAttribute('text-value',this.shorten(item.name,14));
-        button.setAttribute('color','#42b8ac');
-        button.className = 'intersectable';
-        button.addEventListener('mousedown',()=>{
+        let breadCrumb = `<a-ui-button width="0.45" width="0.13" color="#42b8ac"
+                ripple-size="0.45 0.13" wrap-count="15" class="intersectable"
+                position="`+(this.isOverloaded&&index>0?((index*0.52)+0.2):(index*0.52))+` 0 0"
+                text-value="`+this.shorten(item.name,13)+`"
+            
+            ></a-ui-button>`;
+        parent.insertAdjacentHTML('beforeend',breadCrumb);
+        parent.lastChild.addEventListener('mousedown',()=>{
             item.callback();
         });
-        return button;
+        // let button = document.createElement('a-ui-button');
+        // // button.setAttribute('color','#42b8ac');
+        // button.setAttribute('width',0.45);
+        // button.setAttribute('height',0.13);
+        // button.setAttribute('ripple-size','0.45 0.13');
+        // button.setAttribute('position',(this.isOverloaded&&index>0?((index*0.52)+0.2):(index*0.52))+' 0 0');
+        // button.setAttribute('wrap-count',15);
+        // button.setAttribute('text-value',this.shorten(item.name,13));
+        // button.className = 'intersectable';
+        // button.addEventListener('mousedown',()=>{
+        //     item.callback();
+        // });
+        // return button;
     }
     makeDivider(index,isMore){
         // Make breadcrumb gap and divider.
-        let divider = document.createElement('a-plane');
+        let divider = document.createElement('a-box');
         divider.setAttribute('width',0.12);
         divider.setAttribute('position',(this.isOverloaded&&index&&!isMore>0?(((index*0.52)+0.25)+0.2):((index*0.52)+(isMore?0.4:0.25)))+' 0 0');
         divider.setAttribute('height',0.12);
+        divider.setAttribute('depth',0.00001);
         divider.setAttribute('shader','flat');
         divider.setAttribute('transparent',true);
         divider.setAttribute('src',isMore?'#breadCrumbMore':'#breadCrumb');

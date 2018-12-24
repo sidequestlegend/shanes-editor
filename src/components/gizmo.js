@@ -14,16 +14,20 @@ module.exports = AFRAME.registerComponent('gizmo', {
         mode:{default:'position'}
     },
     init(){
-        this.setupElements();
-        this.setMode();
+        this.el.addEventListener('loaded',()=>{
+            this.setupElements();
+            this.setMode();
+        });
         // Seed the empty transform values
         this.currentTransform = {
             position:new THREE.Vector3(),
             rotation:new THREE.Vector3(),
             scale:new THREE.Vector3(),
         };
+        this.el.switchMode = this.switchMode.bind(this);
+
     },
-    updateSchema(){
+    switchMode(){
         // Set the mode with the mode attribute is updated on the gizmo element.
         if(this.top_box&&!this.isAnimating){
             this.toggle(true)
@@ -44,7 +48,8 @@ module.exports = AFRAME.registerComponent('gizmo', {
             .easing(TWEEN.Easing.Exponential.Out).start();
         // Get gizmo position from  the bounding box - move it to the corner.
         this.boundingBox = boundingBox;
-        let size = boundingBox.getSize();
+        let size = new THREE.Vector3();
+        boundingBox.getSize(size);
         let position = object.parent.localToWorld(object.position.clone());
         this.el.setAttribute('position',position);
         this.el.setAttribute('position',{x:position.x-(0.12+size.x/2),y:position.y,z:position.z-(0.12+size.z/2)});
@@ -115,14 +120,14 @@ module.exports = AFRAME.registerComponent('gizmo', {
             axis = 'top';
             offset = new THREE.Vector3(0,-0.7,0);
         }
-        return {spine:spine,axis:axis,offset:offset};
+        return {spine,axis,offset};
     },
     onMouseUp(e){
         if(this.dragging){
             // Reset the current box being dragged.
             this.dragging.setAttribute('position',this.defaultPosition);
-            let spine = this.getDraggingSpine();
-            spine.spine.object3D.scale.z = spine.axis==='top'?0.71:0.51;
+            //let spine = this.getDraggingSpine();
+            //spine.spine.object3D.scale.z = spine.axis==='top'?0.71:0.51;
             // Reset the gizmo state
             this.setMode();
             // Remove click catcher and remove intersect class to prevent clicks when not interacting.
@@ -144,18 +149,22 @@ module.exports = AFRAME.registerComponent('gizmo', {
     },
     setSpinePosition(pos,spine){
         // Update the spine position while dragging.
-        let zero = new THREE.Vector3(0,0,0);
+        //let zero = new THREE.Vector3(0,0,0);
         let _spine = this.getDraggingSpine();
         spine = spine||_spine.spine;
+
+        spine.geometry.verticesNeedUpdate = true;
+
         // Get the mid point between the dragging position and the origin point (0,0,0)
-        spine.setAttribute('position',this.getPointInBetweenByPerc(pos,zero));
-        // Scale the spine to connect the dragging box to the zero point
-        let scale = pos.distanceTo(zero);
-        _spine.scale = scale;
-        _spine.angle = Math.atan2(pos.y,pos.x);
-        spine.object3D.scale.z = scale;
-        // Rotate the spine by making it look at the dragging position.
-        spine.object3D.lookAt(pos);
+        // spine.setAttribute('position',this.getPointInBetweenByPerc(pos,zero));
+        // // Scale the spine to connect the dragging box to the zero point
+        // let scale = pos.distanceTo(zero);
+        // //spine.getObject3D('mesh').geometry.translate(0,0,scale/2)
+        // _spine.scale = scale;
+         _spine.angle = Math.atan2(pos.y,pos.x);
+        // spine.object3D.scale.z = scale;
+        // // Rotate the spine by making it look at the dragging position.
+        // spine.object3D.lookAt(pos);
         return _spine;
     },
     setBoxRotation(pos,axis){
@@ -312,10 +321,12 @@ module.exports = AFRAME.registerComponent('gizmo', {
         this.backing_element.setAttribute('position',this.defaultPosition);
         // Register the mouse move listener
         this.backing_element.addEventListener('ui-mousemove',this.mousemove);
+        let pos = new THREE.Vector3();
+        this.data.cameraEl.object3D.getWorldPosition(pos);
         // Make the backing elemtn face the camera for mouse moves relative to your current position.
         this.backing_element.object3D.lookAt(
             this.backing_element.object3D.parent
-                .worldToLocal(this.data.cameraEl.object3D.getWorldPosition())
+                .worldToLocal(pos)
         );
         // Save the current transform to use as an offset.
         this.saveCurrentTransform = this.deepCopy(this.el.sceneEl.context.currentObject.settings.transform);
@@ -345,12 +356,12 @@ module.exports = AFRAME.registerComponent('gizmo', {
         this.z_box = this.createElement('0.1 0.1 0.1',"red",true);
 
         // Create the box spines
-        this.top_spine = this.createElement('0.005 0.005 0.71',"#cfcfcf");
-        this.top_spine.setAttribute('position','0 0.355 0');
+        this.top_spine = this.createSpine("#cfcfcf",this.top_box.getAttribute('position'));//this.createElement('0.005 0.005 0.71',"#cfcfcf");
+        //this.top_spine.setAttribute('position','0 0.355 0');
 
-        this.x_spine = this.createElement('0.01 0.01 0.509','blue');
-        this.y_spine = this.createElement('0.01 0.01 0.509','green');
-        this.z_spine = this.createElement('0.01 0.01 0.509','red');
+        this.x_spine = this.createSpine("#0000ff",this.x_box.getAttribute('position'));//this.createElement('0.01 0.01 0.509','blue');
+        this.y_spine = this.createSpine("#00ff00",this.y_box.getAttribute('position'));//this.createElement('0.01 0.01 0.509','green');
+        this.z_spine = this.createSpine("#ff0000",this.z_box.getAttribute('position'));//this.createElement('0.01 0.01 0.509','red');
 
         // Create the rotation rails.
         this.x_rail = this.createRail('0 0 0','blue');
@@ -359,6 +370,7 @@ module.exports = AFRAME.registerComponent('gizmo', {
 
     },
     setMode(){
+        console.log('here set mode');
         // Set the image on the intractable dragging boxes to match the mode
         this.setImage(this.data.mode);
         if(this.data.mode==='rotation'){
@@ -367,7 +379,7 @@ module.exports = AFRAME.registerComponent('gizmo', {
             this.rot_y_pos = this.getPointOnCircle(Math.PI*1.25,'y',0.475);
             this.rot_z_pos = this.getPointOnCircle(1,'z',0.475);
             this.top_box.setAttribute('visible',false);
-            this.top_spine.setAttribute('visible',false);
+           // this.top_spine.setAttribute('visible',false);
             this.x_rail.setAttribute('visible',true);
             this.y_rail.setAttribute('visible',true);
             this.z_rail.setAttribute('visible',true);
@@ -382,14 +394,14 @@ module.exports = AFRAME.registerComponent('gizmo', {
             this.z_box.object3D.rotation.x = 0;
             // Show the top box for adjust all axis at once.
             this.top_box.setAttribute('visible',true);
-            this.top_spine.setAttribute('visible',true);
+           // this.top_spine.setAttribute('visible',true);
             // Hide the rotation rails.
             this.x_rail.setAttribute('visible',false);
             this.y_rail.setAttribute('visible',false);
             this.z_rail.setAttribute('visible',false);
             // Reset the top spine position and rotations.
-            this.top_spine.setAttribute('rotation','90 0 0');
-            this.top_spine.setAttribute('position','0 0.355 0');
+           // this.top_spine.setAttribute('rotation','90 0 0');
+           // this.top_spine.setAttribute('position','0 0.355 0');
         }
         // Set the default positions of the dragging boxes, the same for scale/position but different for rotation.
         this.x_box.setAttribute('position',this.data.mode==='rotation'?this.rot_x_pos:'0.5 0 0');
@@ -411,6 +423,14 @@ module.exports = AFRAME.registerComponent('gizmo', {
         this.x_box.setAttribute('src','https://cdn.theexpanse.app/images/gizmos/'+mode+'_top.jpg');
         this.y_box.setAttribute('src','https://cdn.theexpanse.app/images/gizmos/'+mode+'_top.jpg');
         this.z_box.setAttribute('src','https://cdn.theexpanse.app/images/gizmos/'+mode+'_top.jpg');
+    },
+    createSpine(color,position){
+        let lineGeom = new THREE.Geometry();
+        lineGeom.vertices.push(new THREE.Vector3());
+        lineGeom.vertices.push(position);
+        let line = new THREE.Line(lineGeom, new THREE.LineBasicMaterial({color}));
+        this.el.object3D.add(line);
+        return line;
     },
     createRail(rotation,color){
         // Create a partial/full ring for the rail indicator for rotations.
