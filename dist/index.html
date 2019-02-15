@@ -13,51 +13,269 @@
 <body>
 <a-scene stats background="color: black">
     <a-assets>
-        <img id="sceneImage" src="images/icons/objects/scene.jpg"/>
-        <img id="navBack" src="images/nav-back.jpg"/>
-        <img id="iconEdit" src="images/icons/edit.png"/>
-        <img id="iconSend" src="images/icons/send.png"/>
-        <img id="iconBack" src="images/icons/baseline_keyboard_backspace_white_18dp.png"/>
-        <img id="iconCopy" src="images/icons/baseline_file_copy_white_18dp.png"/>
-        <img id="closeIcon" src="images/icons/baseline_close_white_18dp.png"/>
-        <img id="swapVirtIcon" src="images/icons/baseline_swap_vert_white_18dp.png"/>
-        <img id="helpIcon" src="images/icons/baseline_help_outline_white_18dp.png"/>
-        <img id="viewIcon" src="images/icons/baseline_remove_red_eye_white_18dp.png"/>
-        <img id="breadCrumb" src="images/icons/baseline_navigate_next_white_36dp.png"/>
-        <img id="breadCrumbMore" src="images/icons/baseline_more_horiz_white_18dp.png"/>
-        <img id="resetIcon" src="images/icons/baseline_vertical_align_bottom_white_18dp.png"/>
-        <img id="precisionIcon" src="images/icons/baseline_gps_fixed_white_18dp.png"/>
+        <img id="breadCrumb" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/baseline_navigate_next_white_36dp.png"/>
+        <img id="precisionIcon" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/baseline_gps_fixed_white_18dp.png"/>
+        <img id="navBack" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/nav-back.jpg"/>
+        <img id="iconBack" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/baseline_keyboard_backspace_white_18dp.png"/>
+        <img id="closeIcon" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/baseline_close_white_18dp.png"/>
+        <img id="objects_avatar" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/avatar.jpg"/>
+        <img id="objects_custom" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/custom.jpg"/>
+        <img id="objects_folder" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/folder.jpg"/>
+        <img id="objects_parametric" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/parametric.jpg"/>
+        <img id="objects_effects" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/parametric.jpg"/>
+        <img id="objects_lights" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/lights.jpg"/>
+        <img id="objects_sprite" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/sprite.jpg"/>
 
-        <a-mixin id="pointer" raycaster="showLine: true; objects: .intersect" ui-mouse-shim="fps:90"
-             super-hands="colliderEvent: raycaster-intersection;
-               colliderEventProperty: els;
-               colliderEndEvent:raycaster-intersection-cleared;
-               colliderEndEventProperty: clearedEls;">
-        </a-mixin>
-        <a-mixin id="controller-right" mixin="pointer"
-                 vive-controls="hand: right" oculus-touch-controls="hand: right"
-                 windows-motion-controls="hand: right"
-                 gearvr-controls daydream-controls oculus-go-controls>
-        </a-mixin>
-        <a-mixin id="controller-left" mixin="pointer"
-                 vive-controls="hand: left" oculus-touch-controls="hand: left"
-                 windows-motion-controls="hand: left">
-        </a-mixin>
+        <img id="objects_portal" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/portal.jpg"/>
+        <img id="objects_aframe" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/aframe.jpg"/>
+        <img id="objects_poly" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/poly.jpg"/>
+        <img id="objects_sketchfab" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/sketchfab.jpg"/>
+        <img id="objects_kenny" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/kenny-logo.jpg"/>
+        <img id="objects_prefab" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/prefab.jpg"/>
+        <img id="objects_market" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/market.jpg"/>
+        <img id="objects_sound" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/sound.jpg"/>
 
+        <img id="geometry_box" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/primitive/Box.jpg"/>
+        <img id="geometry_circle" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/primitive/Circle.jpg"/>
+        <img id="geometry_cone" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/primitive/Cone.jpg"/>
+        <img id="geometry_cylinder" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/primitive/Cylinder.jpg"/>
+        <img id="geometry_dodecahedron" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/primitive/Dodecahedron.jpg"/>
+        <img id="geometry_icosahedron" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/primitive/Icosahedron.jpg"/>
+        <img id="geometry_octahedron" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/primitive/Octahedron.jpg"/>
+        <img id="geometry_plane" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/primitive/Plane.jpg"/>
+        <img id="geometry_ring" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/primitive/Ring.jpg"/>
+        <img id="geometry_sphere" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/primitive/Sphere.jpg"/>
+        <img id="geometry_terrain" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/primitive/Terrain.jpg"/>
+        <img id="geometry_tetrahedron" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/primitive/Tetrahedron.jpg"/>
+        <img id="geometry_torus" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/primitive/Torus.jpg"/>
+        <img id="geometry_torusknot" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/primitive/TorusKnot.jpg"/>
+
+        <img id="geometry_apple" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/parametric/Apple.jpg"/>
+        <img id="geometry_catenoid" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/parametric/Catenoid.jpg"/>
+        <img id="geometry_fermat" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/parametric/Fermat.jpg"/>
+        <img id="geometry_helicoid" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/parametric/Helicoid.jpg"/>
+        <img id="geometry_horn" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/parametric/Horn.jpg"/>
+        <img id="geometry_klein" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/parametric/Klein.jpg"/>
+        <img id="geometry_mobius" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/parametric/Mobius.jpg"/>
+        <img id="geometry_mobius3d" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/parametric/Mobius3D.jpg"/>
+        <img id="geometry_naticastellata" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/parametric/NaticaStellata.jpg"/>
+        <img id="geometry_pillow" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/parametric/Pillow.jpg"/>
+        <img id="geometry_scherk" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/parametric/Scherk.jpg"/>
+        <img id="geometry_snail" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/parametric/Snail.jpg"/>
+        <img id="geometry_spiral" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/parametric/Spiral.jpg"/>
+        <img id="geometry_spring" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/icons/objects/geometries/parametric/Spring.jpg"/>
+
+        <img id="kenny_3d_nature_pack" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/3d-nature-pack/Sample.png"/>
+        <img id="kenny_3d_road_pack" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/3d-road-pack/Sample.png"/>
+        <img id="kenny_castle_kit" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/castle-kit-1.0/Sample.png"/>
+        <img id="kenny_furniturepack" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/kenney_furniturepack/Sample.png"/>
+        <img id="kenny_holidaypack" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/kenney_holidaypack/Sample.png"/>
+        <img id="kenny_medieval_town_base" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/medieval-town-base/Sample.png"/>
+        <img id="kenny_modular_buildings" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/modular-buildings-100-assets/Sample.png"/>
+        <img id="kenny_naturepack_extended" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/naturepack_extended/Sample.png"/>
+        <img id="kenny_racing_kit" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/racing-kit-1.2/Sample.png"/>
+        <img id="kenny_space_kit" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/space-kit-1.0/Sample.png"/>
+        <img id="kenny_watercraftpack" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/watercraftpack_kenney/Sample.png"/>
+        <img id="kenny_weaponpack" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/weaponpack_assets/Sample.png"/>
+
+        <img id="kenny_preview_3d_nature_pack" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/3d-nature-pack/Preview.png"/>
+        <img id="kenny_preview_3d_road_pack" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/3d-road-pack/Preview.png"/>
+        <img id="kenny_preview_castle_kit" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/castle-kit-1.0/Preview.png"/>
+        <img id="kenny_preview_furniturepack" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/kenney_furniturepack/Preview.png"/>
+        <img id="kenny_preview_holidaypack" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/kenney_holidaypack/Preview.png"/>
+        <img id="kenny_preview_medieval_town_base" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/medieval-town-base/Preview.png"/>
+        <img id="kenny_preview_modular_buildings" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/modular-buildings-100-assets/Preview.png"/>
+        <img id="kenny_preview_naturepack_extended" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/naturepack_extended/Preview.png"/>
+        <img id="kenny_preview_racing_kit" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/racing-kit-1.2/Preview.png"/>
+        <img id="kenny_preview_space_kit" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/space-kit-1.0/Preview.png"/>
+        <img id="kenny_preview_watercraftpack" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/watercraftpack_kenney/Preview.png"/>
+        <img id="kenny_preview_weaponpack" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/kenney/weaponpack_assets/Preview.png"/>
+
+
+        <img id="avatar_food_cake" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Food/Cake.png"/>
+        <img id="avatar_food_donuts" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Food/Donuts.png"/>
+        <img id="avatar_food_hamegg" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Food/HamEgg.png"/>
+        <img id="avatar_food_hamburger" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Food/Hamburger.png"/>
+        <img id="avatar_food_icecream" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Food/IceCream.png"/>
+        <img id="avatar_food_milk" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Food/Milk.png"/>
+        <img id="avatar_food_waffle" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Food/Waffle.png"/>
+
+
+        <img id="avatar_hair_hair1" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hair/Hair1.png"/>
+        <img id="avatar_hair_hair2" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hair/Hair2.png"/>
+        <img id="avatar_hair_hair3" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hair/Hair3.png"/>
+        <img id="avatar_hair_hair4" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hair/Hair4.png"/>
+        <img id="avatar_hair_hair5" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hair/Hair5.png"/>
+
+
+        <img id="avatar_hats_bikehelmet" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/BikeHelmet.png"/>
+        <img id="avatar_hats_bluehelmet" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/BlueHelmet.png"/>
+        <img id="avatar_hats_buckethat" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/BucketHat.png"/>
+        <img id="avatar_hats_christmashat" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/ChristmasHat.png"/>
+        <img id="avatar_hats_coneofshame" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/ConeOfShame.png"/>
+        <img id="avatar_hats_drinkinghat" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/DrinkingHat.png"/>
+        <img id="avatar_hats_fancyhat" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/FancyHat.png"/>
+        <img id="avatar_hats_flophat" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/FlopHat.png"/>
+        <img id="avatar_hats_footballhelmet" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/FootballHelmet.png"/>
+        <img id="avatar_hats_frenchpolicemanhat" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/FrenchPolicemanHat.png"/>
+        <img id="avatar_hats_graduationhat" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/GraduationHat.png"/>
+        <img id="avatar_hats_ladyhat" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/LadyHat.png"/>
+        <img id="avatar_hats_navyparadehat" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/NavyParadeHat.png"/>
+        <img id="avatar_hats_paperbag" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/PaperBag.png"/>
+        <img id="avatar_hats_partyhat" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/PartyHat.png"/>
+        <img id="avatar_hats_propellorhat" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/PropellorHat.png"/>
+        <img id="avatar_hats_sailorshat" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/SailorsHat.png"/>
+        <img id="avatar_hats_sleepinghat" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/SleepingHat.png"/>
+        <img id="avatar_hats_soldierhelmet" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/SoldierHelmet.png"/>
+        <img id="avatar_hats_sunhat" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/SunHat.png"/>
+        <img id="avatar_hats_sweatband" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/SweatBand.png"/>
+        <img id="avatar_hats_trafficcone" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/TrafficCone.png"/>
+        <img id="avatar_hats_umbrellahat" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/UmbrellaHat.png"/>
+        <img id="avatar_hats_valkyrehelmet" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/ValkyreHelmet.png"/>
+        <img id="avatar_hats_weldingmask" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/WeldingMask.png"/>
+        <img id="avatar_hats_winterhat" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Hats/WinterHat.png"/>
+
+
+        <img id="avatar_masks_mask1_black_white" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask1/black-white.png"/>
+        <img id="avatar_masks_mask1_blood_moon" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask1/blood-moon.png"/>
+        <img id="avatar_masks_mask1_blue_blush" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask1/blue-blush.png"/>
+        <img id="avatar_masks_mask1_blue_white" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask1/blue-white.png"/>
+        <img id="avatar_masks_mask1_copper" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask1/copper.png"/>
+        <img id="avatar_masks_mask1_forest" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask1/forest.png"/>
+        <img id="avatar_masks_mask1_white_orange" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask1/white-orange.png"/>
+
+
+        <img id="avatar_masks_mask2_black_white" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask2/black-white.png"/>
+        <img id="avatar_masks_mask2_blood_moon" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask2/blood-moon.png"/>
+        <img id="avatar_masks_mask2_blue_blush" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask2/blue-blush.png"/>
+        <img id="avatar_masks_mask2_blue_white" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask2/blue-white.png"/>
+        <img id="avatar_masks_mask2_copper" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask2/copper.png"/>
+        <img id="avatar_masks_mask2_forest" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask2/forest.png"/>
+        <img id="avatar_masks_mask2_white_orange" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask2/white-orange.png"/>
+
+
+        <img id="avatar_masks_mask3_black_white" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask3/black-white.png"/>
+        <img id="avatar_masks_mask3_blood_moon" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask3/blood-moon.png"/>
+        <img id="avatar_masks_mask3_blue_blush" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask3/blue-blush.png"/>
+        <img id="avatar_masks_mask3_blue_white" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask3/blue-white.png"/>
+        <img id="avatar_masks_mask3_copper" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask3/copper.png"/>
+        <img id="avatar_masks_mask3_forest" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask3/forest.png"/>
+        <img id="avatar_masks_mask3_white_orange" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask3/white-orange.png"/>
+
+
+        <img id="avatar_masks_mask4_black_white" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask4/black-white.png"/>
+        <img id="avatar_masks_mask4_blood_moon" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask4/blood-moon.png"/>
+        <img id="avatar_masks_mask4_blue_blush" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask4/blue-blush.png"/>
+        <img id="avatar_masks_mask4_blue_white" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask4/blue-white.png"/>
+        <img id="avatar_masks_mask4_copper" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask4/copper.png"/>
+        <img id="avatar_masks_mask4_forest" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask4/forest.png"/>
+        <img id="avatar_masks_mask4_white_orange" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask4/white-orange.png"/>
+
+
+        <img id="avatar_masks_mask5_black_white" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask5/black-white.png"/>
+        <img id="avatar_masks_mask5_blood_moon" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask5/blood-moon.png"/>
+        <img id="avatar_masks_mask5_blue_blush" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask5/blue-blush.png"/>
+        <img id="avatar_masks_mask5_blue_white" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask5/blue-white.png"/>
+        <img id="avatar_masks_mask5_copper" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask5/copper.png"/>
+        <img id="avatar_masks_mask5_forest" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask5/forest.png"/>
+        <img id="avatar_masks_mask5_white_orange" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask5/white-orange.png"/>
+
+
+        <img id="avatar_masks_mask6_black_white" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask6/black-white.png"/>
+        <img id="avatar_masks_mask6_blood_moon" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask6/blood-moon.png"/>
+        <img id="avatar_masks_mask6_blue_blush" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask6/blue-blush.png"/>
+        <img id="avatar_masks_mask6_blue_white" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask6/blue-white.png"/>
+        <img id="avatar_masks_mask6_copper" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask6/copper.png"/>
+        <img id="avatar_masks_mask6_forest" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask6/forest.png"/>
+        <img id="avatar_masks_mask6_white_orange" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask6/white-orange.png"/>
+
+
+        <img id="avatar_masks_mask7_black_white" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask7/black-white.png"/>
+        <img id="avatar_masks_mask7_blood_moon" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask7/blood-moon.png"/>
+        <img id="avatar_masks_mask7_blue_blush" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask7/blue-blush.png"/>
+        <img id="avatar_masks_mask7_blue_white" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask7/blue-white.png"/>
+        <img id="avatar_masks_mask7_copper" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask7/copper.png"/>
+        <img id="avatar_masks_mask7_forest" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask7/forest.png"/>
+        <img id="avatar_masks_mask7_white_orange" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask7/white-orange.png"/>
+
+
+        <img id="avatar_masks_mask8_black_white" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask8/black-white.png"/>
+        <img id="avatar_masks_mask8_blood_moon" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask8/blood-moon.png"/>
+        <img id="avatar_masks_mask8_blue_blush" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask8/blue-blush.png"/>
+        <img id="avatar_masks_mask8_blue_white" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask8/blue-white.png"/>
+        <img id="avatar_masks_mask8_copper" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask8/copper.png"/>
+        <img id="avatar_masks_mask8_forest" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask8/forest.png"/>
+        <img id="avatar_masks_mask8_white_orange" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Masks/Mask8/white-orange.png"/>
+
+
+        <img id="avatar_weapons_pack1_arrow_explosive" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack1/arrow-explosive.png"/>
+        <img id="avatar_weapons_pack1_arrow_piercing" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack1/arrow-piercing.png"/>
+        <img id="avatar_weapons_pack1_arrow_regular" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack1/arrow-regular.png"/>
+        <img id="avatar_weapons_pack1_bomb" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack1/bomb.png"/>
+        <img id="avatar_weapons_pack1_bow" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack1/bow.png"/>
+        <img id="avatar_weapons_pack1_crossbow" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack1/crossbow.png"/>
+        <img id="avatar_weapons_pack1_dagger" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack1/dagger.png"/>
+        <img id="avatar_weapons_pack1_potion_berserk" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack1/potion-berserk.png"/>
+        <img id="avatar_weapons_pack1_potion_generic" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack1/potion-generic.png"/>
+        <img id="avatar_weapons_pack1_potion_health" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack1/potion-health.png"/>
+        <img id="avatar_weapons_pack1_potion_mana" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack1/potion-mana.png"/>
+        <img id="avatar_weapons_pack1_potion_stamina" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack1/potion-stamina.png"/>
+        <img id="avatar_weapons_pack1_shield" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack1/shield.png"/>
+        <img id="avatar_weapons_pack1_smoke_grenade" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack1/smoke-grenade.png"/>
+        <img id="avatar_weapons_pack1_sulfur_grenade" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack1/sulfur-grenade.png"/>
+        <img id="avatar_weapons_pack1_sword" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack1/sword.png"/>
+
+        <img id="avatar_weapons_pack2_axe1" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack2/axe1.png"/>
+        <img id="avatar_weapons_pack2_axe2" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack2/axe2.png"/>
+        <img id="avatar_weapons_pack2_hammer" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack2/hammer.png"/>
+        <img id="avatar_weapons_pack2_spear" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack2/spear.png"/>
+        <img id="avatar_weapons_pack2_sword1" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack2/sword1.png"/>
+        <img id="avatar_weapons_pack2_sword2" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack2/sword2.png"/>
+        <img id="avatar_weapons_pack2_sword3" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack2/sword3.png"/>
+        <img id="avatar_weapons_pack2_sword4" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack2/sword4.png"/>
+        <img id="avatar_weapons_pack2_sword5" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack2/sword5.png"/>
+
+        <img id="avatar_weapons_pack3_angelblade" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack3/angelblade.png"/>
+        <img id="avatar_weapons_pack3_moonandstarblade" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack3/moonandstarblade.png"/>
+        <img id="avatar_weapons_pack3_moonandstarsword" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack3/moonandstarsword.png"/>
+        <img id="avatar_weapons_pack3_wingblade" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack3/wingblade.png"/>
+        <img id="avatar_weapons_pack3_wingsword" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack3/wingsword.png"/>
+
+        <img id="avatar_weapons_pack4_arrow" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack4/arrow.png"/>
+        <img id="avatar_weapons_pack4_axe" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack4/axe.png"/>
+        <img id="avatar_weapons_pack4_bow" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack4/bow.png"/>
+        <img id="avatar_weapons_pack4_darksword" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack4/darksword.png"/>
+        <img id="avatar_weapons_pack4_demonstaff" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack4/demonstaff.png"/>
+        <img id="avatar_weapons_pack4_goldsword" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack4/goldsword.png"/>
+        <img id="avatar_weapons_pack4_naturestaff" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack4/naturestaff.png"/>
+        <img id="avatar_weapons_pack4_shield" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack4/shield.png"/>
+        <img id="avatar_weapons_pack4_spiked_club" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack4/spiked-club.png"/>
+        <img id="avatar_weapons_pack4_stonesword" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack4/stonesword.png"/>
+
+        <img id="avatar_weapons_pack5_ak47" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack5/ak47.png"/>
+        <img id="avatar_weapons_pack5_barettm107" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack5/barettm107.png"/>
+        <img id="avatar_weapons_pack5_coltm4" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack5/coltm4.png"/>
+        <img id="avatar_weapons_pack5_gatling" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack5/gatling.png"/>
+        <img id="avatar_weapons_pack5_handgun" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack5/handgun.png"/>
+        <img id="avatar_weapons_pack5_rocket_shells" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack5/rocket-shells.png"/>
+        <img id="avatar_weapons_pack5_shotgun" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack5/shotgun.png"/>
+        <img id="avatar_weapons_pack5_smaw" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack5/smaw.png"/>
+        <img id="avatar_weapons_pack5_uzi" crossorigin="anonymous" src="https://cdn.theexpanse.app/images/avatar-upgrades/Weapons/pack5/uzi.png"/>
 
     </a-assets>
+    <a-box></a-box>
     <a-entity id="rig" position="0 1.6 0"
               movement-controls="camera:#camera;fly:true">
-        <a-entity id="camera" camera="near:0.1;far:500" look-controls wasd-controls="fly:true">
-            <a-entity id="cursor"  cursor="rayOrigin: mouse"
-              raycaster="far: 30; objects: .intersect;" ui-mouse-shim="fps:60"
-              super-hands="colliderEvent: raycaster-intersection;
-              colliderEventProperty: els;
-              colliderEndEvent:raycaster-intersection-cleared;
-              colliderEndEventProperty: clearedEls;" ></a-entity>
+            <a-entity id="camera" camera="near:0.1;far:500" look-controls wasd-controls="fly:true">
+                <a-entity id="cursor"  cursor="rayOrigin: mouse"
+                  raycaster="far: 30; objects: .intersect;" ui-mouse-shim="fps:60"
+                  super-hands="colliderEvent: raycaster-intersection;
+                  colliderEventProperty: els;
+                  colliderEndEvent:raycaster-intersection-cleared;
+                  colliderEndEventProperty: clearedEls;" ></a-entity>
 
-            <a-entity id="cameraDummyPosition"></a-entity>
-        </a-entity>
+                <a-entity id="cameraDummyPosition"></a-entity>
+            </a-entity>
 
         <a-entity position="-1.85 -0.8 -1.2">
             <a-ring segments-theta="6" theta-start="100" rotation="0 0 -10" shader="flat" position="0 0 0"
@@ -87,12 +305,19 @@
         <!--<a-entity id="rhand" mixin="controller-right"></a-entity>-->
         <!--<a-entity id="lhand" mixin="controller-left"></a-entity>-->
     </a-entity>
-    <a-shanes-editor></a-shanes-editor>
+    <!--<a-shanes-editor></a-shanes-editor>-->
+    <!--<a-entity id="selectionBox">-->
+        <!--<a-entity gizmo="raycasterEl:#cursor;cameraEl:#camera;displayEl:#displayBox" id="gizmos" position="-0.6 -0.45 -0.6"></a-entity>-->
+        <!--<a-entity display-box="gizmoEl:#gizmos" id="displayBox"></a-entity>-->
+    <!--</a-entity>-->
+    <!--<a-entity id="placeContainer"></a-entity>-->
     <a-entity id="selectionBox">
-        <a-entity gizmo="raycasterEl:#cursor;cameraEl:#camera;displayEl:#displayBox" id="gizmos" position="-0.6 -0.45 -0.6"></a-entity>
+        <a-entity gizmo="cameraEl:#camera;displayEl:#displayBox" id="gizmos" position="-0.6 -0.45 -0.6"></a-entity>
         <a-entity display-box="gizmoEl:#gizmos" id="displayBox"></a-entity>
     </a-entity>
-    <a-entity id="placeContainer"></a-entity>
+
+    <a-entity id="placeContainer" objects-collide></a-entity>
+    <a-shanes-editor id="shanesEditor"></a-shanes-editor>
 </a-scene>
 </body>
 </html>

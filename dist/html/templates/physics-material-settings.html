@@ -1,0 +1,26 @@
+<a-entity class="materialSettings">
+    <a-text font="roboto" baseLine="top" anchor="center" value="Physics Material Settings"
+            position="-1.05 0.88 0" color="#212121" wrap-count="45" width="2.6" height="0.2"></a-text>
+
+    <a-plane width="2.6" height="0.01" color="#8f8f8f" shader="flat"></a-plane>
+
+    <a-entity width="0.04"></a-entity>
+
+    <a-text font="roboto" baseLine="top" anchor="center" value="Friction"
+            position="-1.05 0.88 0" color="#212121" wrap-count="10" width="0.448333" height="0.1"></a-text>
+    <a-plane class="zFriction" width="0.55" ui-border="borderRadius:0.1;borderWidth:0.008" height="0.2" color="#212121" text="value:{{to-fixed friction 3}};color:#212121;wrapCount:12;align:center">
+        <a-ui-fab-button-small scale="0.75 0.75 0.75" class="zFrictionUp intersectable no-yoga-layout" color="#009688" position="0.33 0.055 0.001" icon-color="#fff" ripple-color="#009688" src="https://cdn.theexpanse.app/images/icons/baseline_keyboard_arrow_up_white_18dp.png"></a-ui-fab-button-small>
+        <a-ui-fab-button-small scale="0.75 0.75 0.75" class="zFrictionDown intersectable no-yoga-layout" color="#009688" position="0.33 -0.055 0.001" icon-color="#fff" ripple-color="#009688" src="https://cdn.theexpanse.app/images/icons/down_arrow.png"></a-ui-fab-button-small>
+    </a-plane>
+
+
+    <a-entity width="0.04"></a-entity>
+
+    <a-text font="roboto" baseLine="top" anchor="center" value="Restitution"
+            position="-1.05 0.88 0" color="#212121" wrap-count="10" width="0.448333" height="0.1"></a-text>
+    <a-plane class="zRestitution" width="0.55" ui-border="borderRadius:0.1;borderWidth:0.008" height="0.2" color="#212121" text="value:{{to-fixed restitution 3}};color:#212121;wrapCount:12;align:center">
+        <a-ui-fab-button-small scale="0.75 0.75 0.75" class="zRestitutionUp intersectable no-yoga-layout" color="#009688" position="0.33 0.055 0.001" icon-color="#fff" ripple-color="#009688" src="https://cdn.theexpanse.app/images/icons/baseline_keyboard_arrow_up_white_18dp.png"></a-ui-fab-button-small>
+        <a-ui-fab-button-small scale="0.75 0.75 0.75" class="zRestitutionDown intersectable no-yoga-layout" color="#009688" position="0.33 -0.055 0.001" icon-color="#fff" ripple-color="#009688" src="https://cdn.theexpanse.app/images/icons/down_arrow.png"></a-ui-fab-button-small>
+    </a-plane>
+
+</a-entity>

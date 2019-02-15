@@ -75,6 +75,7 @@ export class LightSettings{
         this.lightTargetUpdate = ()=>{
             UI.utils.isChanging(this.context.sceneEl,this.context.currentObject.settings.uuid);
             let position = this.context.currentObject.object3D.target.position;
+            this.context.currentObject.settings.light = {x:position.x,y:position.y,z:position.z};
             positionSettings.querySelector('.xInput').setAttribute('text','value:'+(position.x).toFixed(3)+extraTextSettings);
             positionSettings.querySelector('.yInput').setAttribute('text','value:'+(position.y).toFixed(3)+extraTextSettings);
             positionSettings.querySelector('.zInput').setAttribute('text','value:'+(position.z).toFixed(3)+extraTextSettings);

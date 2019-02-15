@@ -26,7 +26,8 @@ export class RepeatSettingsModal {
 
 
         this.endSection = '</a-entity>\n            </a-entity>';
-        this.setupDisplayValues()
+        this.setupDisplayValues();
+        console.log(this.material.texture.filters);
         Promise.all([
             this.context.content.compileTemplates('number',
                 [

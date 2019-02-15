@@ -3,6 +3,7 @@ import {Content} from "./modules/content";
 import {SceneGraph} from './modules/scene-graph';
 import {SceneListView} from "./views/scene-list-view";
 import {ItemView} from "./views/item-view";
+import './components/sprite-sheet';
 import './components/gizmo';
 import './components/display-box';
 import './components/expanse-portal';
@@ -58,6 +59,8 @@ import {EditModelSettings} from "./views/modals/edit-model-settings";
 import {SpriteModalSettings} from "./views/modals/sprite-modal";
 import {PortalModal} from "./views/modals/portal-modal";
 import {EffectModal} from "./views/modals/effect-modal";
+import {SoundModal} from "./views/modals/sound-model";
+import {LoadAudioModal} from "./views/modals/load-audio";
 
 export class Editor{
     constructor(context,rootUrl){
@@ -75,11 +78,11 @@ export class Editor{
         this.setupModals();
         this.setupPopupNavigation();
         this.setupTransformOptions();
-        new PreloadTemplates(this).preload();
-
+        this.sceneGraph.audioListener = new THREE.AudioListener();
+        this.sceneEl.camera.add( this.sceneGraph.audioListener );
         this.showAlphaMap = new THREE.TextureLoader().load('https://cdn.theexpanse.app/images/nav-alpha.jpg');
         this.hideAlphaMap = new THREE.TextureLoader().load('https://cdn.theexpanse.app/images/nav-alpha-hide.jpg');
-        this.showMaterial = document.getElementById('uiPanel').getObject3D('mesh').material;
+        this.showMaterial = {};//document.getElementById('uiPanel').getObject3D('mesh').material;
         this.showMaterial.transparent = true;
         this.showMaterial.alphaMap = this.hideAlphaMap;
         this.displayBox = document.getElementById('displayBox').components['display-box'];
@@ -88,6 +91,36 @@ export class Editor{
             if(this.transformUpdate){
                 this.transformUpdate();
             }
+        });
+        this.sceneEl.addEventListener('sceneList',(e)=>{
+            this.sceneList.open(e.detail.scenes,e.detail.page,e.detail.search,e.detail.type);
+        });
+        this.sceneEl.addEventListener('loadBehaviours',()=>{
+            this.sceneGraph.behaviourFactory.loadBehaviours();
+        });
+        this.sceneEl.addEventListener('openScene',()=>{
+            this.sceneGraph.open()
+                .then(()=>this.sceneEl.emit('sceneOpened'));
+        });
+        this.sceneEl.addEventListener('loadScene',({detail})=>{
+            this.sceneGraph.load(detail.space,detail.isEditing)
+                .then(()=>this.sceneEl.emit('sceneLoaded'));
+        });
+        this.sceneEl.addEventListener('saveAframe',({detail})=>{
+            this.sceneGraph.objectFactory
+                .resetAframeContainerItem(detail.aframe_id,detail.definition);
+        });
+
+        this.sceneEl.addEventListener('getSceneBehaviour',({detail})=>{
+            let behaviour = this.sceneGraph.currentScene.behaviours[detail];
+            this.sceneEl.emit('getSceneBehaviour-return',behaviour)
+        });
+        this.sceneEl.addEventListener('resetSceneBehaviour',({detail})=>{
+            let behaviour = this.sceneGraph.behaviourFactory.resetBehaviour(detail);
+            this.sceneEl.emit('resetSceneBehaviour-return',behaviour)
+        });
+        this.sceneEl.addEventListener('syncObject',({detail})=>{
+            this.sceneGraph.syncReceive(detail);
         });
         let saveScene = document.getElementById('saveScene');
         saveScene.setAttribute('ui-modal','modal:#modalRenderer;main:#mainRenderer');
@@ -122,6 +155,7 @@ export class Editor{
             this.currentObject.settings.state.transform_updated = true;
             this.sceneGraph.sync();
         });
+        setTimeout(()=>new PreloadTemplates(this).preload(),5000)
     }
     changeTopButtons(inScene){
         if(inScene){
@@ -198,6 +232,7 @@ export class Editor{
         this.repeatSettingsModal = new RepeatSettingsModal(this);
         this.portalModal = new PortalModal(this);
         this.loadTextureModal = new LoadTextureModal(this);
+        this.loadAudioModal = new LoadAudioModal(this);
 
         this.geometryTypeModal = new GeometryTypeModal(this);
         this.geometrySettingsModal = new GeometrySettingsModal(this);
@@ -218,6 +253,7 @@ export class Editor{
         this.physicsShapeTypeModal = new PhysicsShapeTypeModal(this);
         this.physicsShapeSettingsModal = new PhysicsShapeSettingsModal(this);
         this.effectModal = new EffectModal(this);
+        this.soundModal = new SoundModal(this);
 
         this.sceneEl.addEventListener('modal-closed',()=>{
             this.content.popup.components['ui-scroll-pane'].setContent('');

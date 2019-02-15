@@ -1,0 +1,46 @@
+<a-entity width="2.9">
+    <a-text font="roboto" baseLine="center" anchor="center" value="Physics Shape Settings"
+            color="#212121" wrap-count="24" width="2" height="0.1"></a-text>
+    <a-plane height="0.2" width="0.2" src="{{image}}" shader="flat"></a-plane>
+    <a-entity height="0.2" width="0.1"></a-entity>
+
+    <a-text font="roboto" baseLine="center" anchor="center" value="Mesh Object To Add ( Optional )"
+            color="#212121" wrap-count="50" width="2.6" height="0.1"></a-text>
+    <a-entity width="2.9" height="0.1"></a-entity>
+    <a-entity width="0.3"></a-entity>
+    <a-entity width="2.2">
+        {{#each meshes}}
+        <a-entity height="0.2" width="0.1"></a-entity>
+        <a-text font="roboto" baseLine="center" anchor="center" value="{{name}}"
+                color="#212121" wrap-count="35" width="1.55" height="0.1"></a-text>
+        <a-ui-switch class="shapeWrap" data-name="{{name}}" value="{{enabled}}"></a-ui-switch>
+        {{/each}}
+    </a-entity>
+    <a-entity width="0.55"></a-entity>
+    <a-entity width="2.2">
+        {{#compare page 0 operator=">"}}
+        <a-ui-button text-value="Prev Page" class="prev-meshes-button intersectable"></a-ui-button>
+        <a-entity width="0.5"></a-entity>
+        {{/compare}}
+        {{#compare meshes.length 10 operator="=="}}
+        {{#compare page 0 operator="=="}}
+        <a-entity width="1.05"></a-entity>
+        {{/compare}}
+        <a-ui-button text-value="Next Page" class="next-meshes-button intersectable"></a-ui-button>
+        {{/compare}}
+    </a-entity>
+
+    <a-entity width="0.1"></a-entity>
+    <a-entity width="2.9"></a-entity>
+    <a-entity width="3.2">
+        <a-entity height="0.2" width="0.1"></a-entity>
+        <a-ui-button class="intersectable left-button cancelAddScene" text-value="CANCEL"
+                     font-color="#009688" color="#fff" ripple-color="#009688" width="1.2" height="0.2" ripple-size="1.2 0.2"
+                     wrap-count="24"></a-ui-button>
+
+        <a-entity height="0.2" width="0.1"></a-entity>
+        <a-ui-button class="intersectable right-button createSceneConfirm" text-value="CREATE SHAPE"
+                     font-color="#fff" color="#009688" ripple-color="#fff" width="1.2" height="0.2" ripple-size="1.2 0.2"
+                     wrap-count="24"></a-ui-button>
+    </a-entity>
+</a-entity>

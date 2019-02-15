@@ -22,6 +22,7 @@ export class ItemView {
         this.isSprite = object.settings.type==="Sprite";
         this.isPortal = object.settings.type==="Portal";
         this.isEffect = object.settings.type==="Effect";
+        this.isSound = object.settings.type==="Sound";
         if(this.isTop){
             this.context.displayBox.hide();
             this.context.viewUtils.hideTransformOptions();
@@ -66,6 +67,7 @@ export class ItemView {
             .then(()=>this.setupPortalSettings())
             .then(()=>this.setupClearScene())
             .then(()=>this.setupPhysics())
+            .then(()=>this.setupAudioSettings())
             .then(()=>this.setupMobileResponse())
             .then(()=>this.setupShadowSettings())
             .then(()=>this.setupLightSettings())
@@ -165,7 +167,7 @@ export class ItemView {
 
     }
     showMaterialAndGeometrySettings(){
-        if(this.isTop||this.isGroup||this.is3dModel||this.isAframe||this.isLight||this.isSprite||this.isPortal||this.isEffect)return;
+        if(this.isTop||this.isGroup||this.is3dModel||this.isAframe||this.isLight||this.isSprite||this.isPortal||this.isEffect||this.isSound)return;
         let isPrimitive = this.context.currentObject.settings.type==="Primitive";
         let material = this.context.currentObject.settings.material;
         let geometry = this.context.currentObject.settings.geometry;
@@ -249,7 +251,7 @@ export class ItemView {
             });
     }
     setupShadowSettings(){
-        if(this.isTop||this.isGroup||this.isAframe||this.isLight||this.isSprite||this.isPortal||this.isEffect)return;
+        if(this.isTop||this.isGroup||this.isAframe||this.isLight||this.isSprite||this.isPortal||this.isEffect||this.isSound)return;
         return this.context.content.compileTemplates('shadow-settings',[{
             shadow:this.context.currentObject.shadow
         }])
@@ -302,6 +304,21 @@ export class ItemView {
                 });
             })
     }
+    setupAudioSettings(){
+        if(!this.isSound) return;
+        return this.context.content.compileTemplates('single-item-button', [{
+            title: 'Sound Settings',
+            description: 'Change the sound settings for this sound object.',
+            buttonText: 'EDIT SOUND',
+            descriptionHeight: 0.21,
+        }])
+            .then(contents => this.context.content.addTemplateItem('#soundSettings', contents[0]))
+            .then(()=>{
+                document.querySelector('#soundSettings').querySelector('.singleButton').addEventListener('mousedown',()=>{
+                    this.context.soundModal.open();
+                });
+            })
+    }
     setupPortalSettings(){
         if(!this.isPortal) return;
         return this.context.content.compileTemplates('single-item-button', [{
@@ -313,7 +330,8 @@ export class ItemView {
             .then(contents => this.context.content.addTemplateItem('#portalSettings', contents[0]))
             .then(()=>{
                 document.querySelector('#portalSettings').querySelector('.singleButton').addEventListener('mousedown',()=>{
-                    this.context.portalModal.open(this.context.currentObject.settings.portal,true);
+
+                    this.context.portalModal.open(this.context.currentObject.settings.portal,true,this.context.currentObject.settings.name);
                 });
             })
     }
@@ -505,7 +523,7 @@ export class ItemView {
             this.removeSection('shadowSettings');
             this.removeSection('lightSettings');
             this.removeSection('portalSettings');
-        }else if(this.isPortal||this.isEffect){
+        }else if(this.isPortal||this.isEffect||this.isSound){
             this.removeSection('clearScene');
             this.removeSection('sceneSettings');
             this.removeSection('geometrySettings');

@@ -1,0 +1,26 @@
+<a-entity class="bodySettings" width="1" >
+    <a-text font="roboto" baseLine="top" anchor="center" value="Physics Settings"
+            position="-1.05 0.88 0" color="#212121" wrap-count="15" width="1.2" height="0.2"></a-text>
+
+    <a-plane width="2.6" height="0.01" color="#8f8f8f" shader="flat"></a-plane>
+
+    <a-entity>
+        <a-text font="roboto" baseLine="top" anchor="center" align="center" value="Enable Physics:"
+                position="-1.05 0.88 0" color="#212121" wrap-count="25" width="1.05" height="0.1"></a-text>
+        <a-entity height="0.1" width="0.35"></a-entity>
+        <a-ui-switch class="physicsEnabled" value="{{enabled}}"></a-ui-switch>
+    </a-entity>
+
+    <a-text font="roboto" baseLine="top" anchor="center" align="center" value="Mass"
+            color="#212121" wrap-count="25" width="1.05" height="0.1"></a-text>
+    <a-entity height="0.1" width="0.2"></a-entity>
+    <a-plane class="zMass" width="0.55" ui-border="borderRadius:0.1;borderWidth:0.008" height="0.2" color="#212121" text="value:{{to-fixed mass 3}};color:#212121;wrapCount:12;align:center">
+        <a-ui-fab-button-small scale="0.75 0.75 0.75" class="zMassUp intersectable no-yoga-layout" color="#009688" position="0.33 0.055 0.001" icon-color="#fff" ripple-color="#009688" src="https://cdn.theexpanse.app/images/icons/baseline_keyboard_arrow_up_white_18dp.png"></a-ui-fab-button-small>
+        <a-ui-fab-button-small scale="0.75 0.75 0.75" class="zMassDown intersectable no-yoga-layout" color="#009688" position="0.33 -0.055 0.001" icon-color="#fff" ripple-color="#009688" src="https://cdn.theexpanse.app/images/icons/down_arrow.png"></a-ui-fab-button-small>
+    </a-plane>
+
+    <a-entity height="0" width="1"></a-entity>
+    <a-ui-button class="intersectable resetPhysics" text-value="RESET PHYSICS"
+                 font-color="#fff" color="#009688" ripple-color="#fff" width="1" height="0.2" ripple-size="1.2 0.2"
+                 wrap-count="20"></a-ui-button>
+</a-entity>

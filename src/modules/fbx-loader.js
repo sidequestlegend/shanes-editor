@@ -46,6 +46,7 @@ module.exports = THREE.FBXLoader = ( function () {
         crossOrigin: 'anonymous',
 
         load: function ( url, onLoad, onProgress, onError ) {
+            console.log(url);
             var self = this;
 
             var resourceDirectory = THREE.LoaderUtils.extractUrlBase( url );
@@ -53,7 +54,7 @@ module.exports = THREE.FBXLoader = ( function () {
             var loader = new THREE.FileLoader( this.manager );
             loader.setResponseType( 'arraybuffer' );
             loader.load( url, function ( buffer ) {
-
+                console.log(url,buffer);
                 try {
 
                     var scene = self.parse( buffer, resourceDirectory );

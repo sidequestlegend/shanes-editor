@@ -99,6 +99,8 @@ export class Migrations{
                     },
                     shapes:[]
                 },
+                light:{},
+                sound:{},
                 shadow:{cast:false,receive:false},
                 hide_on_mobile:current.settings.object.hide_on_mobile||false,
                 hide_on_desktop:current.settings.object.show_only_on_mobile||false,

@@ -2,7 +2,6 @@ export class LoadTextureModal {
     constructor(context) {
         this.context = context;
         this.setupTextures();
-
     }
     open(){
         this.uiRenderer = document.getElementById('mainRenderer');
@@ -47,11 +46,11 @@ export class LoadTextureModal {
     openImage(folder,image){
         this.context.content.compileTemplates('add-items',[{items:
                 window.location.host==='shaneharris.github.io'?
-                    [{name:"128",friendly_name:'0.128K Image',image_url:'https://cdn.theexpanse.app/images/icons/128.jpg'}]:[
-                {name:"1024",friendly_name:'1K Image',image_url:'https://cdn.theexpanse.app/images/icons/1024.jpg'},
-                {name:"512",friendly_name:'0.5K Image',image_url:'https://cdn.theexpanse.app/images/icons/512.jpg'},
-                {name:"256",friendly_name:'0.25K Image',image_url:'https://cdn.theexpanse.app/images/icons/256.jpg'},
-                {name:"128",friendly_name:'0.128K Image',image_url:'https://cdn.theexpanse.app/images/icons/128.jpg'}
+                    [{name:"128",friendly_name:'0.128K Image',image_url:'#small_icons',image_coords:'128 0 128 128'}]:[
+                {name:"1024",friendly_name:'1K Image',image_url:'#small_icons',image_coords:'0 0 128 128'},
+                {name:"512",friendly_name:'0.5K Image',image_url:'#small_icons',image_coords:'128 128 128 128'},
+                {name:"256",friendly_name:'0.25K Image',image_url:'#small_icons',image_coords:'0 128 128 128'},
+                {name:"128",friendly_name:'0.128K Image',image_url:'#small_icons',image_coords:'128 0 128 128'}
             ]}],true)
             .then(contents=>this.context.content.popup.setContent(contents[0]))
             .then(()=>{

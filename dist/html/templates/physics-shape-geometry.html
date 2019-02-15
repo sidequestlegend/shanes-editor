@@ -1,0 +1,34 @@
+<a-text font="roboto" baseLine="top" anchor="center" value="{{title}}"
+        position="-1.05 0.88 0" color="#212121" wrap-count="12" width="0.7" height="0.2"></a-text>
+<a-plane width="1" height="0.01" color="#8f8f8f" shader="flat"></a-plane>
+<a-entity class="childObjects">
+    {{#each children}}
+    <a-entity width="1.2">
+        <a-entity width="0.6">
+            <a-text font="roboto" baseLine="center" anchor="center" value="{{name}}"
+                    position="-1.05 0.88 0" color="#212121" wrap-count="15" width="0.5" height="0.15"></a-text>
+
+            <a-text font="roboto" baseLine="center" anchor="center" value="{{type}}"
+                    position="-1.05 0.88 0" color="#8f8f8f" wrap-count="16" width="0.5" height="0.05"></a-text>
+        </a-entity>
+        <a-entity width="0.3">
+            <a-ui-switch class="switchEnabled" data-uuid="{{uuid}}" value="{{enabled}}"></a-ui-switch>
+        </a-entity>
+        <a-plane width="1" height="0.01" color="#8f8f8f" shader="flat" ui-yoga="margin:0"></a-plane>
+    </a-entity>
+
+    <!--<a-entity width="0.5"></a-entity>-->
+    {{/each}}
+    <a-entity width="1.2">
+        {{#compare page 0 operator=">"}}
+        <a-entity width="0.1"></a-entity>
+        <a-ui-button text-value="Prev" width="0.4" wrap-count="8" class="prev-button-children intersectable"></a-ui-button>
+        {{/compare}}
+        {{#compare children.length 10 operator="=="}}
+        {{#compare page 0 operator="=="}}
+        <a-entity width="0.55"></a-entity>
+        {{/compare}}
+        <a-ui-button text-value="Next" width="0.4" wrap-count="8" class="next-button-children intersectable"></a-ui-button>
+        {{/compare}}
+    </a-entity>
+</a-entity>

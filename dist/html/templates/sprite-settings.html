@@ -1,0 +1,67 @@
+<a-entity width="2.9">
+
+
+    <a-text font="roboto" baseLine="center" anchor="center" value="Sprite Settings"
+            color="#212121" wrap-count="40" width="2.95" height="0.2"></a-text>
+
+    <a-plane width="3.75" height="0.008" color="#cfcfcf" shader="flat"></a-plane>
+    <a-text font="roboto" baseLine="top" anchor="center" value="Image:"
+            color="#212121" wrap-count="16" width="0.5" height="0.1"></a-text>
+    <a-ui-input-text class="textureImage" camera-el="#camera" look-controls-component="right-look-controls"
+                     rig-el="#rig" wasd-controls-component="smooth-wasd-controls"
+                     width="1.25" height="0.2" value="{{map}}" place-holder="Image"></a-ui-input-text>
+
+    <a-ui-button class="intersectable save" text-value="SAVE"
+                 width="0.22" height="0.12" ripple-size="0.22 0.12" wrap-count="6"></a-ui-button>
+
+    <a-entity width="0.21"></a-entity>
+
+    <a-entity width="1.35">
+
+        <a-text font="roboto" baseLine="top" anchor="center" value="Color:"
+                color="#212121" wrap-count="16" width="0.5" height="0.1"></a-text>
+
+        <a-entity width="0.005" ui-yoga="margin:0"></a-entity>
+
+        <a-plane ui-btn ui-yoga="margin:0" shader="flat" class="colorInputField intersectable" ui-rounded="borderRadius:0.1;curveSegments:5" width="0.32" height="0.2" color="{{color}}">
+            <a-plane ui-border="borderRadius:0.1;borderWidth:0.008" class="no-yoga-layout" width="0.32" height="0.2" color="#212121" position="0 0 0.001"></a-plane>
+        </a-plane>
+
+        <a-text ui-yoga="margin:0" shader="flat" width="0.32" class="colorInputFieldText" height="0.2" value="{{color}}" color="#212121" wrap-count="7" align="center">
+        </a-text>
+
+    </a-entity>
+
+    <a-entity width="1.35" class="rotation">
+
+        <a-text font="roboto" baseLine="top" anchor="center" value="Rotation:"
+                color="#212121" wrap-count="16" width="0.5" height="0.1"></a-text>
+
+        <a-plane ui-yoga="margin:0" class="xText" width="0.33" ui-border="borderRadius:0.1;borderWidth:0.008" height="0.2" color="#212121" text="value:{{to-fixed rotation 3}};color:#212121;wrapCount:9;align:center">
+            <a-ui-fab-button-small scale="0.75 0.75 0.75" class="xInputUp intersectable no-yoga-layout" color="#009688" position="0.22 0.055 0.001" icon-color="#fff" ripple-color="#009688" src="https://cdn.theexpanse.app/images/icons/baseline_keyboard_arrow_up_white_18dp.png"></a-ui-fab-button-small>
+            <a-ui-fab-button-small scale="0.75 0.75 0.75" class="xInputDown intersectable no-yoga-layout" color="#009688" position="0.22 -0.055 0.001" icon-color="#fff" ripple-color="#009688" src="https://cdn.theexpanse.app/images/icons/down_arrow.png"></a-ui-fab-button-small>
+        </a-plane>
+
+    </a-entity>
+
+    <a-entity width="1.35">
+        <a-text font="roboto" baseLine="top" anchor="center" value="Fog:"
+                color="#212121" wrap-count="10" width="0.32" height="0.07" ui-yoga="margin:0"></a-text>
+        <a-ui-switch class="switch-fog" value="{{fog}}"></a-ui-switch>
+    </a-entity>
+
+
+    <a-entity width="1.35">
+        <a-text font="roboto" baseLine="top" anchor="center" value="Lights:"
+                color="#212121" wrap-count="10" width="0.32" height="0.07" ui-yoga="margin:0"></a-text>
+        <a-ui-switch class="switch-lights" value="{{lights}}"></a-ui-switch>
+    </a-entity>
+
+
+    <a-entity height="0.05" width="2.9"></a-entity>
+    <a-entity height="0.2" width="0.1"></a-entity>
+    <a-ui-button class="intersectable right-button cancelAddSprite" text-value="CLOSE"
+                 font-color="#009688" color="#fff" ripple-color="#009688" width="1.2" height="0.2" ripple-size="1.2 0.2"
+                 wrap-count="24"></a-ui-button>
+
+</a-entity>

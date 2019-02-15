@@ -5,14 +5,14 @@
     <a-plane width="2.6" height="0.01" color="#8f8f8f" shader="flat"></a-plane>
 
     <a-entity>
-        <a-text font="roboto" baseLine="top" anchor="center" value="Hide on Mobile:"
+        <a-text font="roboto" baseLine="top" anchor="center" value="Only On Desktop:"
                 position="-1.05 0.88 0" color="#212121" wrap-count="38" width="1.5" height="0.1"></a-text>
-        <a-ui-switch id="hideOnMobile" value="{{hide_on_mobile}}"></a-ui-switch>
+        <a-ui-switch class="hideOnMobile" value="{{hide_on_mobile}}"></a-ui-switch>
     </a-entity>
 
     <a-entity>
-        <a-text font="roboto" baseLine="top" anchor="center" value="Hide on Desktop:"
+        <a-text font="roboto" baseLine="top" anchor="center" value="Only On Mobile:"
                 position="-1.05 0.88 0" color="#212121" wrap-count="38" width="1.5" height="0.1"></a-text>
-        <a-ui-switch id="hideOnDesktop" value="{{show_only_on_mobile}}"></a-ui-switch>
+        <a-ui-switch class="hideOnDesktop" value="{{hide_on_desktop}}"></a-ui-switch>
     </a-entity>
 </a-entity>

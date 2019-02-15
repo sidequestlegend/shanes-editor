@@ -12,6 +12,7 @@ export class GeometryFactory{
         for(let key in settingsObj){
             if(settingsObj.hasOwnProperty(key)){
                 parameters.push(settingsObj[key]);
+                geo_settings[key] = settingsObj[key];
             }
         }
         let outputFunc = Function.prototype.bind.apply(THREE[geo_settings.type],parameters);
@@ -75,6 +76,7 @@ export class GeometryFactory{
             if(settings.hasOwnProperty(key)&&
                 notAllowed.indexOf(key)===-1){
                 parameters.push(settings[key]);
+                geo_settings[key] = settings[key];
             }
         }
         let outputFunc = Function.prototype.bind.apply(THREE.ParametricBufferGeometry,parameters);

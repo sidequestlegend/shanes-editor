@@ -25,6 +25,7 @@ export class SceneGraph{
         this.physicsChildren = [];
         this.physicsWalkOnChildren = [];
         this.raycastObjects = [];
+        this.mouseChildren = [];
         let version = require('./../../package.json').version;
         console.log('Shane\'s Editor Version '+version);
     }
@@ -56,7 +57,7 @@ export class SceneGraph{
                 console.log('Scene Downloaded.');
             });
     }
-    
+
     sync(object){
         object = object || this.context.currentObject;
         clearTimeout(this.syncTimeout);
@@ -77,7 +78,7 @@ export class SceneGraph{
             syncObject = {};
             for(let key in object.settings){
                 if(object.settings.hasOwnProperty(key))
-                syncObject[key] = object.settings[key];
+                    syncObject[key] = object.settings[key];
             }
             if(object.settings.state.added){
                 syncObject.state = {added:true}
@@ -93,7 +94,7 @@ export class SceneGraph{
             };
         }
         if(syncObject){
-            this.context.sceneEl.emit('syncObject',syncObject);
+            this.context.sceneEl.emit('syncObjectSend',syncObject);
             object.settings.state = {
                 added:false,
                 updated:false,
@@ -186,6 +187,7 @@ export class SceneGraph{
     }
 
     open(){
+        this.context.sceneEl.loadTime = new Date().getTime()
         console.log('Loading Scene...');
         // return if no scene is loaded.
         if(!this.currentScene||this.sceneLoaded)return;
@@ -207,6 +209,7 @@ export class SceneGraph{
                 }
             }
         });
+        this.mouseChildren.length = 0;
     }
 
     updatePhysicsChildren(){
@@ -232,21 +235,6 @@ export class SceneGraph{
             init(){
                 this.el.setObject3D('mesh',_this.container);
                 this.el.sceneEl.sceneGraph = _this;
-                this.preventClickTime = 0;
-                this.throttledMouseEvents = AFRAME.utils.throttle(_this.emitMouseEvents, 60, _this);
-                setTimeout(()=>this.el.sceneEl.canvas.addEventListener('mousedown', e=>{
-                    if( e instanceof MouseEvent && e.button !== 0 ) return;
-                    if(_this.prevIntersectionEl){
-                        let now = new Date().getTime();
-                        if(now-this.preventClickTime<200)return;
-                        if(!this.el.sceneEl.preventClick){
-                            _this.prevIntersectionEl.emit('mousedown',this.currentIntersection);
-                        }else{
-                            this.el.sceneEl.preventClick = false;
-                        }
-                        this.preventClickTime = now;
-                    }
-                }),1000);
             },
             tick(time,delta){
                 if(_this.lightHelper){
@@ -262,8 +250,6 @@ export class SceneGraph{
 
                 }
                 _this.behaviourFactory.updateBehaviours(delta);
-                this.throttledMouseEvents();
-                //TWEEN.update()
             }
         });
         // Create and attach the aframe entity container to the scene
@@ -275,77 +261,6 @@ export class SceneGraph{
         this.aframeContainer = document.createElement('a-entity');
         this.aframeContainer.setAttribute('position',"0 0 0");
         document.querySelector('a-scene').appendChild(this.aframeContainer);
-    }
-
-    emitMouseEvents(){
-        let raycaster;
-        if(this.context.sceneEl.renderer.vr.enabled&&this.context.sceneEl.handRaycaster){
-            raycaster = this.context.sceneEl.handRaycaster.raycaster;
-        }else if(!this.context.sceneEl.renderer.vr.enabled&&this.context.sceneEl.raycaster){
-            raycaster = this.context.sceneEl.raycaster.raycaster;
-        }
-        if(!raycaster)return;
-        // let raycaster = this.context.sceneEl&&this.context.sceneEl.raycaster?this.context.sceneEl.raycaster.raycaster:new THREE.Raycaster();
-        if(!this.raycastObjectsInitialised){
-            this.raycastObjectsInitialised = true;
-            this.raycastObjects.length = 0;
-            if(this.context.sceneEl){
-                this.context.sceneEl.object3D.traverse(child=>{
-                    if(child.userData.sceneObject&&
-                        child.userData.sceneObject.settings.mouseOn){
-                        this.raycastObjects.push(child);
-                    }
-                });
-            }else{
-                this.traverse(this.currentScene,object=>{
-                    if(object.settings.mouseOn){
-                        this.raycastObjects.push(object.object3D);
-                    }
-                });
-            }
-        }
-        // this.helper.setDirection(this.raycaster.ray.direction);
-        let intersections = raycaster.intersectObjects( this.raycastObjects, true );
-        //console.log(intersections.length,this.raycastObjects.length);
-        this.prevIntersectionEls = this.prevIntersectionEls||[];
-        let type = 'mouse-move';
-        let closestDistance = Number.POSITIVE_INFINITY;
-        let closestIntersection;
-        for(let i = 0;i < intersections.length; i++) {
-            let intersection = intersections[i];
-            if (intersection.distance < closestDistance) {
-                closestIntersection = intersections[i];
-                closestDistance = intersection.distance;
-            }
-        }
-        if(closestIntersection) {
-            this.context.sceneEl.preventTeleport = true;
-            // Only emit events on objecst with an element attached
-            if(closestIntersection.object.userData.sceneObject&&
-                closestIntersection.object.userData.sceneObject.emit&&
-                closestIntersection.object.userData.sceneObject.settings.mouseOn){
-                // Emit event on sceneGraph object
-
-                let currentEvent = {intersection:closestIntersection};
-                // If this is the first time weve seen this element then emit the mouseenter event.
-                if(this.prevIntersectionEl!==closestIntersection.object.userData.sceneObject){
-                    closestIntersection.object.userData.sceneObject.emit('mouseenter',currentEvent);
-                }
-                this.currentIntersection = {cursorEl:closestIntersection.object.userData.sceneObject,intersection:closestIntersection,evt:event};
-                closestIntersection.object.userData.sceneObject.emit(type,this.currentIntersection);
-            }
-
-            if(this.prevIntersectionEl&&closestIntersection.object.userData.sceneObject!==this.prevIntersectionEl){
-                this.prevIntersectionEl.emit('mouseleave');
-            }
-            this.prevIntersectionEl = closestIntersection.object.userData.sceneObject;
-        }else{
-            this.context.sceneEl.preventTeleport = false;
-            if(this.prevIntersectionEl){
-                this.prevIntersectionEl.emit('mouseleave');
-            }
-            delete this.prevIntersectionEl;
-        }
     }
 
     totals(object,totals,desktopOverride,mobileOverride){
@@ -384,6 +299,7 @@ export class SceneGraph{
 
     traverse(object,callback){
         callback(object);
+        if(!object.children)return;
         for(let i = 0; i < object.children.length; i++){
             this.traverse(object.children[i],callback);
         }
@@ -468,19 +384,19 @@ export class SceneGraph{
         let childObject = this.objectFactory.make(child);
 
         return childObject.promise.then(()=>{
-                // Attach the child to the object3D as a reference.
-                childObject.object.userData.sceneObject = child;
-                // Attach the object3D to the child as a reference.
-                child.object3D = childObject.object;
-                // Add the object3D to the scene.
-                parent.object3D.add(childObject.object);
-                // Add the child to the parent int he scene graph
-                parent.children.push(child);
-                // Setup physics on object
-                this.context.physics.addCurrent(child);
-                // Return the newly created child.
-                return child;
-            });
+            // Attach the child to the object3D as a reference.
+            childObject.object.userData.sceneObject = child;
+            // Attach the object3D to the child as a reference.
+            child.object3D = childObject.object;
+            // Add the object3D to the scene.
+            parent.object3D.add(childObject.object);
+            // Add the child to the parent int he scene graph
+            parent.children.push(child);
+            // Setup physics on object
+            this.context.physics.addCurrent(child);
+            // Return the newly created child.
+            return child;
+        });
     }
 
     showLightHelper(){

@@ -2,7 +2,10 @@
 
     <a-text font="roboto" baseLine="top" anchor="center" value="Texture Image:"
             color="#212121" wrap-count="15" width="0.5" height="0.1"></a-text>
-    <a-ui-input-text class="textureImage" camera-el="#camera" look-controls-component="right-look-controls" width="0.65" height="0.2" value="{{map}}"></a-ui-input-text>
+    <a-ui-input-text class="textureImage" camera-el="#camera"
+                     rig-el="#rig"
+                     wasd-controls-component="smooth-wasd-controls"
+                     look-controls-component="right-look-controls" width="0.65" height="0.2" value="{{map}}"></a-ui-input-text>
 
     <a-entity width="0.21"></a-entity>
 

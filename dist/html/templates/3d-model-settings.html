@@ -1,0 +1,27 @@
+<a-text font="roboto" baseLine="top" anchor="center" value="3D Model Settings"
+        color="#212121" wrap-count="45" width="2.9" height="0.2"></a-text>
+<a-plane width="2.9" height="0.01" color="#8f8f8f" shader="flat"></a-plane>
+
+<a-entity width="2.9" height="0.1"></a-entity>
+<a-entity>
+    <a-text font="roboto" baseLine="top" anchor="center" value="Preserve Position and Scale:"
+            position="-1.05 0.88 0" color="#212121" wrap-count="25.5" width="1" height="0.1"></a-text>
+    <a-ui-switch class="preserveEnable"></a-ui-switch>
+</a-entity>
+<a-entity>
+    <a-text font="roboto" baseLine="top" anchor="center" value="Disable Animations:"
+            position="-1.05 0.88 0" color="#212121" wrap-count="25.5" width="1" height="0.1"></a-text>
+    <a-ui-switch class="animationDisable"></a-ui-switch>
+</a-entity>
+
+<a-entity width="2.9" height="0.1"></a-entity>
+
+<a-entity height="0.2" width="0.1"></a-entity>
+<a-ui-button class="intersectable left-button cancelAddCustom" text-value="CANCEL"
+             font-color="#009688" color="#fff" ripple-color="#009688" width="1.2" height="0.2" ripple-size="1.2 0.2"
+             wrap-count="24"></a-ui-button>
+
+<a-entity height="0.2" width="0.1"></a-entity>
+<a-ui-button class="intersectable right-button addToSceneButton" text-value="ADD TO SCENE"
+             font-color="#fff" color="#009688" ripple-color="#fff" width="1.2" height="0.2" ripple-size="1.2 0.2"
+             wrap-count="24"></a-ui-button>

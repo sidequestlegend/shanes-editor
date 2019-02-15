@@ -1,0 +1,79 @@
+<a-text font="roboto" baseLine="top" anchor="center" value="3D Model Settings"
+        color="#212121" wrap-count="45" width="2.9" height="0.2"></a-text>
+<a-plane width="2.9" height="0.01" color="#8f8f8f" shader="flat"></a-plane>
+
+<a-entity height="0" width="2.9"></a-entity>
+
+<a-entity width="0.4" height="0.2"></a-entity>
+{{#compare type "GLTF2" operator="=="}}
+<a-ui-input-text id="mainModelUrl" camera-el="#camera" rig-el="#rig" wasd-controls-component="smooth-wasd-controls" place-holder="GLTF Url"
+                 value="{{url}}"
+                 look-controls-component="right-look-controls"
+                 width="2" height="0.2"></a-ui-input-text>
+
+<a-entity height="0" width="2.9"></a-entity>
+{{/compare}}
+
+{{#compare type "DAE" operator="=="}}
+<a-ui-input-text id="mainModelUrl" camera-el="#camera" rig-el="#rig" wasd-controls-component="smooth-wasd-controls" place-holder="Collada Url"
+                 value="{{url}}"
+                 look-controls-component="right-look-controls"
+                 width="2" height="0.2"></a-ui-input-text>
+
+<a-entity height="0" width="2.9"></a-entity>
+{{/compare}}
+
+{{#compare type "FBX" operator="=="}}
+<a-ui-input-text id="mainModelUrl" camera-el="#camera" rig-el="#rig" wasd-controls-component="smooth-wasd-controls" place-holder="FBX Url"
+                 look-controls-component="right-look-controls"
+                 value="{{url}}"
+                 width="2" height="0.2"></a-ui-input-text>
+
+<a-entity height="0" width="2.9"></a-entity>
+{{/compare}}
+
+{{#compare type "OBJ" operator="=="}}
+<a-ui-input-text id="mainModelUrl" camera-el="#camera" rig-el="#rig" wasd-controls-component="smooth-wasd-controls" place-holder="OBJ Url"
+                 look-controls-component="right-look-controls"
+                 value="{{url}}"
+                 width="2" height="0.2"></a-ui-input-text>
+
+<a-entity width="0.4" height="0.2"></a-entity>
+<a-ui-input-text id="mainMTLUrl" camera-el="#camera" rig-el="#rig" wasd-controls-component="smooth-wasd-controls" place-holder="MTL Url"
+                 look-controls-component="right-look-controls"
+                 value="{{mtl_url}}"
+                 width="2" height="0.2"></a-ui-input-text>
+
+<a-entity width="0.4" height="0.2"></a-entity>
+<a-ui-input-text id="mainMTLPath" camera-el="#camera" rig-el="#rig" wasd-controls-component="smooth-wasd-controls" place-holder="MTL Path"
+                 look-controls-component="right-look-controls"
+                 value="{{mtl_path}}"
+                 width="2" height="0.2"></a-ui-input-text>
+<a-entity width="0.3" height="0.2"></a-entity>
+{{/compare}}
+
+
+
+<a-entity>
+    <a-text font="roboto" baseLine="top" anchor="center" value="Preserve Position and Scale:"
+            position="-1.05 0.88 0" color="#212121" wrap-count="25.5" width="1" height="0.1"></a-text>
+    <a-ui-switch class="preserveEnable" value="{{preserve}}"></a-ui-switch>
+</a-entity>
+<a-entity>
+    <a-text font="roboto" baseLine="top" anchor="center" value="Disable Animations:"
+            position="-1.05 0.88 0" color="#212121" wrap-count="25.5" width="1" height="0.1"></a-text>
+    <a-ui-switch class="animationDisable" value="{{disableAnimations}}"></a-ui-switch>
+</a-entity>
+
+<a-entity width="2.9" height="0"></a-entity>
+
+
+<a-entity height="0.2" width="0.1"></a-entity>
+<a-ui-button class="intersectable left-button cancelEditModel" text-value="CANCEL"
+             font-color="#009688" color="#fff" ripple-color="#009688" width="1.2" height="0.2" ripple-size="1.2 0.2"
+             wrap-count="24"></a-ui-button>
+
+<a-entity height="0.2" width="0.1"></a-entity>
+<a-ui-button class="intersectable right-button saveModelButton" text-value="SAVE MODEL"
+             font-color="#fff" color="#009688" ripple-color="#fff" width="1.2" height="0.2" ripple-size="1.2 0.2"
+             wrap-count="24"></a-ui-button>

@@ -34,13 +34,14 @@ export class EditModelSettings{
                     let parent = this.context.currentObject.object3D.parent;
                     parent.remove(this.context.currentObject.object3D);
                     delete this.context.currentObject.object3D;
-                    return this.context.sceneGraph.objectFactory.make(this.context.currentObject).then(object=>{
-                        if(object){
-                            parent.add(object);
-                            this.context.currentObject.object3D = object;
-                            object.userData.sceneObject = this.context.currentObject;
+                    let childObject = this.context.sceneGraph.objectFactory.make(this.context.currentObject);
+                    return childObject.promise.then(object=>{
+                        if(childObject.object){
+                            parent.add(childObject.object);
+                            this.context.currentObject.object3D = childObject.object;
+                            childObject.object.userData.sceneObject = this.context.currentObject;
                             this.context.showObject();
-                            this.context.displayBox.setObject(object);
+                            this.context.displayBox.setObject(childObject.object);
                             this.uiRenderer.modal.close();
                             this.context.sceneGraph.sync();
                         }

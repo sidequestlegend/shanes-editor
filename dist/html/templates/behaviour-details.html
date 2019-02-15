@@ -2,37 +2,37 @@
 <a-text font="roboto" baseLine="center" anchor="center" value="Behaviour Settings"
         color="#212121" wrap-count="40" width="2.95" height="0.2"></a-text>
 
-<a-ui-button class="intersectable right-button createSceneConfirm" text-value="SAVE"
+<a-ui-button class="intersectable right-button saveBehaviour" text-value="SAVE"
              font-color="#fff" color="#009688" ripple-color="#fff" width="0.7" height="0.2" ripple-size="0.7 0.2"
              wrap-count="12"></a-ui-button>
 
 <a-plane width="3.75" height="0.008" color="#cfcfcf" shader="flat"></a-plane>
 
 <a-text font="roboto" baseLine="center" anchor="center" value="Name:"
-        color="#212121" wrap-count="18" width="1" height="0.2"></a-text>
+        color="#212121" wrap-count="21" width="1" height="0.2"></a-text>
 
-<a-ui-input-text class="textureImage" camera-el="#camera" rig-el="#rig"
+<a-ui-input-text id="behaviourName" camera-el="#camera" rig-el="#rig"
                  wasd-controls-component="smooth-wasd-controls"
                  look-controls-component="right-look-controls" width="2" height="0.2" value="{{behaviour.name}}"></a-ui-input-text>
 
 <a-text font="roboto" baseLine="center" anchor="center" value="Description:"
-        color="#212121" wrap-count="18" width="1" height="0.2"></a-text>
+        color="#212121" wrap-count="21" width="1" height="0.2"></a-text>
 
-<a-ui-input-text class="textureImage" camera-el="#camera" rig-el="#rig"
+<a-ui-input-text id="behaviourDescription" camera-el="#camera" rig-el="#rig"
                  wasd-controls-component="smooth-wasd-controls"
                  look-controls-component="right-look-controls" width="2.3" height="0.2" value="{{behaviour.description}}"></a-ui-input-text>
 
 <a-text font="roboto" baseLine="center" anchor="center" value="Image:"
         color="#212121" wrap-count="18" width="1" height="0.2"></a-text>
 
-<a-ui-input-text class="textureImage" camera-el="#camera" rig-el="#rig"
+<a-ui-input-text id="behaviourImage" camera-el="#camera" rig-el="#rig"
                  wasd-controls-component="smooth-wasd-controls"
                  look-controls-component="right-look-controls" width="2.3" height="0.2" value="{{behaviour.image}}"></a-ui-input-text>
 
 <a-text font="roboto" baseLine="center" anchor="center" value="Code Definition:"
         color="#212121" wrap-count="44" width="2.45" height="0.2"></a-text>
 
-<a-ui-button class="intersectable right-button createSceneConfirm" text-value="EDIT CODE"
+<a-ui-button class="intersectable right-button editCodeButton" text-value="EDIT CODE"
              font-color="#fff" color="#009688" ripple-color="#fff" width="1.2" height="0.2" ripple-size="1.2 0.2"
              wrap-count="24"></a-ui-button>
 
@@ -40,9 +40,9 @@
 
 <a-text font="roboto" baseLine="center" anchor="center" value="Is Public:"
         color="#212121" wrap-count="18" width="1.2" height="0.1"></a-text>
-<a-ui-switch id="isPublic" value="{{behaviour.public}}"></a-ui-switch>
+<a-ui-switch id="isPublic" value="{{behaviour.is_public}}"></a-ui-switch>
 
 
 <a-text font="roboto" baseLine="center" anchor="center" value="Is Obfuscated:"
         color="#212121" wrap-count="18" width="1.2" height="0.1"></a-text>
-<a-ui-switch id="isObfuscated" value="{{behaviour.obfuscated}}"></a-ui-switch>
+<a-ui-switch id="isObfuscated" value="{{behaviour.obfuscate}}"></a-ui-switch>

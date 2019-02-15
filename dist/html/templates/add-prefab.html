@@ -1,0 +1,51 @@
+<a-entity width="2.9">
+
+    <a-text font="roboto" baseLine="center" anchor="center" value="Prefab Settings"
+            color="#212121" wrap-count="40" width="2.95" height="0.2"></a-text>
+
+    <a-plane width="3.75" height="0.008" color="#cfcfcf" shader="flat"></a-plane>
+
+    <a-text font="roboto" baseLine="center" anchor="center" value="Name:"
+            color="#212121" wrap-count="18" width="1" height="0.2"></a-text>
+
+    <a-ui-input-text id="prefabNameEdit" camera-el="#camera" rig-el="#rig"
+                     wasd-controls-component="smooth-wasd-controls"
+                     look-controls-component="right-look-controls" width="1.8" height="0.2" value="{{name}}"></a-ui-input-text>
+
+    <a-text font="roboto" baseLine="center" anchor="center" value="Description:"
+            color="#212121" wrap-count="18" width="1" height="0.2"></a-text>
+
+    <a-ui-input-text id="prefabDescriptionEdit" camera-el="#camera" rig-el="#rig"
+                     wasd-controls-component="smooth-wasd-controls"
+                     look-controls-component="right-look-controls" width="1.8" height="0.2" value="{{description}}"></a-ui-input-text>
+
+    <a-text font="roboto" baseLine="center" anchor="center" value="Image:"
+            color="#212121" wrap-count="18" width="1" height="0.2"></a-text>
+
+    <a-ui-input-text id="prefabImageEdit" camera-el="#camera" rig-el="#rig"
+                     wasd-controls-component="smooth-wasd-controls"
+                     look-controls-component="right-look-controls" width="1.8" height="0.2" value="{{image}}"></a-ui-input-text>
+
+    <a-entity width="3.75" height="0"></a-entity>
+
+    <a-text font="roboto" baseLine="center" anchor="center" value="Is Public:"
+            color="#212121" wrap-count="18" width="1" height="0.1"></a-text>
+    <a-ui-switch id="isPublic" value="{{is_public}}"></a-ui-switch>
+
+
+    <a-text font="roboto" baseLine="center" anchor="center" value="Is Obfuscated:"
+            color="#212121" wrap-count="18" width="1" height="0.1"></a-text>
+    <a-ui-switch id="isObfuscated" value="{{obfuscate}}"></a-ui-switch>
+
+
+    <a-entity height="0.2" width="2.9"></a-entity>
+    <a-entity height="0.2" width="0.1"></a-entity>
+    <a-ui-button class="intersectable left-button cancelAddPrefab" text-value="CANCEL"
+                 font-color="#009688" color="#fff" ripple-color="#009688" width="1.2" height="0.2" ripple-size="1.2 0.2"
+                 wrap-count="24"></a-ui-button>
+
+    <a-entity height="0.2" width="0.1"></a-entity>
+    <a-ui-button class="intersectable right-button createPrefabConfirm" text-value="{{#if prefabs_id}}SAVE{{else}}CREATE{{/if}} PREFAB"
+                 font-color="#fff" color="#009688" ripple-color="#fff" width="1.2" height="0.2" ripple-size="1.2 0.2"
+                 wrap-count="24"></a-ui-button>
+</a-entity>

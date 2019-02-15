@@ -170,13 +170,13 @@ export class MaterialFactory{
                 wrapping:{s:settings.texture&&settings.texture.wrapping?settings.texture.wrapping.s:THREE.RepeatWrapping,t:settings.texture&&settings.texture.wrapping?settings.texture.wrapping.t:THREE.RepeatWrapping},
                 repeat:{x:settings.texture&&settings.texture.repeat?settings.texture.repeat.x:1,y:settings.texture&&settings.texture.repeat?settings.texture.repeat.y:1},
                 offset:{x:settings.texture&&settings.texture.offset?settings.texture.offset.x:0,y:settings.texture&&settings.texture.offset?settings.texture.offset.y:0},
-                filters:{mag:settings.texture&&settings.texture.filters?settings.texture.filters.mag:THREE.LinearFilter,min:settings.texture&&settings.texture.filters?settings.texture.filters.min:THREE.LinearMipMapLinearFilter},
+                filters:{mag:settings.texture&&settings.texture.filters?settings.texture.filters.mag:THREE.LinearFilter,min:settings.texture&&settings.texture.filters?settings.texture.filters.min:THREE.LinearFilter},
             },
             lightTexture:{
                 wrapping:{s:settings.lightTexture&&settings.lightTexture.wrapping?settings.lightTexture.wrapping.s:THREE.RepeatWrapping,t:settings.lightTexture&&settings.lightTexture.wrapping?settings.lightTexture.wrapping.t:THREE.RepeatWrapping},
                 repeat:{x:settings.lightTexture&&settings.lightTexture.repeat?settings.lightTexture.repeat.x:0,y:settings.lightTexture&&settings.lightTexture.repeat?settings.lightTexture.repeat.y:0},
                 offset:{x:settings.lightTexture&&settings.lightTexture.offset?settings.lightTexture.offset.x:0,y:settings.lightTexture&&settings.lightTexture.offset?settings.lightTexture.offset.y:0},
-                filters:{mag:settings.lightTexture&&settings.lightTexture.filters?settings.lightTexture.filters.mag:THREE.LinearFilter,min:settings.lightTexture&&settings.lightTexture.filters?settings.lightTexture.filters.min:THREE.LinearMipMapLinearFilter},
+                filters:{mag:settings.lightTexture&&settings.lightTexture.filters?settings.lightTexture.filters.mag:THREE.LinearFilter,min:settings.lightTexture&&settings.lightTexture.filters?settings.lightTexture.filters.min:THREE.LinearFilter},
             }};
         switch(settings.type){
             case "MeshBasicMaterial":

@@ -1,5 +1,5 @@
 <a-entity width="2.9">
-    <a-text font="roboto" baseLine="center" anchor="center" value="Scene Name"
+    <a-text font="roboto" baseLine="center" anchor="center" value="{{title}}"
             color="#212121" wrap-count="30" width="2.6" height="0.1"></a-text>
     <a-entity height="0.2" width="2.9"></a-entity>
     <a-entity height="0.2" width="0.1"></a-entity>
@@ -11,12 +11,22 @@
 
     <a-entity height="0.2" width="2.9"></a-entity>
     <a-entity height="0.2" width="0.1"></a-entity>
-    <a-ui-button class="intersectable right-button cancelAddScene" text-value="CANCEL"
-                 font-color="#009688" color="#fff" ripple-color="#009688" width="1.2" height="0.2" ripple-size="1.2 0.2"
-                 wrap-count="24"></a-ui-button>
+    <a-ui-button class="intersectable left-button cancelAddScene" text-value="CANCEL"
+                 font-color="#009688" color="#fff" ripple-color="#009688" width="{{#if scenes_id}}0.74{{else}}1.2{{/if}}" height="0.2"
+                 ripple-size="{{#if scenes_id}}0.74{{else}}1.2{{/if}} 0.2"
+                 wrap-count="{{#if scenes_id}}15{{else}}24{{/if}}"></a-ui-button>
 
     <a-entity height="0.2" width="0.1"></a-entity>
-    <a-ui-button class="intersectable right-button createSceneConfirm" text-value="CREATE SCENE"
-                 font-color="#fff" color="#009688" ripple-color="#fff" width="1.2" height="0.2" ripple-size="1.2 0.2"
-                 wrap-count="24"></a-ui-button>
+    {{#if scenes_id}}
+    <a-ui-button class="intersectable right-button copySceneConfirm" text-value="SAVE COPY"
+                 font-color="#fff" color="#009688" ripple-color="#fff" width="{{#if scenes_id}}0.74{{else}}1.2{{/if}}" height="0.2"
+                 ripple-size="{{#if scenes_id}}0.74{{else}}1.2{{/if}} 0.2"
+                 wrap-count="{{#if scenes_id}}15{{else}}24{{/if}}"></a-ui-button>
+
+    <a-entity height="0.2" width="0.1"></a-entity>
+    {{/if}}
+    <a-ui-button class="intersectable right-button createSceneConfirm" text-value="{{#if scenes_id}}SAVE SCENE{{else}}CREATE SCENE{{/if}}"
+                 font-color="#fff" color="#009688" ripple-color="#fff" width="{{#if scenes_id}}0.74{{else}}1.2{{/if}}" height="0.2"
+                 ripple-size="{{#if scenes_id}}0.74{{else}}1.2{{/if}} 0.2"
+                 wrap-count="{{#if scenes_id}}15{{else}}24{{/if}}"></a-ui-button>
 </a-entity>

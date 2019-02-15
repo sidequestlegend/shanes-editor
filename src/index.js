@@ -1,47 +1,47 @@
 import {Editor} from "./app";
 class Main{
     constructor(){
-        let editor = new Editor(this,'http://'+window.location.host+'/');
+        let editor = new Editor(this,'https://cdn.theexpanse.app/');
         this.editorPanel = document.getElementById('editorContainer');
         document.getElementById('uiPanel').setAttribute('scale','1 1 1');
         this.sceneEl = document.querySelector('a-scene');
         this.sceneEl.addEventListener('modal-closed',()=>{
             this.content.popup.components['ui-scroll-pane'].setContent('');
         });
-        let scenes = [
-            {
-                "scenes_id": 1,
-                "name": "Electric",
-                "short_code": "16t",
-                "url": "scene/16t.json"
-            },
-            {
-                "scenes_id": 2,
-                "name": "Thirsty",
-                "short_code": "gl",
-                "url": "scene/gl.json"
-            }
-        ];
-        let loadingText = document.getElementById('loadingText');
-        let loadingTextBack = document.getElementById('loadingTextBack');
+        // let scenes = [
+        //     {
+        //         "scenes_id": 1,
+        //         "name": "Electric",
+        //         "short_code": "16t",
+        //         "url": "scene/16t.json"
+        //     },
+        //     {
+        //         "scenes_id": 2,
+        //         "name": "Thirsty",
+        //         "short_code": "gl",
+        //         "url": "scene/gl.json"
+        //     }
+        // ];
+        // let loadingText = document.getElementById('loadingText');
+        // let loadingTextBack = document.getElementById('loadingTextBack');
         let start = 0;
         this.sceneEl.addEventListener('scene-load-start',()=>{
             start = new Date().getTime();
-            loadingTextBack.setAttribute('scale','1 1 1');
+            //loadingTextBack.setAttribute('scale','1 1 1');
         });
         this.sceneEl.addEventListener('scene-loading',e=>{
-            loadingText.setAttribute('value',Math.round(e.detail*100)+'%');
+            //loadingText.setAttribute('value',Math.round(e.detail*100)+'%');
             if(e.detail===1){
                 console.log('Scene loaded in: '+((new Date().getTime()-start)/1000)+" seconds");
-                setTimeout(()=>{
-                    loadingText.setAttribute('value','');
-                    loadingTextBack.setAttribute('scale','0 0 0');
-                },500)
+                // setTimeout(()=>{
+                //     loadingText.setAttribute('value','');
+                //     loadingTextBack.setAttribute('scale','0 0 0');
+                // },500)
             }
         });
         this.cameraDummy = document.getElementById('cameraDummyPosition');
-        document.getElementById('menuButton').addEventListener('click',()=>this.openEditor());
-        document.getElementById('closeButton').addEventListener('mousedown',()=>this.closeEditor());
+        // document.getElementById('menuButton').addEventListener('click',()=>this.openEditor());
+        // document.getElementById('closeButton').addEventListener('mousedown',()=>this.closeEditor());
     }
     closeEditor(){
         let _this = this;

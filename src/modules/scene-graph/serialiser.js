@@ -29,10 +29,10 @@ export class Serialiser{
                 promises.push(Promise.resolve().then(()=>{
                     return childObject.promise.then(object=>{
                         if(object){
-                            current.add(childObject.object);
                             child.parent = scene_current;
                             child.emit('object-loaded');
                             child.objectLoaded = true;
+                            current.add(childObject.object);
                             return {object:childObject.object,child:child};
                         }
                     });

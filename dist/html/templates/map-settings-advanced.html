@@ -4,7 +4,10 @@
 
     <a-text font="roboto" baseLine="top" anchor="center" value="{{name}}:"
             color="#212121" wrap-count="15" width="0.5" height="0.1"></a-text>
-    <a-ui-input-text class="{{remove-spaces name}}Input" camera-el="#camera" look-controls-component="right-look-controls" width="0.65" height="0.2" value="{{url}}" place-holder="Url..."></a-ui-input-text>
+    <a-ui-input-text class="{{remove-spaces name}}Input" camera-el="#camera"
+                     rig-el="#rig"
+                     wasd-controls-component="smooth-wasd-controls"
+                     look-controls-component="right-look-controls" width="0.65" height="0.2" value="{{url}}" place-holder="Url..."></a-ui-input-text>
 </a-entity>
 
 <a-entity width="1.4">
@@ -23,8 +26,8 @@
             color="#212121" wrap-count="16" width="0.5" height="0.1"></a-text>
 
     <a-plane ui-yoga="margin:0" class="xText" width="0.33" ui-border="borderRadius:0.1;borderWidth:0.008" height="0.2" color="#212121" text="value:{{to-fixed number 3}};color:#212121;wrapCount:9;align:center">
-        <a-ui-fab-button-small scale="0.75 0.75 0.75" class="xInputUp intersectable no-yoga-layout" color="#009688" position="0.22 0.055 0.001" icon-color="#fff" ripple-color="#009688" src="images/icons/baseline_keyboard_arrow_up_white_18dp.png"></a-ui-fab-button-small>
-        <a-ui-fab-button-small scale="0.75 0.75 0.75" class="xInputDown intersectable no-yoga-layout" color="#009688" position="0.22 -0.055 0.001" icon-color="#fff" ripple-color="#009688" src="images/icons/down_arrow.png"></a-ui-fab-button-small>
+        <a-ui-fab-button-small scale="0.75 0.75 0.75" class="xInputUp intersectable no-yoga-layout" color="#009688" position="0.22 0.055 0.001" icon-color="#fff" ripple-color="#009688" src="https://cdn.theexpanse.app/images/icons/baseline_keyboard_arrow_up_white_18dp.png"></a-ui-fab-button-small>
+        <a-ui-fab-button-small scale="0.75 0.75 0.75" class="xInputDown intersectable no-yoga-layout" color="#009688" position="0.22 -0.055 0.001" icon-color="#fff" ripple-color="#009688" src="https://cdn.theexpanse.app/images/icons/down_arrow.png"></a-ui-fab-button-small>
     </a-plane>
 </a-entity>
 {{/if}}
@@ -36,8 +39,8 @@
             color="#212121" wrap-count="16" width="0.5" height="0.1"></a-text>
 
     <a-plane ui-yoga="margin:0" class="xText" width="0.33" ui-border="borderRadius:0.1;borderWidth:0.008" height="0.2" color="#212121" text="value:{{to-fixed number2 3}};color:#212121;wrapCount:9;align:center">
-        <a-ui-fab-button-small scale="0.75 0.75 0.75" class="xInputUp intersectable no-yoga-layout" color="#009688" position="0.22 0.055 0.001" icon-color="#fff" ripple-color="#009688" src="images/icons/baseline_keyboard_arrow_up_white_18dp.png"></a-ui-fab-button-small>
-        <a-ui-fab-button-small scale="0.75 0.75 0.75" class="xInputDown intersectable no-yoga-layout" color="#009688" position="0.22 -0.055 0.001" icon-color="#fff" ripple-color="#009688" src="images/icons/down_arrow.png"></a-ui-fab-button-small>
+        <a-ui-fab-button-small scale="0.75 0.75 0.75" class="xInputUp intersectable no-yoga-layout" color="#009688" position="0.22 0.055 0.001" icon-color="#fff" ripple-color="#009688" src="https://cdn.theexpanse.app/images/icons/baseline_keyboard_arrow_up_white_18dp.png"></a-ui-fab-button-small>
+        <a-ui-fab-button-small scale="0.75 0.75 0.75" class="xInputDown intersectable no-yoga-layout" color="#009688" position="0.22 -0.055 0.001" icon-color="#fff" ripple-color="#009688" src="https://cdn.theexpanse.app/images/icons/down_arrow.png"></a-ui-fab-button-small>
     </a-plane>
 </a-entity>
 {{/if}}

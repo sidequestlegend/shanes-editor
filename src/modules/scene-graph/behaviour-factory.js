@@ -90,7 +90,62 @@ export class BehaviourFactory{
             for(let i = 0; i < behaviour_keys.length; i++){
                 behaviours.push(this.scene_graph.currentScene.behaviours[behaviour_keys[i]]);
             }
-            this.scene_graph.context.sceneEl.emit('old-behaviours',behaviours);
+            //this.loadLegacyBehaviours(behaviours);
+            this.legacyBehaviours = behaviours;//sceneEl.emit('old-behaviours',behaviours);
+        }
+    }
+
+    async loadRemoteBehaviours(type,data){
+        return new Promise(resolve=>{
+            let sceneEl = this.scene_graph.context.sceneEl;
+            let response = ({detail})=>{
+                resolve(detail);
+                sceneEl.removeEventListener(type+"-return",response);
+            };
+            sceneEl.emit(type,data);
+            sceneEl.addEventListener(type+"-return",response)
+        });
+    }
+
+    async loadLegacyBehaviours(legacyBehaviours){
+        let behaviourIds = [];
+        for(let i = 0; i < legacyBehaviours.length; i++){
+            behaviourIds.push(legacyBehaviours[i].behaviours_id)
+        }
+        if(!this.scene_graph.isEditing){
+            return this.awakeBehaviours();
+        }
+        let existing = await this.loadRemoteBehaviours('getOldBehaviours',behaviourIds);
+        let existingIds = existing.map(e=>e.old_id);
+        let importBehaviours = legacyBehaviours;
+        if(existing.length){
+            importBehaviours = [];
+            for(let i = 0; i < legacyBehaviours.length; i++){
+                let index = existingIds.indexOf(legacyBehaviours[i].behaviours_id);
+                if(index===-1){
+                    importBehaviours.push(legacyBehaviours[i]);
+                }
+            }
+            this.updateBehaviourIds(existing,existingIds);
+        }
+        if(importBehaviours.length){
+            this.scene_graph.context.importBehavioursModal.open(importBehaviours,existingIds);
+        }else{
+            this.awakeBehaviours();
+        }
+    }
+
+    async loadBehaviours() {
+        if(this.legacyBehaviours){
+            await this.loadLegacyBehaviours(this.legacyBehaviours);
+        }else{
+            await this.loadRemoteBehaviours('getSceneBehaviours',this.getBehaviourIds())
+                .then(behaviours=>{
+                    for(let i = 0; i < behaviours.length; i++){
+                        this.scene_graph.currentScene.behaviours[behaviours[i].behaviours_id] = behaviours[i];
+                    }
+                    this.awakeBehaviours();
+                })
         }
     }
 

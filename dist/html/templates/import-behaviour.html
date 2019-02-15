@@ -1,0 +1,28 @@
+<a-entity width="2.9">
+    <a-entity width="2.9">
+        <a-text font="roboto" baseLine="center" anchor="center" value="Legacy Behaviours Detected"
+                color="#212121" wrap-count="24" width="2" height="0.1"></a-text>
+        <a-text font="roboto" baseLine="center" value="Select behaviours to save to your account. If you are unsure click 'Import'."
+                anchor="center" color="#515151" wrap-count="70" width="2.9" height="0.2"></a-text>
+    </a-entity>
+    <a-entity width="2.9">
+        {{#each behaviours}}
+        <a-entity with="0.2">
+            <a-ui-switch value="{{behaviours_id}}" class="switch-{{behaviours_id}}" selected="true"></a-ui-switch>
+        </a-entity>
+        <a-text font="roboto" baseLine="center" anchor="center" value="{{name}}"
+                color="#212121" wrap-count="40" width="2.2" height="0.1"></a-text>
+        {{/each}}
+    </a-entity>
+
+    <a-entity height="0.05" width="2.9"></a-entity>
+    <a-entity height="0.2" width="0.1"></a-entity>
+    <a-ui-button class="intersectable right-button cancelImportBehaviours" text-value="CANCEL"
+                 font-color="#009688" color="#fff" ripple-color="#009688" width="1.2" height="0.2" ripple-size="1.2 0.2"
+                 wrap-count="24"></a-ui-button>
+
+    <a-entity height="0.2" width="0.1"></a-entity>
+    <a-ui-button class="intersectable right-button importBehaviours" text-value="IMPORT"
+                 font-color="#fff" color="#009688" ripple-color="#fff" width="1.2" height="0.2" ripple-size="1.2 0.2"
+                 wrap-count="24"></a-ui-button>
+</a-entity>

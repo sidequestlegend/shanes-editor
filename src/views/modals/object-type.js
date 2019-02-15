@@ -1,22 +1,22 @@
 export class ObjectTypeModal{
     constructor(context) {
         this.context = context;
-        let icon_path = 'https://cdn.theexpanse.app/images/icons/objects/';
         this.types = [
-            {name:'Group',friendly_name:'Group',image_url:'#objects_folder',extra_class:'close-modal'},
-            {name:'Primitive',friendly_name:'Simple',image_url:'#geometry_box'},
-            {name:'Parametric',friendly_name:'Fancy',image_url:'#geometry_apple'},
-            {name:'Sprite',friendly_name:'Sprite',image_url:'#objects_sprite'},
-            {name:'Prefab',friendly_name:'Prefab',image_url:'#objects_prefab'},
-            {name:'Light',friendly_name:'Light',image_url:'#objects_lights'},
-            {name:'Effect',friendly_name:'Effect',image_url:'#objects_effects'},
-            {name:'Portal',friendly_name:'Portal',image_url:'#objects_portal'},
-            {name:'Aframe',friendly_name:'Aframe',image_url:'#objects_aframe'},
-            {name:'Kenney',friendly_name:'Kenney\'s',image_url:'#objects_kenny'},
-            {name:'Poly',friendly_name:'Google Poly',image_url:'#objects_poly'},
-            {name:'Sketchfab',friendly_name:'Sketchfab',image_url:'#objects_sketchfab'},
-            {name:'Avatar',friendly_name:'Avatar Models',image_url:'#objects_avatar'},
-            {name:'Custom',friendly_name:'Your Model',image_url:'#objects_custom'}
+            {name:'Group',friendly_name:'Group',image_url:'#small_icons',image_coords:'0 384 128 128'},
+            {name:'Primitive',friendly_name:'Simple',image_url:'#small_icons',image_coords:'0 768 128 128'},
+            {name:'Parametric',friendly_name:'Fancy',image_url:'#small_icons',image_coords:'640 256 128 128'},
+            {name:'Sprite',friendly_name:'Sprite',image_url:'#small_icons',image_coords:'896 768 128 128'},
+            {name:'Prefab',friendly_name:'Prefab',image_url:'#small_icons',image_coords:'512 896 128 128'},
+            {name:'Light',friendly_name:'Light',image_url:'#small_icons',image_coords:'384 896 128 128'},
+            {name:'Sound',friendly_name:'Sound',image_url:'#small_icons',image_coords:'768 768 128 128'},
+            {name:'Effect',friendly_name:'Effect',image_url:'#small_icons',image_coords:'640 640 128 128'},
+            {name:'Portal',friendly_name:'Portal',image_url:'#small_icons',image_coords:'640 768 128 128'},
+            {name:'Aframe',friendly_name:'Aframe',image_url:'#small_icons',image_coords:'256 0 128 128'},
+            {name:'Kenney',friendly_name:'Kenney\'s',image_url:'#small_icons',image_coords:'512 768 128 128'},
+            {name:'Poly',friendly_name:'Google Poly',image_url:'#small_icons',image_coords:'768 640 128 128'},
+            {name:'Sketchfab',friendly_name:'Sketchfab',image_url:'#small_icons',image_coords:'896 640 128 128'},
+           // {name:'Avatar',friendly_name:'Avatar Models',image_url:'#small_icons',image_coords:'384 0 128 128'},
+            {name:'Custom',friendly_name:'Your Model',image_url:'#small_icons',image_coords:'0 256 128 128'}
         ]
     }
     open() {
@@ -54,6 +54,22 @@ export class ObjectTypeModal{
                                 break;
                             case "Effect":
                                 this.context.effectModal.open();
+                                break;
+                            case "Sound":
+                                this.context.sceneGraph.add(this.context.currentObject,{
+                                    type:"Sound"
+                                })
+                                    .then(child=>{
+                                        console.log('hi there');
+                                        this.context.displayBox.setObject(child.object3D);
+                                        this.context.itemView.open(child);
+                                        this.context.sceneGraph.sync();
+                                        setTimeout(()=>{
+                                            this.uiRenderer.modal.open();
+                                            this.context.soundModal.open();
+                                        },1000);
+                                    });
+                                this.uiRenderer.modal.close();
                                 break;
                             case "Aframe":
                                 this.context.modelSettings.open({

@@ -71,14 +71,11 @@ export class BreadCrumbs{
     }
     makeDivider(index,isMore){
         // Make breadcrumb gap and divider.
-        let divider = document.createElement('a-box');
-        divider.setAttribute('width',0.12);
+        let divider = document.createElement('a-entity');
+        divider.setAttribute('geometry','primitive:plane;width:0.12;height:0.12;skipCache:true');
+        divider.setAttribute('material','shader:flat;transparent:true;src:#small_icons');
+        divider.setAttribute('sprite-sheet','coords:'+(isMore?'864 896 32 32':'832 928 32 32')+';shape:square');
         divider.setAttribute('position',(this.isOverloaded&&index&&!isMore>0?(((index*0.52)+0.25)+0.2):((index*0.52)+(isMore?0.4:0.25)))+' 0 0');
-        divider.setAttribute('height',0.12);
-        divider.setAttribute('depth',0.00001);
-        divider.setAttribute('shader','flat');
-        divider.setAttribute('transparent',true);
-        divider.setAttribute('src',isMore?'#breadCrumbMore':'#breadCrumb');
         return divider;
     }
     shorten(string,length){

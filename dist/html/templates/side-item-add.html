@@ -14,14 +14,26 @@
             <a-text font="roboto" baseLine="center" anchor="center" value="{{name}}"
                     position="-1.05 0.88 0" color="#212121" wrap-count="15" width="0.5" height="0.15"></a-text>
 
-            <a-text font="roboto" baseLine="center" anchor="center" value="{{type}} Object"
+            <a-text font="roboto" baseLine="center" anchor="center" value="{{type}}"
                     position="-1.05 0.88 0" color="#8f8f8f" wrap-count="16" width="0.5" height="0.05"></a-text>
         </a-entity>
-        <a-ui-fab-button-small class="intersectable openItem" color="#009688" data-uuid="{{uuid}}" icon-color="#fff" ripple-color="#009688" src="images/icons/send.png" ui-yoga="margin:0;"></a-ui-fab-button-small>
+        <a-ui-fab-button-small class="intersectable openItem" color="#009688" data-uuid="{{uuid}}" icon-color="#fff" ripple-color="#009688" src="https://cdn.theexpanse.app/images/icons/send.png" ui-yoga="margin:0;"></a-ui-fab-button-small>
 
         <a-plane width="1" height="0.01" color="#8f8f8f" shader="flat" ui-yoga="margin:0"></a-plane>
     </a-entity>
 
     <!--<a-entity width="0.5"></a-entity>-->
     {{/each}}
+    <a-entity width="1.2">
+        {{#compare page 0 operator=">"}}
+            <a-entity width="0.1"></a-entity>
+            <a-ui-button text-value="Prev" width="0.4" wrap-count="8" class="prev-button-children intersectable"></a-ui-button>
+        {{/compare}}
+        {{#compare children.length 10 operator="=="}}
+            {{#compare page 0 operator="=="}}
+                <a-entity width="0.55"></a-entity>
+            {{/compare}}
+        <a-ui-button text-value="Next" width="0.4" wrap-count="8" class="next-button-children intersectable"></a-ui-button>
+        {{/compare}}
+    </a-entity>
 </a-entity>

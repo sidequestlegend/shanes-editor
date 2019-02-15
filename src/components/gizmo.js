@@ -8,7 +8,6 @@
 
 module.exports = AFRAME.registerComponent('gizmo', {
     schema:{
-        raycasterEl:{type:'selector'},
         cameraEl:{type:'selector'},
         displayEl:{type:'selector'},
         mode:{default:'position'}
@@ -131,8 +130,8 @@ module.exports = AFRAME.registerComponent('gizmo', {
             // Reset the gizmo state
             this.setMode();
             // Remove click catcher and remove intersect class to prevent clicks when not interacting.
-            this.backing_element.setAttribute('scale','0.001 0.001 0.001');
-            this.backing_element.className = '';
+            this.backing_element.setAttribute('scale','0.0001 0.0001 0.0001');
+            // this.backing_element.className = '';
             // Remove mousemove listener
             this.backing_element.removeEventListener('ui-mousemove',this.mousemove);
             // Copy the new transform to the current object settings
@@ -311,7 +310,6 @@ module.exports = AFRAME.registerComponent('gizmo', {
         // Set the current dragging box
         this.dragging = e.target;
         // Add the intersect class to the backing element for capturing mouse moves.
-        this.backing_element.className = 'intersect';
         // Scale the backing to an enormous size to catch mouse events to very far away.
         this.backing_element.setAttribute('scale','1000 1000 1000');
         // Store the default position of the current gizmo box
@@ -343,9 +341,11 @@ module.exports = AFRAME.registerComponent('gizmo', {
         // Create an invisible backing plane for capturing mouse events relative to the current
         // dragging box position while moving
         this.backing_element = document.createElement('a-plane');
-        this.backing_element.setAttribute('scale','0.001 0.001 0.001');
+        this.backing_element.setAttribute('scale','0.0001 0.0001 0.0001');
         this.backing_element.setAttribute('side','double');
-        this.backing_element.setAttribute('visible',false);
+        this.backing_element.className = 'intersect';
+        this.backing_element.setAttribute('opacity',0.3);
+        this.backing_element.setAttribute('alpha-test',0.5);
         this.el.appendChild(this.backing_element);
         // Setup intractable dragging boxes.
         // The top box is used to adjust all axis at once.
@@ -370,7 +370,6 @@ module.exports = AFRAME.registerComponent('gizmo', {
 
     },
     setMode(){
-        console.log('here set mode');
         // Set the image on the intractable dragging boxes to match the mode
         this.setImage(this.data.mode);
         if(this.data.mode==='rotation'){
@@ -451,6 +450,7 @@ module.exports = AFRAME.registerComponent('gizmo', {
         let element = document.createElement('a-box');
         element.setAttribute('shader','flat');
         element.setAttribute('scale',scale);
+        //element.setAttribute('depth-test','false');
         if(intersectable){
             element.className = 'intersect';
         }

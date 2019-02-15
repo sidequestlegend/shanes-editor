@@ -1,26 +1,48 @@
 <a-entity width="3.75">
 
-    <a-entity width="3.75">
-        <a-ui-button text-value="SCENES" wrap-count="11" width="0.5" class="intersectable scene-menu-button no-yoga-layout" data-line_width="1" data-position_x="1"
-                     hover-height="0.001" position="2.3 -0.1 0.001" color="#ececec" font-color="#000000" ripple-color="#009688" height="0.1"></a-ui-button>
-        <a-ui-button text-value="PREFABS" wrap-count="11" width="0.5" class="intersectable scene-menu-button no-yoga-layout" data-line_width="1" data-position_x="1"
-                     hover-height="0.001" position="2.8 -0.1 0.001" color="#ececec" font-color="#000000" ripple-color="#009688" height="0.1"></a-ui-button>
-        <a-ui-button text-value="BEHAVIOURS" wrap-count="15" width="0.7" ripple-size="0.7 0.2" class="intersectable scene-menu-button no-yoga-layout" data-line_width="1" data-position_x="1"
-                     hover-height="0.001" position="3.4 -0.1 0.001" color="#ececec" font-color="#000000" ripple-color="#009688" height="0.1"></a-ui-button>
-        <a-plane class="under-line" width="0.35" height="0.015" position="2.3 -0.18 0.001" color="#009688" shader="flat"></a-plane>
-    </a-entity>
+<a-entity width="3.75">
+    <a-ui-button text-value="VERSIONS" wrap-count="11"
+         width="0.5" class="intersectable scene-menu-button no-yoga-layout"
+         data-line_width="0.4" data-position_x="2.2"
+         data-type="scene"
+         hover-height="0.001" position="2.2 -0.1 0.0001" color="#ececec"
+         font-color="#000000"
+         ripple-color="#009688"
+         height="0.1"></a-ui-button>
+    <a-ui-button text-value="PREFABS" wrap-count="11"
+         width="0.5" class="intersectable scene-menu-button no-yoga-layout"
+         data-line_width="0.38" data-position_x="2.8"
+         data-type="prefab"
+         hover-height="0.001" position="2.8 -0.1 0.0001" color="#ececec"
+         font-color="#000000"
+         ripple-color="#009688"
+         height="0.1"></a-ui-button>
+    <a-ui-button text-value="BEHAVIOURS" wrap-count="15"
+         width="0.7" ripple-size="0.7 0.2"
+         class="intersectable scene-menu-button no-yoga-layout"
+         data-line_width="0.55"
+         data-position_x="3.4"
+         data-type="behaviour"
+         hover-height="0.001" position="3.4 -0.1 0.0001" color="#ececec"
+         font-color="#000000" ripple-color="#009688"
+         height="0.1"></a-ui-button>
+    <a-plane class="scene-under-line" width="0.4" height="0.015" position="2.2 -0.18 0.001" color="#009688" shader="flat"></a-plane>
+</a-entity>
     <a-entity width="0.2"></a-entity>
-    <a-text font="roboto" anchor="center" value="My Scenes" color="#212121" wrap-count="45" width="2.9" height="0.1"></a-text>
+    <a-text font="roboto" anchor="center" id="sceneListTitle" value="My Scenes" color="#212121" wrap-count="45" width="2.9" height="0.1"></a-text>
     <a-entity width="3.75"></a-entity>
     <a-entity width="0.4"></a-entity>
     <a-entity width="2.9">
         <a-plane width="2.8" height="0.008" color="#cfcfcf" shader="flat"></a-plane>
-        <a-entity width="2"></a-entity>
         <a-ui-button class="intersectable createScene" position="0.5 -0.1 0"
-                     text-value="CREATE SCENE" width="0.7" height="0.2" ripple-size="0.7 0.2" ui-modal="modal:#modalRenderer;main:#mainRenderer"
-                     wrap-count="15" font-color="#009688" color="white" ripple-color="#009688"></a-ui-button>
-        <a-entity id="sceneList" width="2.9">
-
-        </a-entity>
+            text-value="CREATE SCENE" width="0.8" height="0.2" ripple-size="0.7 0.2" ui-modal="modal:#modalRenderer;main:#mainRenderer"
+            wrap-count="18" font-color="#009688" color="white" ripple-color="#009688"></a-ui-button>
+        <a-entity width="1.2"></a-entity>
+        <a-ui-input-text class="search-scenes" background-color="#efefef"
+                         rig-el="#rig" camera-el="#camera" place-holder="Search..."
+                         wasd-controls-component="smooth-wasd-controls"
+                         look-controls-component="right-look-controls" width="0.6" height="0.17"></a-ui-input-text>
+        <a-entity id="sceneList" width="2.9"></a-entity>
+        <a-entity id="sceneListPagination" width="2.9"></a-entity>
     </a-entity>
 </a-entity>

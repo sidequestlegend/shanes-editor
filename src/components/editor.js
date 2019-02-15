@@ -48,8 +48,9 @@ module.exports = AFRAME.registerComponent('editor', {
         let editorLoader = document.createElement('a-entity');
         editorLoader.id = 'editorLoader';
         editorLoader.setAttribute('geometry','primitive:plane;width:0.25;height:0.25');
-        editorLoader.setAttribute('material','shader:flat;color:#48aba1;transparent:true;src:https://cdn.theexpanse.app/images/loader.png');
+        editorLoader.setAttribute('material','shader:flat;color:#48aba1;transparent:true;src:#icons');
         editorLoader.setAttribute('position','0 0 0.3');
+        editorLoader.setAttribute('sprite-sheet','coords:512 384 128 128;shape:square;');
         editorLoader.setAttribute('scale','0.00001 0.00001 0.00001');
         uiPanel.appendChild(editorLoader);
         this.editorLoader = editorLoader;
@@ -120,21 +121,11 @@ module.exports = AFRAME.registerComponent('editor', {
 
         let topMenu = document.createElement('a-entity');
         topMenu.id = 'topMenu';
-
-        // topMenu.appendChild(this.makeIcon('backToScenes','0.535 0.885 0.0001','intersectable','#iconBack',false,true,true));
-        // topMenu.appendChild(this.makeIcon('currentScene','0.76 0.885 0.0001','intersectable','#iconEdit',false,true,true));
-        // topMenu.appendChild(this.makeIcon('saveScene','0.76 0.885 0.0001','intersectable','#iconSave',false,true,true));
-        // topMenu.appendChild(this.makeIcon('userManagement','0.985 0.885 0.0001','intersectable','#usersIcon','toastEl:#toastMessage;message:Coming soon!',false,true));
-        // topMenu.appendChild(this.makeIcon('precisionButton','1.21 0.885 0.0001','intersectable','#precisionIcon','toastEl:#toastMessage;message:here!',false,true));
-        // topMenu.appendChild(this.makeIcon('marketSection','1.435 0.885 0.0001','intersectable','#marketIcon','toastEl:#toastMessage;message:Coming soon!',false,true));
-        // topMenu.appendChild(this.makeIcon('helpSection','1.66 0.885 0.0001','intersectable','#helpIcon','toastEl:#toastMessage;message:Coming soon!',false,true));
-        // topMenu.appendChild(this.makeIcon('hideEditor','1.885 0.885 0.0001','intersectable','#swapVirtIcon',false,false,true));
-
-        topMenu.appendChild(this.makeIcon('backToScenes','1.21 0.885 0.0001','intersectable','#iconBack',false,true,true));
-        topMenu.appendChild(this.makeIcon('currentScene','1.435 0.885 0.0001','intersectable','#iconEdit',false,true,true));
-        topMenu.appendChild(this.makeIcon('saveScene','1.435 0.885 0.0001','intersectable','#iconSave',false,true,true));
-        topMenu.appendChild(this.makeIcon('precisionButton','1.66 0.885 0.0001','intersectable','#precisionIcon','toastEl:#toastMessage;message:here!',false,true));
-        topMenu.appendChild(this.makeIcon('hideEditor','1.885 0.885 0.0001','intersectable','#swapVirtIcon',false,false,true));
+        topMenu.appendChild(this.makeIcon('backToScenes','1.21 0.885 0.0001','intersectable','#small_icons',false,true,true,'832 896 32 32'));
+        topMenu.appendChild(this.makeIcon('currentScene','1.435 0.885 0.0001','intersectable','#small_icons',false,true,true,'864 992 32 32'));
+        topMenu.appendChild(this.makeIcon('saveScene','1.435 0.885 0.0001','intersectable','#small_icons',false,true,true,'832 960 32 32'));
+        topMenu.appendChild(this.makeIcon('precisionButton','1.66 0.885 0.0001','intersectable','#small_icons','toastEl:#toastMessage;message:here!',false,true,'800 896 32 32'));
+        topMenu.appendChild(this.makeIcon('hideEditor','1.885 0.885 0.0001','intersectable','#small_icons',false,false,true,'896 928 32 32'));
 
         mainEditor.appendChild(topMenu);
         let scrollPane = document.createElement('a-ui-scroll-pane');
@@ -188,9 +179,9 @@ module.exports = AFRAME.registerComponent('editor', {
         toastEle.setAttribute('wrap-count',15);
         modalRenderBacking.appendChild(toastEle);
 
-        modalRenderBacking.appendChild(this.makeIcon('closePopup','1.57 0.740 0.001','intersectable close-modal','#closeIcon'));
-        modalRenderBacking.appendChild(this.makeIcon('popupPrecision','1.4 0.740 0.001','intersectable','#precisionIcon','toastEl:#popupToastMessage;message:here!'));
-        modalRenderBacking.appendChild(this.makeIcon('backButton','-1.55 0.738 0.001','intersectable','#iconBack',false,true));
+        modalRenderBacking.appendChild(this.makeIcon('closePopup','1.57 0.740 0.001','intersectable close-modal','#small_icons',false,false,false,'768 896 32 32'));
+        modalRenderBacking.appendChild(this.makeIcon('popupPrecision','1.4 0.740 0.001','intersectable','#small_icons','toastEl:#popupToastMessage;message:here!',false,false,'800 896 32 32'));
+        modalRenderBacking.appendChild(this.makeIcon('backButton','-1.55 0.738 0.001','intersectable','#small_icons',false,false,false,'832 896 32 32'));
 
         let modalScrollPane = document.createElement('a-ui-scroll-pane');
         modalScrollPane.id = 'popupContent';
@@ -212,7 +203,7 @@ module.exports = AFRAME.registerComponent('editor', {
         colorPicker.setAttribute('position','0 0.25 0.2');
         modalRenderBacking.appendChild(colorPicker);
     },
-    makeIcon(id,position,className,src,toast,isHidden,isEditor){
+    makeIcon(id,position,className,src,toast,isHidden,isEditor,coords){
         let button = document.createElement('a-plane');
         button.id = id;
         button.setAttribute('width','0.225');
@@ -234,19 +225,19 @@ module.exports = AFRAME.registerComponent('editor', {
         button.setAttribute('shader','flat');
         button.setAttribute('class',className);
 
-        let buttonIcon = document.createElement('a-plane');
-        buttonIcon.setAttribute('src',src);
+        let buttonIcon = document.createElement('a-entity');
         buttonIcon.setAttribute('class','intersectable');
         buttonIcon.setAttribute('ui-btn','hoverHeight:0.005');
         buttonIcon.setAttribute('ui-ripple','size:0.12 0.12;zIndex:0.001;color:'+(isEditor?'#ffffff':'#4db6ac'));
-        buttonIcon.setAttribute('width','0.12');
+        buttonIcon.setAttribute('geometry','primitive:plane;width:0.12;height:0.12;skipCache:true');
+        buttonIcon.setAttribute('material','src:'+src+';shader:flat;transparent:true;'+(!isEditor?'color:#4db6ac':''));
         buttonIcon.setAttribute('position','0 0 0.001');
-        buttonIcon.setAttribute('height','0.12');
-        buttonIcon.setAttribute('shader','flat');
-        buttonIcon.setAttribute('transparent','true');
-        if(!isEditor){
-            buttonIcon.setAttribute('color','#4db6ac');
+        if(coords){
+            buttonIcon.setAttribute('sprite-sheet','coords:'+coords+';shape:square;')
         }
+        // if(!isEditor){
+        //     buttonIcon.setAttribute('color','#4db6ac');
+        // }
         button.appendChild(buttonIcon);
 
         return button;

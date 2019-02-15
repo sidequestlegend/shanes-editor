@@ -1,0 +1,23 @@
+<a-text font="roboto" baseLine="center" anchor="center" value="Aframe Settings"
+        color="#212121" wrap-count="30" width="2.1" height="0.2"></a-text>
+
+<a-ui-button class="intersectable right-button addAframe" text-value="ADD"
+             font-color="#fff" color="#009688" ripple-color="#fff" width="0.7" height="0.2" ripple-size="0.7 0.2"
+             wrap-count="12"></a-ui-button>
+
+<a-plane width="2.9" height="0.008" color="#cfcfcf" shader="flat"></a-plane>
+
+<a-text font="roboto" baseLine="center" anchor="center" value="Name:"
+        color="#212121" wrap-count="18" width="1" height="0.2"></a-text>
+
+<a-ui-input-text id="behaviourName" camera-el="#camera" rig-el="#rig"
+                 wasd-controls-component="smooth-wasd-controls"
+                 look-controls-component="right-look-controls" width="1.8" height="0.2" value="{{behaviour.name}}"></a-ui-input-text>
+
+
+<a-text font="roboto" baseLine="center" anchor="center" value="Code Definition:"
+        color="#212121" wrap-count="30" width="1.6" height="0.2"></a-text>
+
+<a-ui-button class="intersectable right-button editAframeCodeButton" text-value="EDIT CODE"
+             font-color="#fff" color="#009688" ripple-color="#fff" width="1.2" height="0.2" ripple-size="1.2 0.2"
+             wrap-count="24"></a-ui-button>

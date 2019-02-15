@@ -1,0 +1,30 @@
+<a-entity width="2.9">
+    <a-text font="roboto" baseLine="center" anchor="center" value="Portal Settings"
+            color="#212121" wrap-count="30" width="2.6" height="0.1"></a-text>
+    <a-entity width="2.9" height="0.1"></a-entity>
+    <a-entity height="0.2" width="0.3"></a-entity>
+    <a-text font="roboto" baseLine="center" value="Image Url"
+            anchor="center" color="#515151" wrap-count="15" width="0.7" height="0.2"></a-text>
+    <a-ui-input-text class="portalImage" rig-el="#rig" camera-el="#camera" place-holder="Image..."
+                     value="{{image}}" wasd-controls-component="smooth-wasd-controls"
+                     look-controls-component="right-look-controls" width="1.4" height="0.2"></a-ui-input-text>
+    <a-entity width="2.9"></a-entity>
+
+    <a-entity height="0.2" width="0.3"></a-entity>
+    <a-text font="roboto" baseLine="center" value="Space ID"
+            anchor="center" color="#515151" wrap-count="15" width="0.7" height="0.2"></a-text>
+    <a-ui-input-text class="portalSpaceID" rig-el="#rig" camera-el="#camera" place-holder="SpaceID..."
+                     value="{{spaces_id}}" wasd-controls-component="smooth-wasd-controls"
+                     look-controls-component="right-look-controls" width="1.4" height="0.2"></a-ui-input-text>
+    <a-entity width="2.9" height="0.1"></a-entity>
+
+    <a-entity height="0.2" width="0.1"></a-entity>
+    <a-ui-button class="intersectable left-button cancelAddScene" text-value="CANCEL"
+                 font-color="#009688" color="#fff" ripple-color="#009688" width="1.2" height="0.2" ripple-size="1.2 0.2"
+                 wrap-count="24"></a-ui-button>
+
+    <a-entity height="0.2" width="0.1"></a-entity>
+    <a-ui-button class="intersectable right-button createSceneConfirm" text-value="SAVE PORTAL"
+                 font-color="#fff" color="#009688" ripple-color="#fff" width="1.2" height="0.2" ripple-size="1.2 0.2"
+                 wrap-count="24"></a-ui-button>
+</a-entity>

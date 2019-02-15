@@ -1,0 +1,25 @@
+{{#unless behaviours.length}}
+<a-text font="roboto" baseLine="top" anchor="center" value="Nothing found :) ..."
+        color="#212121" wrap-count="60" width="2.9" height="0.15"></a-text>
+{{/unless}}
+<a-entity width="2.9">
+    {{#each behaviours}}
+        <a-text font="roboto" baseLine="center" anchor="center" value="{{name}}"
+                color="#212121" wrap-count="35" width="2.3" height="0.15"></a-text>
+        <a-ui-fab-button class="loadBehaviour intersectable" data-behaviour="{{behaviours_id}}"
+                         src="https://cdn.theexpanse.app/images/icons/send.png" color="#009688"></a-ui-fab-button>
+    {{/each}}
+</a-entity>
+
+<a-entity width="2.2">
+    {{#compare page 0 operator=">"}}
+        <a-ui-button text-value="Prev Page" class="prev-behaviour-button intersectable"></a-ui-button>
+        <a-entity width="0.5"></a-entity>
+    {{/compare}}
+    {{#compare behaviours.length 10 operator="=="}}
+        {{#compare page 0 operator="=="}}
+            <a-entity width="1.05"></a-entity>
+        {{/compare}}
+        <a-ui-button text-value="Next Page" class="next-behaviour-button intersectable"></a-ui-button>
+    {{/compare}}
+</a-entity>

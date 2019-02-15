@@ -69,11 +69,11 @@ module.exports.Component = AFRAME.registerComponent('expanse-portal', {
     },
 
     play: function () {
-        this.updateEventListener();
+      //  this.updateEventListener();
     },
 
     pause: function () {
-        this.removeEventListener();
+       // this.removeEventListener();
     },
 
     updateEventListener: function () {
@@ -124,7 +124,7 @@ module.exports.Component = AFRAME.registerComponent('expanse-portal', {
             phiStart: 0,
             segmentsWidth: 16,
             segmentsHeight: 16,
-            phiLength: 180,
+            phiLength: 20,
             thetaStart: 0,
             thetaLength: 360
         });
@@ -143,6 +143,7 @@ module.exports.Component = AFRAME.registerComponent('expanse-portal', {
         sphereEl.setAttribute('geometry', {
             primitive: 'sphere',
             radius: 10,
+            phiLength: 20,
             segmentsWidth: 16,
             segmentsHeight: 16
         });
@@ -203,14 +204,15 @@ module.exports.Component = AFRAME.registerComponent('expanse-portal', {
             //     object3D.lookAt(cameraWorldPosition);
             // } else {
                 // When portal is close to the user/camera.
-            if ( distance < 1 && !this.triggered ) {
-                this.triggered = true;
-                this.el.sceneEl.emit('teleport',this.data.spaces_id);
-            }else if(distance > 1 && this.triggered){
-                this.triggered = false;
-            }
-
-
+                if ( distance < 1 && !this.triggered ) {
+                    this.triggered = true;
+                    let now = new Date().getTime();
+                    if(now-this.el.sceneEl.loadTime>10000){
+                        this.el.sceneEl.emit('teleport',this.data.spaces_id);
+                    }
+                }else if(distance > 1 && this.triggered){
+                    this.triggered = false;
+                }
                 cameraPortalOrientation = this.calculateCameraPortalOrientation();
                 // If user gets very close to portal, replace with holed sphere they can peek in.
                 if (distance < 0.5) {

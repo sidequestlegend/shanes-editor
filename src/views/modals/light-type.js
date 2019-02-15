@@ -2,12 +2,12 @@ export class LightTypeModal{
     constructor(context) {
         this.context = context;
         this.types = [
-            {name:'AmbientLight',friendly_name:'Ambient',image_url:'#objects_lights'},
-            {name:'DirectionalLight',friendly_name:'Directional',image_url:'#objects_lights'},
-            {name:'HemisphereLight',friendly_name:'Hemisphere',image_url:'#objects_lights'},
-            {name:'PointLight',friendly_name:'Point',image_url:'#objects_lights'},
-            {name:'RectAreaLight',friendly_name:'Rectangle Area',image_url:'#objects_lights'},
-            {name:'SpotLight',friendly_name:'Spot',image_url:'#objects_lights'},
+            {name:'AmbientLight',friendly_name:'Ambient',image_url:'#small_icons',image_coords:'384 896 128 128'},
+            {name:'DirectionalLight',friendly_name:'Directional',image_url:'#small_icons',image_coords:'384 896 128 128'},
+            {name:'HemisphereLight',friendly_name:'Hemisphere',image_url:'#small_icons',image_coords:'384 896 128 128'},
+            {name:'PointLight',friendly_name:'Point',image_url:'#small_icons',image_coords:'384 896 128 128'},
+            {name:'RectAreaLight',friendly_name:'Rectangle Area',image_url:'#small_icons',image_coords:'384 896 128 128'},
+            {name:'SpotLight',friendly_name:'Spot',image_url:'#small_icons',image_coords:'384 896 128 128'},
         ];
     }
     open() {

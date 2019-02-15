@@ -8,13 +8,15 @@ export class ObjectFactory{
         this.materialFactory = new MaterialFactory(sceneGraph);
         this.geometryFactory = new GeometryFactory(sceneGraph);
         this.lightFactory = new LightFactory(sceneGraph);
+        this.modelErrorMaterial = new THREE.SpriteMaterial({map:new THREE.TextureLoader().load('https://cdn.theexpanse.app/images/icons/baseline_close_white_18dp.png'),alphaTest:0.5, color:'#ff0000'});
+        this.modelError = new THREE.Sprite(this.modelErrorMaterial);
     }
     changeGeometry(type){
         // Change the type of the geometry
         let isPrimitive = this.sceneGraph.context.currentObject.settings.type==="Primitive";
         this.sceneGraph.context.currentObject.settings.geometry =
             this.geometryFactory[isPrimitive?"geometrySettingsWithDefaults":"parametricSettingsWithDefaults"]
-                (isPrimitive?{type:type}:{sub_type:type});
+            (isPrimitive?{type:type}:{sub_type:type});
         if(isPrimitive){
             this.sceneGraph.context.currentObject.settings.geometry.type = type;
         }else{
@@ -43,13 +45,13 @@ export class ObjectFactory{
     generateUserData(settings){
         // Generate default settings for a new object created - wraps the defaultUserData method basically.
         let userData = this.defaultUserData(
-                settings.type,
-                settings.sub_type||"",
-                settings.geo_settings||{},
-                settings.mat_settings||{},
-                settings.tra_settings||{},
-                settings.name
-            );
+            settings.type,
+            settings.sub_type||"",
+            settings.geo_settings||{},
+            settings.mat_settings||{},
+            settings.tra_settings||{},
+            settings.name
+        );
         if(settings.type==="Sprite"){
             userData.material.rotation = settings.mat_settings.rotation;
             userData.material.fog = settings.mat_settings.fog;
@@ -117,8 +119,9 @@ export class ObjectFactory{
             preserve_scale:false,
             disable_animations:false,
             geometry:geo_settings||{},
-            material:this.materialFactory.materialSettingsWithDefaults(mat_settings||{}),
+            material:~["Primitive","Parametric"].indexOf(type)?this.materialFactory.materialSettingsWithDefaults(mat_settings||{}):{},
             light:{},
+            sound:{},
             state:{
                 added:false,
                 updated:false,
@@ -170,6 +173,113 @@ export class ObjectFactory{
             );
         }
     }
+
+    resetSound(sound){
+        if(sound&&sound.userData.sceneObject){
+            if(sound.isPlaying)sound.stop();
+            let parent = sound.parent;
+            let child = sound.userData.sceneObject;
+            let newSound = this.makeSound(sound.userData.sceneObject.settings);
+            newSound.position.set(
+                child.settings.transform.position.x,
+                child.settings.transform.position.y,
+                child.settings.transform.position.z);
+            child.object3D = newSound;
+            newSound.userData.sceneObject = child;
+            newSound.userData.sceneObject.stats = {points:0,pixels:0};
+            this.setParentChild(newSound,child);
+            parent.remove(sound);
+            parent.add(newSound);
+        }
+    }
+
+    makeSound(settings){
+        let sound = new THREE.PositionalAudio( this.sceneGraph.audioListener );
+        settings.sound = this.soundDefaults(settings.sound);
+        if(!settings.url)settings.url = 'song.mp3';
+
+        // let loader = new THREE.FileLoader( );
+        // loader.setResponseType( 'arraybuffer' );
+        // loader.setPath( this.path );
+        //
+        // let loadAudio = ()=>{
+        //     loader.load( settings.url, function ( buffer ) {
+        //         let context = THREE.AudioContext.getContext();
+        //         sound.isPlaying = false;
+        //         console.log('here -sgjfasgfjfaf');
+        //         context.decodeAudioData( buffer.slice( 0 ), function ( audioBuffer ) {
+        //             sound.setBuffer( audioBuffer );
+        //             sound.setRefDistance( settings.sound.refDistance );
+        //             sound.setRolloffFactor ( settings.sound.rolloffFactor );
+        //             sound.setMaxDistance ( settings.sound.maxDistance );
+        //             sound.setDistanceModel ( settings.sound.distanceModel );
+        //             // sound.setDirectionalCone ( settings.sound.innerAngle, settings.sound.outerAngle, settings.sound.outerGain );
+        //             sound.setLoop( settings.sound.loop );
+        //             sound.setVolume( settings.sound.volume );
+        //             sound.play();
+        //             sound.source.onended = loadAudio
+        //         });
+        //
+        //     });
+        // };
+        // loadAudio();
+
+        //
+        let audioLoader = new THREE.AudioLoader();
+        audioLoader.load( settings.url, ( buffer )=> {
+            sound.setBuffer( buffer );
+            sound.setRefDistance( settings.sound.refDistance );
+            sound.setRolloffFactor ( settings.sound.rolloffFactor );
+            sound.setMaxDistance ( settings.sound.maxDistance );
+            sound.setDistanceModel ( settings.sound.distanceModel );
+            // sound.setDirectionalCone ( settings.sound.innerAngle, settings.sound.outerAngle, settings.sound.outerGain );
+            sound.setLoop( settings.sound.loop );
+            sound.setVolume( settings.sound.volume );
+            if(settings.sound.autoPlay){
+                sound.play();
+                if(settings.sound.loop){
+                    sound.source.onended = this.resetSound.bind(this,sound);
+                }
+            }
+        });
+
+        // let audio = new Audio();
+        // audio.crossOrigin = 'anonymous';
+        // audio.addEventListener('canplaythrough', function() {
+        //     if(!audio.paused) return;
+        //     // sound.setDirectionalCone ( settings.sound.innerAngle, settings.sound.outerAngle, settings.sound.outerGain );
+        //     audio.loop = settings.sound.loop;
+        //     if(settings.sound.autoPlay){
+        //         audio.play();
+        //         sound.setMediaElementSource( audio );
+        //         sound.setRefDistance( settings.sound.refDistance );
+        //         sound.setRolloffFactor ( settings.sound.rolloffFactor );
+        //         sound.setMaxDistance ( settings.sound.maxDistance );
+        //         sound.setDistanceModel ( settings.sound.distanceModel );
+        //         sound.setVolume( settings.sound.volume );
+        //     }
+        // }, false);
+        // audio.src = settings.url;
+        // sound.userData.audio = audio;
+
+        return sound;
+    }
+
+    soundDefaults(settings){
+        return {
+            autoPlay:settings.hasOwnProperty('autoPlay')?settings.autoPlay:true,
+            loop:settings.loop||false,
+            distanceModel:settings.distanceModel||'linear',
+            maxDistance:settings.maxDistance||20,
+            refDistance:settings.refDistance||5,
+            rolloffFactor:settings.rolloffFactor||1,
+            innerAngle:settings.innerAngle||Math.PI*2,
+            outerAngle:settings.outerAngle||Math.PI*2,
+            outerGain:settings.outerGain||0.5,
+            volume:settings.volume||0.5
+        }
+    }
+
     spriteDefaults(settings){
         return {
             color:settings.color||'#ffffff',
@@ -244,11 +354,16 @@ export class ObjectFactory{
         }
     }
 
+    setParentChild(object,child){
+        object.traverse(obj=>{
+            obj.sceneChild = child;
+        })
+    }
+
     resolveObject(object,scene,child,resolve){
         // Resolve a newly created object - used to calculate the loading percentage and
         // some common processing tasks.
         this.transform(object,child);
-        // TODO: hook into preserve_scale property to decide if this object should be centered and scaled to fit inside 1,1,1
         if(!child.settings.preserve_scale)this.scaleAndCenterObject(scene);
         object.add( scene );
         this.addStats(object,child);
@@ -258,19 +373,20 @@ export class ObjectFactory{
         let settings = child.settings;
         let object,promise;
         promise = new Promise(resolve=>{
-            let geometry, loader;
+            let geometry, material, loader;
             switch(settings.type){
                 case "Primitive":
                     // Create a primitive geometry
                     geometry = this.geometryFactory.makeGeometry(settings.geometry);
-                    let material = this.materialFactory.makeMaterial(settings.material)
-                     //   .then(material=>{
+                    material = this.materialFactory.makeMaterial(settings.material)
+                    //   .then(material=>{
                     object = new THREE.Mesh(geometry,material);
                     object.name = "Primitive";
                     this.transform(object,child);
                     this.addStats(object,child);
                     object.castShadow = settings.shadow.cast;
                     object.receiveShadow = settings.shadow.receive;
+                    this.setParentChild(object,child);
                     resolve(object);
                     //    });
                     break;
@@ -278,16 +394,16 @@ export class ObjectFactory{
                     // Create a parametric geometry
                     geometry = this.geometryFactory.makeParametric(settings.geometry);
                     this.scaleAndCenterGeometry(geometry);
-                    this.materialFactory.makeMaterial(settings.material)
-                        .then(material=>{
-                            object = new THREE.Mesh(geometry,material);
-                            object.name = "Parametric";
-                            this.transform(object,child);
-                            this.addStats(object,child);
-                            object.castShadow = settings.shadow.cast;
-                            object.receiveShadow = settings.shadow.receive;
-                            resolve(object);
-                        });
+                    material = this.materialFactory.makeMaterial(settings.material)
+
+                    object = new THREE.Mesh(geometry,material);
+                    object.name = "Parametric";
+                    this.transform(object,child);
+                    this.addStats(object,child);
+                    object.castShadow = settings.shadow.cast;
+                    object.receiveShadow = settings.shadow.receive;
+                    this.setParentChild(object,child);
+                    resolve(object);
                     break;
                 case "Light":
                     // Create a light
@@ -298,6 +414,18 @@ export class ObjectFactory{
                         child.settings.transform.position.z);
                     object.userData.sceneObject = child;
                     object.userData.sceneObject.stats = {points:0,pixels:0};
+                    this.setParentChild(object,child);
+                    resolve(object);
+                    break;
+                case "Sound":
+                    object = this.makeSound(settings);
+                    object.position.set(
+                        child.settings.transform.position.x,
+                        child.settings.transform.position.y,
+                        child.settings.transform.position.z);
+                    object.userData.sceneObject = child;
+                    object.userData.sceneObject.stats = {points:0,pixels:0};
+                    this.setParentChild(object,child);
                     resolve(object);
                     break;
                 case "Object3D":
@@ -305,6 +433,7 @@ export class ObjectFactory{
                     object.name = 'Group';
                     this.transform(object,child);
                     object.userData.sceneObject.stats = {points:0,pixels:0};
+                    this.setParentChild(object,child);
                     resolve(object);
                     break;
                 case "Sprite":
@@ -316,23 +445,26 @@ export class ObjectFactory{
                     }
                     object = new THREE.Sprite(new THREE.SpriteMaterial(defaults));
                     this.transform(object,child);
+                    this.setParentChild(object,child);
                     resolve(object);
                     break;
                 case "Effect":
                 case "Portal":
                 case "Aframe":
+                    object = new THREE.Object3D();
                     if(settings.type==="Portal"){
                         this.makePortal(child.settings);
                     }else if(settings.type==="Effect"){
+                        //return resolve(object);
                         this.makeEffect(child.settings);
                     }
-                    object = new THREE.Object3D();
                     this.addAframeItem(child)
                         .then(aobject=>{
                             if(settings.type==="Aframe"&&!child.settings.preserve_scale){
                                 this.scaleAndCenterObject(aobject);
                             }
                             this.transform(object,child);
+                            this.setParentChild(object,child);
                             object.add(aobject);
                             return object;
                         })
@@ -346,8 +478,12 @@ export class ObjectFactory{
                             let promises = this.sceneGraph.serialiser.deSerialiseScene(_prefab,object);
                             this.sceneGraph.behaviourFactory.awakePrefabBehaviours(_prefab);
                             this.transform(object,child);
+                            this.setParentChild(object,child);
                             Promise.all(promises)
-                                .then(()=>resolve(object));
+                                .then(()=>{
+                                    this.setParentChild(object,child);
+                                    resolve(object);
+                                });
                         });
                     break;
                 case "Avatar":
@@ -366,7 +502,11 @@ export class ObjectFactory{
                             loader.setCrossOrigin( true );
                             loader.load( settings.url, ( response )=>{
                                 if(!settings.disable_animations)this.startAnimations(response,response.scene,object);
+                                this.setParentChild(response.scene,child);
                                 this.resolveObject(object,response.scene,child,resolve)
+                            },null,()=>{
+                                object.userData.loadError = true;
+                                this.resolveObject(object,this.modelError.clone(),child,resolve);
                             });
                             break;
                         case "DAE":
@@ -375,7 +515,11 @@ export class ObjectFactory{
                             loader.setCrossOrigin( true );
                             loader.load(url, response=> {
                                 if(!settings.disable_animations)this.startAnimations(response,response.scene,object);
+                                this.setParentChild(response.scene,child);
                                 this.resolveObject(object,response.scene,child,resolve)
+                            },null,()=>{
+                                object.userData.loadError = true;
+                                this.resolveObject(object,this.modelError.clone(),child,resolve);
                             });
                             break;
                         case "FBX":
@@ -383,13 +527,23 @@ export class ObjectFactory{
                             loader.setCrossOrigin( true );
                             loader.load( settings.url, ( response )=>{
                                 if(!settings.disable_animations)this.startAnimations(response,response,object);
+                                this.setParentChild(response,child);
                                 this.resolveObject(object,response,child,resolve)
+                            },null,()=>{
+                                object.userData.loadError = true;
+                                this.resolveObject(object,this.modelError.clone(),child,resolve);
                             });
                             break;
                         case "GLTF":
                             loader = new THREE.LegacyGLTFLoader();
                             loader.setCrossOrigin( true );
-                            loader.load( settings.url, ( response )=>this.resolveObject(object,response.scene,child,resolve));
+                            loader.load( settings.url, ( response )=>{
+                                this.setParentChild(response.scene,child);
+                                this.resolveObject(object,response.scene,child,resolve)
+                            },null,()=>{
+                                object.userData.loadError = true;
+                                this.resolveObject(object,this.modelError.clone(),child,resolve);
+                            });
                             break;
                         case "OBJ":
                             let urls = {obj:settings.url,mtl:settings.mtl_url,mtl_path:settings.mtl_path};
@@ -400,7 +554,18 @@ export class ObjectFactory{
                                 materials.preload();
                                 loader = new THREE.OBJLoader();
                                 loader.setMaterials(materials);
-                                loader.load(urls.obj, obj=>this.resolveObject(object,obj,child,resolve));
+                                loader.load(urls.obj, obj=>{
+                                    this.setParentChild(obj,child);
+                                    this.resolveObject(object,obj,child,resolve)
+                                },null,()=>{
+                                    object.userData.loadError = true;
+
+                                    object.add();
+                                    resolve(object);
+                                });
+                            },null,()=>{
+                                object.userData.loadError = true;
+                                this.resolveObject(object,this.modelError.clone(),child,resolve);
                             });
                             break;
                     }

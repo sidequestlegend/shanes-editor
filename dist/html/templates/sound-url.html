@@ -1,0 +1,24 @@
+<a-entity width="1.35">
+    <a-text font="roboto" baseLine="top" anchor="center" value="Audio Url ( Mp3, Ogg, Wav ):"
+            color="#212121" wrap-count="15" width="0.5" height="0.1"></a-text>
+    <a-ui-input-text class="audioUrl"
+                     camera-el="#camera"
+                     rig-el="#rig"
+                     wasd-controls-component="smooth-wasd-controls"
+                     look-controls-component="right-look-controls" width="0.65" height="0.2" value="{{url}}"></a-ui-input-text>
+
+    <a-entity width="0.21"></a-entity>
+
+    <a-ui-button class="intersectable play-audio" text-value="PLAY"
+                 width="0.22" height="0.12" ripple-size="0.22 0.12" wrap-count="6"></a-ui-button>
+
+    <a-ui-button class="intersectable stop-audio" text-value="STOP"
+                 width="0.22" height="0.12" ripple-size="0.22 0.12" wrap-count="6"></a-ui-button>
+
+    <a-ui-button class="intersectable load-audio" text-value="LOAD"
+                 width="0.22" height="0.12" ripple-size="0.22 0.12" wrap-count="6"></a-ui-button>
+
+    <a-ui-button class="intersectable save-audio" text-value="SAVE"
+                 width="0.22" height="0.12" ripple-size="0.22 0.12" wrap-count="6"></a-ui-button>
+</a-entity>
+<a-plane width="1.35" height="0.004" color="#8f8f8f" shader="flat"></a-plane>

@@ -1,0 +1,82 @@
+<a-entity width="2.9">
+    <a-entity width="2.9">
+        <a-ui-button text-value="GLTF2" wrap-count="10" width="0.5" class="intersectable model-menu-button no-yoga-layout" data-line_width="0.27" data-position_x="1.2" data-type="GLTF2"
+                     hover-height="0.001" position="1.2 -0.1 0.0001" color="#ececec" font-color="#000000" ripple-color="#009688" height="0.1"></a-ui-button>
+        <a-ui-button text-value="COLLADA" wrap-count="10" width="0.5" class="intersectable model-menu-button no-yoga-layout" data-line_width="0.4" data-position_x="1.7"  data-type="DAE"
+                     hover-height="0.001" position="1.7 -0.1 0.0001" color="#ececec" font-color="#000000" ripple-color="#009688" height="0.1"></a-ui-button>
+        <a-ui-button text-value="FBX" wrap-count="5" width="0.25" ripple-size="0.25 0.2" class="intersectable model-menu-button no-yoga-layout" data-line_width="0.2" data-position_x="2.15"  data-type="FBX"
+                     hover-height="0.001" position="2.15 -0.1 0.0001" color="#ececec" font-color="#000000" ripple-color="#009688" height="0.1"></a-ui-button>
+        <a-ui-button text-value="OBJ + MTL" wrap-count="10" width="0.5" class="intersectable model-menu-button no-yoga-layout" data-line_width="0.45" data-position_x="2.6" data-type="OBJ"
+                     hover-height="0.001" position="2.6 -0.1 0.0001" color="#ececec" font-color="#000000" ripple-color="#009688" height="0.1"></a-ui-button>
+        <a-plane class="model-under-line" width="0.27" height="0.015" position="1.3 -0.18 0.001" color="#009688" shader="flat"></a-plane>
+    </a-entity>
+</a-entity>
+
+{{#compare type "OBJ" operator="=="}}
+<a-entity width="2.9" height="0.1"></a-entity>
+{{/compare}}
+
+
+{{#compare type "OBJ" operator="!="}}
+<a-entity width="2.9" height="0.3"></a-entity>
+{{/compare}}
+
+<a-entity width="0.4" height="0.2"></a-entity>
+{{#compare type "GLTF2" operator="=="}}
+<a-ui-input-text id="mainModelUrl" camera-el="#camera" rig-el="#rig" wasd-controls-component="smooth-wasd-controls" place-holder="GLTF Url"
+                 value="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf"
+                 look-controls-component="right-look-controls"
+                 width="2" height="0.2"></a-ui-input-text>
+
+<a-entity height="0.2" width="2.9"></a-entity>
+{{/compare}}
+
+{{#compare type "DAE" operator="=="}}
+<a-ui-input-text id="mainModelUrl" camera-el="#camera" rig-el="#rig" wasd-controls-component="smooth-wasd-controls" place-holder="Collada Url"
+                 value="https://threejs.org/examples/models/collada/stormtrooper/stormtrooper.dae"
+                 look-controls-component="right-look-controls"
+                 width="2" height="0.2"></a-ui-input-text>
+
+<a-entity height="0.2" width="2.9"></a-entity>
+{{/compare}}
+
+{{#compare type "FBX" operator="=="}}
+<a-ui-input-text id="mainModelUrl" camera-el="#camera" rig-el="#rig" wasd-controls-component="smooth-wasd-controls" place-holder="FBX Url"
+                 look-controls-component="right-look-controls"
+                 value="https://xactaccounts.co.uk/Shane_Samba.fbx"
+
+                 width="2" height="0.2"></a-ui-input-text>
+<!--xhttps://threejs.org/examples/models/fbx/Samba%20Dancing.fbx-->
+
+<a-entity height="0.2" width="2.9"></a-entity>
+{{/compare}}
+
+{{#compare type "OBJ" operator="=="}}
+<a-ui-input-text id="mainModelUrl" camera-el="#camera" rig-el="#rig" wasd-controls-component="smooth-wasd-controls" place-holder="OBJ Url"
+                 look-controls-component="right-look-controls"
+                 value="https://vrassets-pa.googleusercontent.com/downloads/bFZbl-mmCeD/15IHC2-9Ax6/model.obj"
+                 width="2" height="0.2"></a-ui-input-text>
+
+<a-entity width="0.4" height="0.2"></a-entity>
+<a-ui-input-text id="mainMTLUrl" camera-el="#camera" rig-el="#rig" wasd-controls-component="smooth-wasd-controls" place-holder="MTL Url"
+                 look-controls-component="right-look-controls"
+                 value="https://vrassets-pa.googleusercontent.com/downloads/bFZbl-mmCeD/15IHC2-9Ax6/materials.mtl"
+                 width="2" height="0.2"></a-ui-input-text>
+
+<a-entity width="0.4" height="0.2"></a-entity>
+<a-ui-input-text id="mainMTLPath" camera-el="#camera" rig-el="#rig" wasd-controls-component="smooth-wasd-controls" place-holder="MTL Path"
+                 look-controls-component="right-look-controls"
+                 value="https://vrassets-pa.googleusercontent.com/downloads/bFZbl-mmCeD/15IHC2-9Ax6/"
+                 width="2" height="0.2"></a-ui-input-text>
+<a-entity width="0.3" height="0.2"></a-entity>
+{{/compare}}
+
+<a-entity height="0.2" width="0.1"></a-entity>
+<a-ui-button class="intersectable left-button cancelAddCustom" text-value="CANCEL"
+             font-color="#009688" color="#fff" ripple-color="#009688" width="1.2" height="0.2" ripple-size="1.2 0.2"
+             wrap-count="24"></a-ui-button>
+
+<a-entity height="0.2" width="0.1"></a-entity>
+<a-ui-button class="intersectable right-button createCustomConfirm" text-value="NEXT"
+             font-color="#fff" color="#009688" ripple-color="#fff" width="1.2" height="0.2" ripple-size="1.2 0.2"
+             wrap-count="24"></a-ui-button>

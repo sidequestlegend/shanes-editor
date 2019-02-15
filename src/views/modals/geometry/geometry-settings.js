@@ -6,6 +6,7 @@ export class GeometrySettingsModal {
     open() {
         this.isPrimitive = this.context.currentObject.settings.type==="Primitive";
         this.geometry = this.context.currentObject.settings.geometry;
+        console.log(this.context.currentObject.settings);
         this.type = this.isPrimitive?this.geometry.type
             .replace('Geometry','')
             .replace('Buffer','')
@@ -390,7 +391,7 @@ export class GeometrySettingsModal {
             })
             .then(()=>this.compile())
             .then(contents=>{
-
+                console.log(this.geometry);
                 let width = contents[0].shift();
                 let height = contents[0].shift();
                 let depth = contents[0].shift();

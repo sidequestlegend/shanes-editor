@@ -1,11 +1,15 @@
+{{#unless scenes.length}}
+<a-text font="roboto" baseLine="top" anchor="center" value="Nothing found :) ..."
+        color="#212121" wrap-count="40" width="2.125" height="0.15"></a-text>
+{{/unless}}
 {{#each scenes}}
 <a-entity width="2.95">
     <a-plane shader="flat" width="0.3" height="0.3" src="#sceneImage" transparent="true">
 
     </a-plane>
-    <a-entity width="1.95" height="0.3" position="0 0 0.05" class="no-z-offset" >
+    <a-entity width="1.55" height="0.3" position="0 0 0.05" class="no-z-offset" >
 
-        <a-text font="roboto" value="{{name}}"
+        <a-text font="roboto" value="{{_name}}"
                 anchor="center" color="#515151" wrap-count="40" width="2.55" height="0.2"></a-text>
 
         <a-text font="roboto" baseLine="bottom" value="{{date}}"
@@ -14,15 +18,19 @@
     </a-entity>
     <a-entity width="0.2" height="0.3">
         <a-entity width="0.2" height="0.05"></a-entity>
-        <a-plane shader="flat" width="0.2" height="0.2" data-scene="{{scenes_id}}" data-view_only="true"
-                 class="loadScene intersectable view" src="#viewIcon" color="#009688" transparent="true" alpha-test="0.5"
-                 ui-ripple="size:0.15 0.15;zIndex:-0.001;color:#999;duration:500;fadeDuration:250;"></a-plane>
+        <a-plane shader="flat" width="0.2" height="0.2" data-scene="{{scenes_id}}" ui-modal="modal:#modalRenderer;main:#mainRenderer"
+                 class="deleteScene intersectable view" src="#closeIcon" color="orange" transparent="true"></a-plane>
+    </a-entity>
+    <a-entity width="0.1" height="0.3"></a-entity>
+    <a-entity width="0.2" height="0.3">
+        <a-entity width="0.2" height="0.05"></a-entity>
+        <a-ui-fab-button class="loadScene intersectable" data-scene="{{scenes_id}}" data-view_only="true"
+             src="https://cdn.theexpanse.app/images/icons/baseline_remove_red_eye_white_18dp.png" color="#009688"></a-ui-fab-button>
     </a-entity>
     <a-entity width="0.2" height="0.3">
         <a-entity width="0.2" height="0.05"></a-entity>
-        <a-plane shader="flat" width="0.2" height="0.2" data-scene="{{scenes_id}}"
-                 class="loadScene intersectable" src="#iconSend" color="#009688" transparent="true" alpha-test="0.5"
-                 ui-ripple="size:0.15 0.15;zIndex:-0.001;color:#999;duration:500;fadeDuration:250;"></a-plane>
+        <a-ui-fab-button class="loadScene intersectable" data-scene="{{scenes_id}}"
+             src="https://cdn.theexpanse.app/images/icons/send.png" color="#009688"></a-ui-fab-button>
     </a-entity>
 </a-entity>
 {{/each}}
